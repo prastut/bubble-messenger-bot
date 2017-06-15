@@ -1,7 +1,17 @@
 'use strict'
 
+var teams = ["india", "pakistan"];
 
-var data = {
+var liveElements = function(teams) {
+
+    var array = [];
+
+    for (var i in teams) {
+        console.log(teams);
+    }
+};
+
+var liveData = {
     "messages": [{
         "attachment": {
             "type": "template",
@@ -55,9 +65,15 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function(req, res) {
-    // var jsonResponse = [];
-    // jsonResponse.push(data);
-    res.send(data);
+    liveElements(teams);
+    // res.send(data);
+})
+
+app.get('/get-live-matches', function(req, res) {
+
+    res.send(data)
+
+
 })
 
 // for Facebook verification
@@ -65,6 +81,9 @@ app.get('/webhook/', function(req, res) {
     if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
         res.send(req.query['hub.challenge'])
     }
+
+    // console.log(req.query['messaging_postbacks']);
+
     res.send('Error, wrong token')
 })
 
