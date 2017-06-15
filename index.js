@@ -1,6 +1,7 @@
 'use strict'
 
-
+var ip = "http://139.59.25.186/";
+var trackingLiveMatchUrl = "get-data";
 
 function getLiveData() {
 
@@ -30,9 +31,9 @@ function getLiveData() {
             "title": liveMatchesData[i].name,
             "image_url": liveMatchesData[i].url,
             "buttons": [{
-                "type": "postback",
-                "block_name": "Track",
-                "payload": liveMatchesData[i].instance_id
+                "url": ip + trackingLiveMatchUrl + "?instance_id=" + liveMatchesData[i].instance_id,
+                "title": "Track this!",
+                "type": "json_plugin_url"
             }]
         });
     }
@@ -83,7 +84,7 @@ app.use(bodyParser.json())
 // Index route
 app.get('/', function(req, res) {
 
-    res.send(getLiveData());
+    res.send("Hey I am a Bubble Social Chatbot");
 })
 
 app.get('/get-live-matches', function(req, res) {
@@ -92,6 +93,16 @@ app.get('/get-live-matches', function(req, res) {
 
 
 })
+
+app.get('/' + ip + trackingLiveMatchUrl, function(req, res) {
+
+    console.log(req.query);
+    res.send({ "text": "Working" });
+
+
+})
+
+
 
 // for Facebook verification
 app.get('/webhook/', function(req, res) {
