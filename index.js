@@ -12,7 +12,7 @@ var data = {
                         "image_url": "http://www.blogcdn.com/www.parentdish.co.uk/media/2011/09/paulscholes.jpg",
                         "buttons": [{
                             "type": "web_url",
-                            "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                            "url": "http://prastutkumar.design/info-design-lab-work/bubble/main/index.html",
                             "title": "View Sentiment",
                             "webview_height_ratio": "compact"
                         }]
