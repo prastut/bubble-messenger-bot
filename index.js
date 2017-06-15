@@ -88,7 +88,7 @@ app.get('/', function(req, res) {
 
 app.get('/get-live-matches', function(req, res) {
 
-    res.send(data);
+    res.send(getLiveData());
 
 
 })
