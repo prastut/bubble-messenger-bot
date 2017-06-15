@@ -1,4 +1,6 @@
 'use strict'
+
+
 var data = {
     "messages": [{
         "attachment": {
@@ -7,8 +9,7 @@ var data = {
                 "template_type": "generic",
                 "elements": [{
                         "title": "Paul Scholes",
-                        "image_url": "https://en.wikipedia.org/wiki/Paul_Scholes",
-                        "subtitle": "Soft white cotton t-shirt is back in style",
+                        "image_url": "http://www.blogcdn.com/www.parentdish.co.uk/media/2011/09/paulscholes.jpg",
                         "buttons": [{
                             "type": "web_url",
                             "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
