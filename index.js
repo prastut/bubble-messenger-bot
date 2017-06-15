@@ -30,9 +30,9 @@ function getLiveData() {
             "title": liveMatchesData[i].name,
             "image_url": liveMatchesData[i].url,
             "buttons": [{
-                "type": "show_block",
+                "type": "postback",
                 "block_name": "Track",
-                "title": "Track this!"
+                "payload": liveMatchesData[i].instance_id
             }]
         });
     }
@@ -99,7 +99,10 @@ app.get('/webhook/', function(req, res) {
         res.send(req.query['hub.challenge'])
     }
 
-    // console.log(req.query['messaging_postbacks']);
+    if (req.query['messaging_postbacks']) {
+        console.log(req.query['messaging_postbacks']);
+
+    }
 
     res.send('Error, wrong token')
 })
