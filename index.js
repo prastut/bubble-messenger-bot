@@ -1,14 +1,11 @@
 'use strict'
 var data = {
-    "messages": [{
-        "attachment": {
-            "type": "image",
-            "payload": {
-                "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/1200px-Banana-Single.jpg"
-            }
-        }
-    }]
+    "messages": [
+        { "text": "Welcome to our store!" },
+        { "text": "How can I help you?" }
+    ]
 };
+
 
 
 const express = require('express')
@@ -26,9 +23,9 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function(req, res) {
-    var jsonResponse = [];
-    jsonResponse.push(data);
-    res.send(jsonResponse);
+    // var jsonResponse = [];
+    // jsonResponse.push(data);
+    res.send(data);
 })
 
 // for Facebook verification
