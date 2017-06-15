@@ -2,40 +2,55 @@
 
 
 
-
 function getLiveData() {
 
     var liveMatchesData = [{
-            "instance_id": "5942ab66bb46ec32826fa0c6",
-            "name": "aoehwdsf'ls;gh",
-            "time": 1497541478
-        },
-        {
-            "instance_id": "5942ab64bb46ec32826fa0c5",
-            "name": "aoehwdsf'ls;gh",
-            "time": 1497541477
-        },
-        {
             "instance_id": "59429e68bb46ec1beeee04fc",
-            "name": "INDVSBAN15062017",
+            "name": "India vs Bangladesh",
+            "url": "https://lh3.googleusercontent.com/iYpxxu6ij6guq0V-aHsed6KpKUFTyN2bz5kLoFe0x5GM7IzpTos-B4RO3H6LIwHB7Mk=h900",
             "time": 1497538153
         },
         {
             "instance_id": "59410b78bb46ec2e26dbaad8",
-            "name": "ENGVSPAKPONLYMATCH",
+            "name": "England vs Pakistan",
             "time": "1497415180"
         },
         {
             "instance_id": "5941012abb46ec2e26dbaaca",
-            "name": "ENGVSPAK14062017",
+            "name": "South Africa vs India",
             "time": "0"
         }
     ];
 
+    var elements = []
+
     for (var i in liveMatchesData) {
 
-        console.log(i.name);
+        elements.push({
+            "title": liveMatchesData[i].name,
+            "image_url": liveMatchesData[i].url,
+            "buttons": [{
+                "type": "show_block",
+                "block_name": "Track",
+                "title": "Track this!"
+            }]
+        });
     }
+
+
+    var liveData = {
+        "messages": [{
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": elements
+                }
+            }
+        }]
+    };
+
+    return liveData;
 
 }
 
@@ -49,42 +64,7 @@ function getLiveData() {
 //     }
 // };
 
-var liveData = {
-    "messages": [{
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": [{
-                        "title": "Paul Scholes",
-                        "buttons": [{
-                            "type": "web_url",
-                            "url": "http://prastutkumar.design/info-design-lab-work/bubble/main/index.html",
-                            "title": "View Sentiment",
-                            "webview_height_ratio": "compact"
-                        }]
-                    },
-                    {
-                        "title": "Classic Grey T-Shirt",
-                        "image_url": "http://petersapparel.parseapp.com/img/item101-thumb.png",
-                        "subtitle": "Soft gray cotton t-shirt is back in style",
-                        "buttons": [{
-                                "type": "web_url",
-                                "url": "https://petersapparel.parseapp.com/view_item?item_id=101",
-                                "title": "View Item"
-                            },
-                            {
-                                "type": "web_url",
-                                "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                                "title": "Buy Item"
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    }]
-};
+
 
 
 const express = require('express')
@@ -102,13 +82,13 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function(req, res) {
-    getLiveData();
-    res.send(data);
+
+    res.send(getLiveData());
 })
 
 app.get('/get-live-matches', function(req, res) {
 
-    res.send(data)
+    res.send(data);
 
 
 })
