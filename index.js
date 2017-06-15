@@ -1,15 +1,53 @@
 'use strict'
 
-var teams = ["india", "pakistan"];
 
-var liveElements = function(teams) {
 
-    var array = [];
 
-    for (var i in teams) {
-        console.log(teams);
+function getLiveData() {
+
+    var liveMatchesData = [{
+            "instance_id": "5942ab66bb46ec32826fa0c6",
+            "name": "aoehwdsf'ls;gh",
+            "time": 1497541478
+        },
+        {
+            "instance_id": "5942ab64bb46ec32826fa0c5",
+            "name": "aoehwdsf'ls;gh",
+            "time": 1497541477
+        },
+        {
+            "instance_id": "59429e68bb46ec1beeee04fc",
+            "name": "INDVSBAN15062017",
+            "time": 1497538153
+        },
+        {
+            "instance_id": "59410b78bb46ec2e26dbaad8",
+            "name": "ENGVSPAKPONLYMATCH",
+            "time": "1497415180"
+        },
+        {
+            "instance_id": "5941012abb46ec2e26dbaaca",
+            "name": "ENGVSPAK14062017",
+            "time": "0"
+        }
+    ];
+
+    for (var i in liveMatchesData) {
+
+        console.log(i.name);
     }
-};
+
+}
+
+
+// var liveElements = function(teams) {
+
+//     var array = [];
+
+//     for (var i in teams) {
+//         array.push()
+//     }
+// };
 
 var liveData = {
     "messages": [{
@@ -19,7 +57,6 @@ var liveData = {
                 "template_type": "generic",
                 "elements": [{
                         "title": "Paul Scholes",
-                        "image_url": "http://www.blogcdn.com/www.parentdish.co.uk/media/2011/09/paulscholes.jpg",
                         "buttons": [{
                             "type": "web_url",
                             "url": "http://prastutkumar.design/info-design-lab-work/bubble/main/index.html",
@@ -65,8 +102,8 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function(req, res) {
-    liveElements(teams);
-    // res.send(data);
+    getLiveData();
+    res.send(data);
 })
 
 app.get('/get-live-matches', function(req, res) {
