@@ -126,10 +126,11 @@ function matchSpecificData(data) {
 
     for (var i in data.channels) {
 
-        if (i.team) {
+
+        if (data.channels.i.team) {
 
             quick_replies.push({
-                "title": i.name,
+                "title": data.channels.i.name,
                 "url": ip + getTeamData + "?team=" + i,
                 "type": "json_plugin_url"
             });
