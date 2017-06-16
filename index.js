@@ -40,7 +40,8 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
             if (err) {
                 return console.error('upload failed:', err);
             }
-            console.log('Upload successful!  Server responded with:', body);
+
+            matchSpecificData(body);
         });
 
     res.send([{ "text": "Hello" }]);
@@ -118,25 +119,23 @@ function getLiveData(data) {
 }
 
 
-function matchSpecificData(chunk) {
-
-    var str = "";
-    str += chunk;
-    // console.log(str);
-    var data = JSON.parse(chunk);
+function matchSpecificData(data) {
 
     var quick_replies = [];
 
+
     for (var i in data.channels) {
-        if (!i.team) {
 
-            quick_replies.push({
-                "title": i.name,
-                "url": ip + getTeamData + "?team=" + i,
-                "type": "json_plugin_url"
-            });
+        console.log(i);
+        // if (!i.team) {
 
-        }
+        //     quick_replies.push({
+        //         "title": i.name,
+        //         "url": ip + getTeamData + "?team=" + i,
+        //         "type": "json_plugin_url"
+        //     });
+
+        // }
 
         // console.log(quick_replies);
     }
