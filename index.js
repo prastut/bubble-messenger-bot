@@ -127,7 +127,8 @@ function matchSpecificData(data) {
     for (var i in data.channels) {
 
 
-        if (data.channels.i.team) {
+
+        if (typeof data.channels.i.team != 'undefined') {
 
             quick_replies.push({
                 "title": data.channels.i.name,
