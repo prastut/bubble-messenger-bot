@@ -4,104 +4,6 @@ var ip = "http://139.59.25.186/";
 var trackingLiveMatchUrl = "get-data";
 var getTeamData = 'get-team-data';
 
-function getLiveData() {
-
-    var liveMatchesData = [{
-            "instance_id": "59429e68bb46ec1beeee04fc",
-            "name": "India vs Bangladesh",
-            "url": "https://lh3.googleusercontent.com/iYpxxu6ij6guq0V-aHsed6KpKUFTyN2bz5kLoFe0x5GM7IzpTos-B4RO3H6LIwHB7Mk=h900",
-            "time": 1497538153
-        },
-        {
-            "instance_id": "59410b78bb46ec2e26dbaad8",
-            "name": "England vs Pakistan",
-            "time": "1497415180"
-        },
-        {
-            "instance_id": "5941012abb46ec2e26dbaaca",
-            "name": "South Africa vs India",
-            "time": "0"
-        }
-    ];
-
-    var elements = []
-
-    for (var i in liveMatchesData) {
-
-        elements.push({
-            "title": liveMatchesData[i].name,
-            "image_url": liveMatchesData[i].url,
-            "buttons": [{
-                "url": ip + trackingLiveMatchUrl + "?instance_id=" + liveMatchesData[i].instance_id,
-                "title": "Track this!",
-                "type": "json_plugin_url"
-            }]
-        });
-    }
-
-
-    var liveData = {
-        "messages": [{
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": elements
-                }
-            }
-        }]
-    };
-
-    return liveData;
-
-}
-
-
-function matchSpecificData(instance_id) {
-
-    var payload = {
-        "messages": [{
-            "text": "Which team are you supporting?",
-            "quick_replies": [{
-                    "title": "Team 1",
-                    "url": ip + getTeamData + "?instance_id=" + 1,
-                    "type": "json_plugin_url"
-
-                },
-                {
-                    "title": "Team 2",
-                    "url": ip + getTeamData + "?instance_id=" + 2,
-                    "type": "json_plugin_url"
-
-                },
-                {
-                    "title": "Both",
-                    "url": ip + getTeamData + "?instance_id=" + 0,
-                    "type": "json_plugin_url"
-
-                }
-            ]
-        }]
-    };
-
-    return payload;
-
-
-}
-
-
-// var liveElements = function(teams) {
-
-//     var array = [];
-
-//     for (var i in teams) {
-//         array.push()
-//     }
-// };
-
-
-
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
@@ -119,14 +21,16 @@ app.use(bodyParser.json())
 app.get('/', function(req, res) {
 
     res.send("Hey I am a Bubble Social Chatbot");
-})
+});
 
 app.get('/get-live-matches', function(req, res) {
+    request
+        .get(getParams('get-live-matches', 'type', 'cricket-match'))
+        .on('data', function(chunk) {
+            res.send(getLiveData(chunk));
+        });
 
-    res.send(getLiveData());
-
-
-})
+});
 
 app.get('/' + trackingLiveMatchUrl, function(req, res) {
 
@@ -164,3 +68,97 @@ app.get('/webhook/', function(req, res) {
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
 })
+
+
+
+function getLiveData(data) {
+
+    var str = "";
+    str += data;
+    var liveMatchesData = JSON.parse(str);
+
+    var elements = [];
+
+    for (var i in liveMatchesData) {
+
+        elements.push({
+            "title": liveMatchesData[i].name,
+            "image_url": liveMatchesData[i].url,
+            "buttons": [{
+                "url": ip + trackingLiveMatchUrl + "?instance_id=" + liveMatchesData[i].instance_id,
+                "title": "Track this!",
+                "type": "json_plugin_url"
+            }]
+        });
+    }
+
+
+
+    var liveData = {
+        "messages": [{
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": elements
+                }
+            }
+        }]
+    };
+
+    return liveData;
+}
+
+
+function matchSpecificData(instance_id) {
+
+    var payload = {
+        "messages": [{
+            "text": "Which team are you supporting?",
+            "quick_replies": [{
+                    "title": "Team 1",
+                    "url": ip + getTeamData + "?instance_id=" + 1,
+                    "type": "json_plugin_url"
+
+                },
+                {
+                    "title": "Team 2",
+                    "url": ip + getTeamData + "?instance_id=" + 2,
+                    "type": "json_plugin_url"
+
+                },
+                {
+                    "title": "Both",
+                    "url": ip + getTeamData + "?instance_id=" + 0,
+                    "type": "json_plugin_url"
+
+                }
+            ]
+        }]
+    };
+
+    return payload;
+
+}
+
+
+// var liveElements = function(teams) {
+
+//     var array = [];
+
+//     for (var i in teams) {
+//         array.push()
+//     }
+// };
+
+function getParams(url, param, value) {
+
+    var params = {};
+    params[param] = value;
+    return { url: customUrlGenerator(url), qs: params, json: true };
+}
+
+
+function customUrlGenerator(url) {
+    return "http://bubble.social/" + url;
+}
