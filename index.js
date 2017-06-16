@@ -126,19 +126,19 @@ function matchSpecificData(data) {
 
     for (var i in data.channels) {
 
-        console.log(i);
-        // if (!i.team) {
+        if (i.team) {
 
-        //     quick_replies.push({
-        //         "title": i.name,
-        //         "url": ip + getTeamData + "?team=" + i,
-        //         "type": "json_plugin_url"
-        //     });
+            quick_replies.push({
+                "title": i.name,
+                "url": ip + getTeamData + "?team=" + i,
+                "type": "json_plugin_url"
+            });
 
-        // }
-
-        // console.log(quick_replies);
+        }
     }
+
+    console.log(quick_replies);
+
     var payload = {
         "messages": [{
             "text": "Which team are you supporting?",
