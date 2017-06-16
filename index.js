@@ -39,19 +39,24 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
         .get(getParams('get-match-details', 'instance_id', instance_id))
         .on('data', function(chunk) {
 
-            matchSpecificData(chunk);
+            var str;
+            str += chunk;
+
+            console.log(chunk);
+            console.log(str);
+            // matchSpecificData(chunk);
 
             // res.send(str);
         });
 
-    res.send(matchSpecificData(instance_id));
+    res.send([{ "text": "Hello" }]);
 
 
 });
 
 app.get('/' + getTeamData, function(req, res) {
 
-    console.log(req.query);
+    // console.log(req.query);
     res.send([{ "text": "Hello World" }]);
 })
 
@@ -123,7 +128,7 @@ function matchSpecificData(chunk) {
 
     var str = "";
     str += chunk;
-    console.log(str);
+    // console.log(str);
     var data = JSON.parse(chunk);
 
     var quick_replies = [];
