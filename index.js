@@ -36,17 +36,11 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
 
     var instance_id = req.query.instance_id;
     request
-        .get(getParams('get-match-details', 'instance_id', instance_id))
-        .on('data', function(chunk) {
-
-            var str;
-            str += chunk;
-
-            console.log(chunk);
-            console.log(str);
-            // matchSpecificData(chunk);
-
-            // res.send(str);
+        .get(getParams('get-match-details', 'instance_id', instance_id), function optionalCallback(err, httpResponse, body) {
+            if (err) {
+                return console.error('upload failed:', err);
+            }
+            console.log('Upload successful!  Server responded with:', body);
         });
 
     res.send([{ "text": "Hello" }]);
