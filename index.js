@@ -2,6 +2,7 @@
 
 var ip = "http://139.59.25.186/";
 var trackingLiveMatchUrl = "get-data";
+var getTeamData = 'get-team-data';
 
 function getLiveData() {
 
@@ -56,6 +57,39 @@ function getLiveData() {
 }
 
 
+function matchSpecificData(instance_id) {
+
+    var payload = {
+        "messages": [{
+            "text": "Which team are you supporting?",
+            "quick_replies": [{
+                    "title": "Team 1",
+                    "url": ip + getTeamData + "?instance_id=" + 1,
+                    "type": "json_plugin_url"
+
+                },
+                {
+                    "title": "Team 2",
+                    "url": ip + getTeamData + "?instance_id=" + 2,
+                    "type": "json_plugin_url"
+
+                },
+                {
+                    "title": "Both",
+                    "url": ip + getTeamData + "?instance_id=" + 0,
+                    "type": "json_plugin_url"
+
+                }
+            ]
+        }]
+    };
+
+    return payload;
+
+
+}
+
+
 // var liveElements = function(teams) {
 
 //     var array = [];
@@ -94,13 +128,21 @@ app.get('/get-live-matches', function(req, res) {
 
 })
 
-app.get('/' + ip + trackingLiveMatchUrl, function(req, res) {
+app.get('/' + trackingLiveMatchUrl, function(req, res) {
+
+    var instance_id = req.query.instance_id;
+    res.send(matchSpecificData(instance_id));
+
+
+});
+
+app.get('/' + getTeamData, function(req, res) {
 
     console.log(req.query);
-    res.send({ "text": "Working" });
-
-
+    res.send([{ "text": "Hello World" }]);
 })
+
+
 
 
 
