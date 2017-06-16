@@ -35,6 +35,17 @@ app.get('/get-live-matches', function(req, res) {
 app.get('/' + trackingLiveMatchUrl, function(req, res) {
 
     var instance_id = req.query.instance_id;
+    request
+        .get(getParams('get-match-details', 'instance_id', instance_id))
+        .on('data', function(chunk) {
+
+            var str = "";
+            str += chunk;
+            console.log(str);
+
+            // res.send(str);
+        });
+
     res.send(matchSpecificData(instance_id));
 
 
