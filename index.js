@@ -4,10 +4,10 @@ var ip = "http://139.59.25.186/";
 var trackingLiveMatchUrl = "get-data";
 var getTeamData = 'get-team-data';
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const request = require('request')
-const app = express()
+const express = require('express');
+const bodyParser = require('body-parser');
+const request = require('request');
+const app = express();
 
 app.set('port', (process.env.PORT || 443))
 
@@ -39,9 +39,7 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
         .get(getParams('get-match-details', 'instance_id', instance_id))
         .on('data', function(chunk) {
 
-            var str = "";
-            str += chunk;
-            console.log(str);
+            matchSpecificData(chunk);
 
             // res.send(str);
         });
@@ -121,8 +119,27 @@ function getLiveData(data) {
 }
 
 
-function matchSpecificData(instance_id) {
+function matchSpecificData(chunk) {
 
+    var str = "";
+    str += chunk;
+    var data = JSON.parse(chunk);
+
+    var quick_replies = [];
+
+    for (var i in data.channels) {
+        if (!i.team) {
+
+            quick_replies.push({
+                "title": i.name,
+                "url": ip + getTeamData + "?team=" + i,
+                "type": "json_plugin_url"
+            });
+
+        }
+
+        console.log(quick_replies);
+    }
     var payload = {
         "messages": [{
             "text": "Which team are you supporting?",
@@ -170,6 +187,6 @@ function getParams(url, param, value) {
 }
 
 
-function customUrlGenerator(url) {
+function customUrlGenerator(url, ip) {
     return "http://bubble.social/" + url;
 }
