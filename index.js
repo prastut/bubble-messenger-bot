@@ -123,6 +123,7 @@ function matchSpecificData(chunk) {
 
     var str = "";
     str += chunk;
+    console.log(str);
     var data = JSON.parse(chunk);
 
     var quick_replies = [];
@@ -138,7 +139,7 @@ function matchSpecificData(chunk) {
 
         }
 
-        console.log(quick_replies);
+        // console.log(quick_replies);
     }
     var payload = {
         "messages": [{
@@ -187,6 +188,6 @@ function getParams(url, param, value) {
 }
 
 
-function customUrlGenerator(url, ip) {
+function customUrlGenerator(url) {
     return "http://bubble.social/" + url;
 }
