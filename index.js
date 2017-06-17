@@ -81,17 +81,20 @@ app.get('/get-data', function(req, res) {
 app.get('/get-team-data', function(req, res) {
     var singleOrBoth = req.query.team == "both" ? 2 : 1;
 
-    if (singleOrBoth == 1) {
-        request
-            .get(getParams('get-index-data', req.query), function callBack(err, httpResponse, body) {
-                if (err) {
-                    return console.error('upload failed:', err);
-                }
+    // if (singleOrBoth == 1) {
+    //     request
+    //         .get(getParams('get-index-data', req.query), function callBack(err, httpResponse, body) {
+    //             if (err) {
+    //                 return console.error('upload failed:', err);
+    //             }
 
-                res.send(teamData(sampleTeamData));
-            });
+    //             res.send(teamData(sampleTeamData));
+    //         });
 
-    }
+    // }
+
+
+    res.send(teamData(sampleTeamData));
 });
 
 
