@@ -40,8 +40,8 @@ const request = require('request');
 const app = express();
 
 app.set('port', (process.env.PORT || 443))
-
-// Process application/x-www-form-urlencoded
+app.set('view engine', 'pug')
+    // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // Process application/json
@@ -62,7 +62,7 @@ app.get('/get-live-matches', function(req, res) {
 
 });
 
-app.get('/' + trackingLiveMatchUrl, function(req, res) {
+app.get('/get-data', function(req, res) {
 
     request
         .get(getParams('get-match-details', req.query), function callBack(err, httpResponse, body) {
@@ -78,7 +78,7 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
 
 });
 
-app.get('/' + getTeamData, function(req, res) {
+app.get('/get-team-data', function(req, res) {
     var singleOrBoth = req.query.team == "both" ? 2 : 1;
 
     if (singleOrBoth == 1) {
@@ -92,21 +92,21 @@ app.get('/' + getTeamData, function(req, res) {
             });
 
     }
+});
 
-    // var instance_id = req.query.instance_id;
-    // var team = req.query.
-    // request
-    //     .get(getParams('get-match-details', 'instance_id', instance_id), function callBack(err, httpResponse, body) {
-    //         if (err) {
-    //             return console.error('upload failed:', err);
-    //         }
 
-    //         res.send(matchSpecificData(body));
-    //     });
-    // console.log(req.query);
-    res.send([{ "text": "Hello World" }]);
-})
 
+//Web Views
+
+app.get('/team', function(req, res) {
+
+    var team = req.query.team;
+
+    res.render('team', {
+        title: capitalizeFirstLetter(team),
+        message: team
+    });
+});
 
 
 
@@ -214,12 +214,40 @@ function matchSpecificData(data) {
 
 function teamData(data) {
 
-    var channel = Object.keys(data)[1 - Object.keys(object).indexOf('instance_id')];
+    var channel = Object.keys(data)[1 - Object.keys(data).indexOf('instance_id')];
 
-    console.log(channel);
+    var payload = {
+        "messages": [{
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": [{
+                            "title": "India",
+                            "subtitle": "#Tweet Count: 2000",
+                            "buttons": [{
+                                "type": "web_url",
+                                "url": ip + "team?team=india",
+                                "title": "See More"
+                            }]
+                        }]
+                    }
+                }
+            },
+            {
+                "quick_replies": [{
+                    "url": "http://pastebin.com/raw/bYwUN7un",
+                    "type": "json_plugin_url",
+                    "title": "Heroes/Zeros"
+                }]
 
-    return [{ "text": "Working" }];
+            }
 
+        ]
+    }
+
+
+    return payload;
 
 }
 
@@ -235,4 +263,8 @@ function getParams(url, params) {
 
 function customUrlGenerator(url) {
     return "http://bubble.social/" + url;
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
