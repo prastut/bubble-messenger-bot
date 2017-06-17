@@ -170,7 +170,7 @@ function matchSpecificData(data) {
 
 }
 
-function getParamsData(url, )
+// function getParamsData(url, )
 
 
 function getParams(url, param, value) {
