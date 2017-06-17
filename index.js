@@ -34,9 +34,8 @@ app.get('/get-live-matches', function(req, res) {
 
 app.get('/' + trackingLiveMatchUrl, function(req, res) {
 
-    var instance_id = req.query.instance_id;
     request
-        .get(getParams('get-match-details', 'instance_id', instance_id), function callBack(err, httpResponse, body) {
+        .get(getParams('get-match-details', req.query), function callBack(err, httpResponse, body) {
             if (err) {
                 return console.error('upload failed:', err);
             }
@@ -173,10 +172,9 @@ function matchSpecificData(data) {
 // function getParamsData(url, )
 
 
-function getParams(url, param, value) {
+function getParams(url, params) {
 
-    var params = {};
-    params[param] = value;
+    console.log(params);
     return { url: customUrlGenerator(url), qs: params, json: true };
 }
 
