@@ -41,10 +41,10 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
                 return console.error('upload failed:', err);
             }
 
-            matchSpecificData(body);
+            res.send(matchSpecificData(body));
         });
 
-    res.send([{ "text": "Hello" }]);
+
 
 
 });
