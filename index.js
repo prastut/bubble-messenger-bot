@@ -50,7 +50,17 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
 });
 
 app.get('/' + getTeamData, function(req, res) {
+    console.log(req.query);
+    // var instance_id = req.query.instance_id;
+    // var team = req.query.
+    // request
+    //     .get(getParams('get-match-details', 'instance_id', instance_id), function callBack(err, httpResponse, body) {
+    //         if (err) {
+    //             return console.error('upload failed:', err);
+    //         }
 
+    //         res.send(matchSpecificData(body));
+    //     });
     // console.log(req.query);
     res.send([{ "text": "Hello World" }]);
 })
@@ -133,7 +143,7 @@ function matchSpecificData(data) {
 
                 quick_replies.push({
                     "title": data.channels[i].name,
-                    "url": ip + getTeamData + "?team=" + i,
+                    "url": ip + getTeamData + "?team=" + i + "&instance_id=" + data.instance_id,
                     "type": "json_plugin_url"
                 });
 
@@ -144,7 +154,7 @@ function matchSpecificData(data) {
 
     quick_replies.push({
         "title": "Both",
-        "url": ip + getTeamData + "?team=" + "both",
+        "url": ip + getTeamData + "?team=" + "both" + "&instance_id=" + data.instance_id,
         "type": "json_plugin_url"
 
     });
@@ -159,6 +169,8 @@ function matchSpecificData(data) {
     return payload;
 
 }
+
+function getParamsData(url, )
 
 
 function getParams(url, param, value) {
