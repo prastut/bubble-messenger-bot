@@ -4,6 +4,36 @@ var ip = "http://139.59.25.186/";
 var trackingLiveMatchUrl = "get-data";
 var getTeamData = 'get-team-data';
 
+var sampleTeamData = {
+    "instance_id": "5943dbd7bb46ec194075e4eb",
+    "monsoon_allergy": {
+        "1497595370": {
+            "neg": 0.14855887235839849,
+            "neg_count": 10,
+            "pos": 2.416569558850262,
+            "pos_count": 60
+        },
+        "1497595400": {
+            "neg": 0.07736161121962223,
+            "neg_count": 9,
+            "pos": 2.4018382437497747,
+            "pos_count": 50
+        },
+        "1497595430": {
+            "neg": 0.26440307849935174,
+            "neg_count": 11,
+            "pos": 2.8790858789234104,
+            "pos_count": 51
+        },
+        "1497595460": {
+            "neg": 0.139300418079936,
+            "neg_count": 7,
+            "pos": 2.81081118843658,
+            "pos_count": 60
+        }
+    }
+};
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
@@ -49,7 +79,20 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
 });
 
 app.get('/' + getTeamData, function(req, res) {
-    console.log(req.query);
+    var singleOrBoth = req.query.team == "both" ? 2 : 1;
+
+    if (singleOrBoth == 1) {
+        request
+            .get(getParams('get-index-data', req.query), function callBack(err, httpResponse, body) {
+                if (err) {
+                    return console.error('upload failed:', err);
+                }
+
+                res.send(teamData(sampleTeamData));
+            });
+
+    }
+
     // var instance_id = req.query.instance_id;
     // var team = req.query.
     // request
@@ -169,12 +212,23 @@ function matchSpecificData(data) {
 
 }
 
+function teamData(data) {
+
+    var channel = Object.keys(data)[1 - Object.keys(object).indexOf('instance_id')];
+
+    console.log(channel);
+
+    return [{ "text": "Working" }];
+
+
+}
+
 // function getParamsData(url, )
 
 
 function getParams(url, params) {
 
-    console.log(params);
+    // console.log(params);
     return { url: customUrlGenerator(url), qs: params, json: true };
 }
 
