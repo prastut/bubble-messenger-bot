@@ -25,7 +25,7 @@ app.get('/', function(req, res) {
 
 app.get('/get-live-matches', function(req, res) {
     request
-        .get(getParams('get-live-matches', 'type', 'cricket-match'))
+        .get(getParams('get-live-matches', { type: 'cricket-match' }))
         .on('data', function(chunk) {
             res.send(getLiveData(chunk));
         });
