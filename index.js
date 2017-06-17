@@ -36,7 +36,7 @@ app.get('/' + trackingLiveMatchUrl, function(req, res) {
 
     var instance_id = req.query.instance_id;
     request
-        .get(getParams('get-match-details', 'instance_id', instance_id), function optionalCallback(err, httpResponse, body) {
+        .get(getParams('get-match-details', 'instance_id', instance_id), function callBack(err, httpResponse, body) {
             if (err) {
                 return console.error('upload failed:', err);
             }
@@ -126,44 +126,33 @@ function matchSpecificData(data) {
 
     for (var i in data.channels) {
 
-        console.log(data.channels)
-        console.log(i);
+        if (typeof data.channels[i] != 'undefined') {
 
-        // if (typeof data.channels.i.team != 'undefined') {
+            if (data.channels[i].team === null) {
 
-        //     quick_replies.push({
-        //         "title": data.channels.i.name,
-        //         "url": ip + getTeamData + "?team=" + i,
-        //         "type": "json_plugin_url"
-        //     });
 
-        // }
+                quick_replies.push({
+                    "title": data.channels[i].name,
+                    "url": ip + getTeamData + "?team=" + i,
+                    "type": "json_plugin_url"
+                });
+
+            }
+
+        }
     }
 
-    console.log(quick_replies);
+    quick_replies.push({
+        "title": "Both",
+        "url": ip + getTeamData + "?team=" + "both",
+        "type": "json_plugin_url"
+
+    });
 
     var payload = {
         "messages": [{
             "text": "Which team are you supporting?",
-            "quick_replies": [{
-                    "title": "Team 1",
-                    "url": ip + getTeamData + "?instance_id=" + 1,
-                    "type": "json_plugin_url"
-
-                },
-                {
-                    "title": "Team 2",
-                    "url": ip + getTeamData + "?instance_id=" + 2,
-                    "type": "json_plugin_url"
-
-                },
-                {
-                    "title": "Both",
-                    "url": ip + getTeamData + "?instance_id=" + 0,
-                    "type": "json_plugin_url"
-
-                }
-            ]
+            "quick_replies": quick_replies
         }]
     };
 
@@ -171,15 +160,6 @@ function matchSpecificData(data) {
 
 }
 
-
-// var liveElements = function(teams) {
-
-//     var array = [];
-
-//     for (var i in teams) {
-//         array.push()
-//     }
-// };
 
 function getParams(url, param, value) {
 
