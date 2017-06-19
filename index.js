@@ -4,35 +4,6 @@ var ip = "http://139.59.25.186/";
 var trackingLiveMatchUrl = "get-data";
 var getTeamData = 'get-team-data';
 
-var sampleTeamData = {
-    "instance_id": "5943dbd7bb46ec194075e4eb",
-    "monsoon_allergy": {
-        "1497595370": {
-            "neg": 0.14855887235839849,
-            "neg_count": 10,
-            "pos": 2.416569558850262,
-            "pos_count": 60
-        },
-        "1497595400": {
-            "neg": 0.07736161121962223,
-            "neg_count": 9,
-            "pos": 2.4018382437497747,
-            "pos_count": 50
-        },
-        "1497595430": {
-            "neg": 0.26440307849935174,
-            "neg_count": 11,
-            "pos": 2.8790858789234104,
-            "pos_count": 51
-        },
-        "1497595460": {
-            "neg": 0.139300418079936,
-            "neg_count": 7,
-            "pos": 2.81081118843658,
-            "pos_count": 60
-        }
-    }
-};
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -79,22 +50,30 @@ app.get('/get-data', function(req, res) {
 });
 
 app.get('/get-team-data', function(req, res) {
-    var singleOrBoth = req.query.team == "both" ? 2 : 1;
 
-    // if (singleOrBoth == 1) {
-    //     request
-    //         .get(getParams('get-index-data', req.query), function callBack(err, httpResponse, body) {
-    //             if (err) {
-    //                 return console.error('upload failed:', err);
-    //             }
+    var teamResponse = req.query;
 
-    //             res.send(teamData(sampleTeamData));
-    //         });
+    var singleOrBoth = teamResponse.channel == "both" ? 2 : 1;
 
-    // }
+    teamResponse.last_timestamp = 0;
+
+    console.log(singleOrBoth);
+    console.log(teamResponse);
+
+    if (singleOrBoth == 1) {
+        request
+            .get(getParams('get-index-data', teamResponse), function callBack(err, httpResponse, body) {
+                if (err) {
+                    return console.error('upload failed:', err);
+                }
+
+                res.send(teamData(body));
+            });
+
+    }
 
 
-    res.send(teamData(sampleTeamData));
+    // res.send(teamData(sampleTeamData));
 });
 
 
@@ -186,7 +165,7 @@ function matchSpecificData(data) {
 
             quick_replies.push({
                 "title": data.channels[i].name,
-                "url": ip + getTeamData + "?team=" + i + "&instance_id=" + data.instance_id,
+                "url": ip + getTeamData + "?channel=" + i + "&instance_id=" + data.instance_id,
                 "type": "json_plugin_url"
             });
 
@@ -195,7 +174,7 @@ function matchSpecificData(data) {
 
     quick_replies.push({
         "title": "Both",
-        "url": ip + getTeamData + "?team=" + "both" + "&instance_id=" + data.instance_id,
+        "url": ip + getTeamData + "?channel=" + "both" + "&instance_id=" + data.instance_id,
         "type": "json_plugin_url"
 
     });
@@ -215,41 +194,53 @@ function teamData(data) {
 
     var channel = Object.keys(data)[1 - Object.keys(data).indexOf('instance_id')];
 
-    // var liveData = {
-    //     "messages": [{
-    //         "attachment": {
-    //             "type": "template",
-    //             "payload": {
-    //                 "template_type": "generic",
-    //                 "elements": elements
-    //             }
-    //         }
-    //     }]
-    // };
-
     console.log(channel);
+    console.log(data);
 
     var payload = {
         "messages": [{
-                "attachment": {
-                    "type": "template",
-                    "payload": {
-                        "template_type": "generic",
-                        "elements": [{
-                            "title": "India",
-                            "subtitle": "#Tweet Count: 2000",
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": [{
+                            "title": "Classic White T-Shirt",
+                            "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+                            "subtitle": "Soft white cotton t-shirt is back in style",
                             "buttons": [{
-                                "type": "web_url",
-                                "url": ip + "team?team=india",
-                                "title": "See More"
-                            }]
-                        }]
-                    }
+                                    "type": "web_url",
+                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                    "title": "View Item"
+                                },
+                                {
+                                    "type": "web_url",
+                                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=100",
+                                    "title": "Buy Item"
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Classic Grey T-Shirt",
+                            "image_url": "http://petersapparel.parseapp.com/img/item101-thumb.png",
+                            "subtitle": "Soft gray cotton t-shirt is back in style",
+                            "buttons": [{
+                                    "type": "web_url",
+                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=101",
+                                    "title": "View Item"
+                                },
+                                {
+                                    "type": "web_url",
+                                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+                                    "title": "Buy Item"
+                                }
+                            ]
+                        }
+                    ]
                 }
             }
-
-        ]
+        }]
     };
+
 
 
     return payload;
