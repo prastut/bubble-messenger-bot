@@ -54,7 +54,7 @@
     <div class="container text-center" style="background: black;" id="screenshot-content">
         <div class="row mainarea">
             <div class="col-sm-12 col-xs-12 ui-data-element" id="team-1">
-                <img src="<%= flag %>" class="img-responsive" alt="">
+             <!--   <img src="<%= flag %>" class="img-responsive" alt=""> -->
                 <div class="intro-text">
                     <h1 class="name"><%= name %></h1>
                     <hr class="star-light">
@@ -83,7 +83,7 @@
         function bargraph(dataset) {
             //Width and height
             var w = 110;
-            var h = 50;
+            var h = 100;
             var barPadding = 5;
            
             if (dataset) {
@@ -119,7 +119,7 @@
                     .enter()
                     .append("rect")
                     .attr("height", function(d) {
-                        return 50;
+                        return 100;
                     })
                     .attr("x", function(d, i) {
                         return (i * dataset[0] / sum) * 100 + i * barPadding;
