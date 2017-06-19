@@ -46,7 +46,6 @@ router.get('/', function(req, res, next) {
                 console.log("----------------------------------------");
 
                 var savePath = path.join('/root/bot/public', 'img', 'screenshot', channel + '-screenshot.jpeg');
-
                 var image_url = path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg');
 
                 console.log(image_url);
@@ -63,7 +62,7 @@ router.get('/', function(req, res, next) {
                                     "image_aspect_ratio": "square",
                                     "elements": [{
                                         "title": "Classic Grey T-Shirt",
-                                        "image_url": "http://petersapparel.parseapp.com/img/item101-thumb.png",
+                                        "image_url": String(image_url),
                                         "subtitle": "Soft gray cotton t-shirt is back in style",
                                         "buttons": [{
                                                 "type": "web_url",

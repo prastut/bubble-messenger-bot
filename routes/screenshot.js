@@ -8,10 +8,6 @@ const jsdom = require('jsdom');
 
 router.get('/', function(req, res, next) {
 
-    console.log(req.query);
-
-
-
     var w = 110;
     var h = 50;
     var barPadding = 5;
