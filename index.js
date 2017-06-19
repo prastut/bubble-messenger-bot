@@ -222,6 +222,7 @@ function teamData(data) {
                 }
             }
         }, {
+            "text": "Let's check",
             "quick_replies": [{
                 "type": "web_url",
                 "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
