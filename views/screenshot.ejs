@@ -74,12 +74,12 @@
     <script>
 
         var $ = jQuery;
-
-        var dataset = [<%= neg %>, <%= pos %>]
+        var dataset = []
+        dataset.push(<%= neg %>);
+        dataset.push(<%= pos %>);
+     
         bargraph(dataset);
 
-        <% console.log(dataset) %>
-        <% console.log('heheeh') %>
         function bargraph(dataset) {
             //Width and height
             var w = 110;
