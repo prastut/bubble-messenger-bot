@@ -178,6 +178,7 @@ function matchSpecificData(data) {
 
     var quick_replies = [];
 
+    console.log(data);
 
     for (var i in data.channels) {
 
@@ -250,18 +251,10 @@ function teamData(data) {
                         }]
                     }
                 }
-            },
-            {
-                "quick_replies": [{
-                    "url": "http://pastebin.com/raw/bYwUN7un",
-                    "type": "json_plugin_url",
-                    "title": "Heroes/Zeros"
-                }]
-
             }
 
         ]
-    }
+    };
 
 
     return payload;
