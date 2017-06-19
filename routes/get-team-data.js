@@ -53,31 +53,56 @@ router.get('/', function(req, res, next) {
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
 
-                    res.send([{ "text": "Hello World" }]);
+                    var payload = {
+                        "messages": [{
+                            "attachment": {
+                                "type": "template",
+                                "payload": {
+                                    "template_type": "generic",
+                                    "image_aspect_ratio": "square",
+                                    "elements": [{
+                                            "title": "Classic White T-Shirt",
+                                            "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+                                            "subtitle": "Soft white cotton t-shirt is back in style",
+                                            "buttons": [{
+                                                    "type": "web_url",
+                                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                                    "title": "View Item"
+                                                },
+                                                {
+                                                    "type": "web_url",
+                                                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=100",
+                                                    "title": "Buy Item"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "title": "Classic Grey T-Shirt",
+                                            "image_url": "http://petersapparel.parseapp.com/img/item101-thumb.png",
+                                            "subtitle": "Soft gray cotton t-shirt is back in style",
+                                            "buttons": [{
+                                                    "type": "web_url",
+                                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=101",
+                                                    "title": "View Item"
+                                                },
+                                                {
+                                                    "type": "web_url",
+                                                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+                                                    "title": "Buy Item"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }]
+                    };
+
+
+                    res.send(payload);
 
                     // return payload;
                 });
-
-                var payload = {
-                    "messages": [{
-                        "attachment": {
-                            "type": "template",
-                            "payload": {
-                                "template_type": "generic",
-                                "elements": [{
-                                    "title": "2",
-                                    "image_url": 'http://www.indiacelebrating.com/wp-content/uploads/indian-Flag.jpg',
-                                    "buttons": [{
-                                        "type": "web_url",
-                                        "url": "http:/139.59.25.186/img/screenshot/india-screenshot.jpeg",
-                                        "title": "View Sentiment Analysis"
-                                    }]
-                                }]
-                            }
-                        }
-                    }]
-                };
-
 
             });
 
