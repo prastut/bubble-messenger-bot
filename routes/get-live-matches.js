@@ -1,25 +1,26 @@
 const express = require('express');
 const request = require('request');
 const router = express.Router();
-
+const helper = require("../helper.js");
 /* GET home page. */
+
 router.get('/', function(req, res, next) {
 
     request
-        .get(getParams('get-live-matches', { type: 'cricket-match' }), function callBack(err, httpResponse, body) {
+        .get(helper.getParams('get-live-matches', { type: 'cricket-match' }), function callBack(err, httpResponse, data) {
             if (err) {
                 return console.error('upload failed:', err);
             }
 
             var elements = [];
 
-            for (var i in liveMatchesData) {
+            for (var i in data) {
 
                 elements.push({
-                    "title": liveMatchesData[i].name,
-                    "image_url": liveMatchesData[i].url,
+                    "title": data[i].name,
+                    "image_url": data[i].url,
                     "buttons": [{
-                        "url": ip + trackingLiveMatchUrl + "?instance_id=" + liveMatchesData[i].instance_id,
+                        "url": helper.ip + "get-data" + "?instance_id=" + data[i].instance_id,
                         "title": "Track this!",
                         "type": "json_plugin_url"
                     }]
