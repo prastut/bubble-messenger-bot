@@ -178,22 +178,17 @@ function matchSpecificData(data) {
 
     var quick_replies = [];
 
-    console.log(data);
+    // console.log(data);
 
     for (var i in data.channels) {
 
-        if (typeof data.channels[i] != 'undefined') {
+        if (data.channels[i].type == "team") {
 
-            if (data.channels[i].team === null) {
-
-
-                quick_replies.push({
-                    "title": data.channels[i].name,
-                    "url": ip + getTeamData + "?team=" + i + "&instance_id=" + data.instance_id,
-                    "type": "json_plugin_url"
-                });
-
-            }
+            quick_replies.push({
+                "title": data.channels[i].name,
+                "url": ip + getTeamData + "?team=" + i + "&instance_id=" + data.instance_id,
+                "type": "json_plugin_url"
+            });
 
         }
     }
