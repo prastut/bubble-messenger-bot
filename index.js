@@ -219,6 +219,20 @@ function teamData(data) {
 
     var channel = Object.keys(data)[1 - Object.keys(data).indexOf('instance_id')];
 
+    // var liveData = {
+    //     "messages": [{
+    //         "attachment": {
+    //             "type": "template",
+    //             "payload": {
+    //                 "template_type": "generic",
+    //                 "elements": elements
+    //             }
+    //         }
+    //     }]
+    // };
+
+    console.log(channel);
+
     var payload = {
         "messages": [{
                 "attachment": {
