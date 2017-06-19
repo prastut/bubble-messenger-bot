@@ -8,30 +8,25 @@ var getTeamData = 'get-team-data';
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
+const path = require('path');
+
 const app = express();
 
 app.set('port', (process.env.PORT || 443))
 app.set('view engine', 'pug')
-    // Process application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
 
+// Process application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 // Process application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Index route
-app.get('/', function(req, res) {
 
-    res.send("Hey I am a Bubble Social Chatbot");
-});
 
-app.get('/get-live-matches', function(req, res) {
-    request
-        .get(getParams('get-live-matches', { type: 'cricket-match' }))
-        .on('data', function(chunk) {
-            res.send(getLiveData(chunk));
-        });
+app.use('/', require('./routes/index'));
+app.use('/get-live-matches', require('./routes/get-live-matches'));
+''
 
-});
 
 app.get('/get-data', function(req, res) {
 
@@ -52,22 +47,21 @@ app.get('/get-data', function(req, res) {
 app.get('/get-team-data', function(req, res) {
 
     var teamResponse = req.query;
-
     var singleOrBoth = teamResponse.channel == "both" ? 2 : 1;
 
     teamResponse.last_timestamp = 0;
 
-    console.log(singleOrBoth);
-    console.log(teamResponse);
-
     if (singleOrBoth == 1) {
+        var flag = teamResponse.image_url;
+        delete teamResponse.image_url;
+
         request
             .get(getParams('get-index-data', teamResponse), function callBack(err, httpResponse, body) {
                 if (err) {
                     return console.error('upload failed:', err);
                 }
 
-                res.send(teamData(body));
+                res.send(teamData(body, flag));
             });
 
     }
@@ -110,47 +104,12 @@ app.get('/webhook/', function(req, res) {
 // Spin up the server
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
+
 })
 
 
 
-function getLiveData(data) {
 
-    var str = "";
-    str += data;
-    var liveMatchesData = JSON.parse(str);
-
-    var elements = [];
-
-    for (var i in liveMatchesData) {
-
-        elements.push({
-            "title": liveMatchesData[i].name,
-            "image_url": liveMatchesData[i].url,
-            "buttons": [{
-                "url": ip + trackingLiveMatchUrl + "?instance_id=" + liveMatchesData[i].instance_id,
-                "title": "Track this!",
-                "type": "json_plugin_url"
-            }]
-        });
-    }
-
-
-
-    var liveData = {
-        "messages": [{
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": elements
-                }
-            }
-        }]
-    };
-
-    return liveData;
-}
 
 
 function matchSpecificData(data) {
@@ -165,7 +124,10 @@ function matchSpecificData(data) {
 
             quick_replies.push({
                 "title": data.channels[i].name,
-                "url": ip + getTeamData + "?channel=" + i + "&instance_id=" + data.instance_id,
+                "url": ip + getTeamData +
+                    "?channel=" + i +
+                    "&instance_id=" + data.instance_id +
+                    "&img_url=" + data.channels[i].image_url,
                 "type": "json_plugin_url"
             });
 
@@ -190,12 +152,11 @@ function matchSpecificData(data) {
 
 }
 
-function teamData(data) {
+function teamData(data, flag) {
 
     var channel = Object.keys(data)[1 - Object.keys(data).indexOf('instance_id')];
 
-    console.log(channel);
-    console.log(data);
+
 
     var payload = {
         "messages": [{
