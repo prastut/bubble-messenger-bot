@@ -62,7 +62,7 @@ router.get('/', function(req, res, next) {
                                     "image_aspect_ratio": "square",
                                     "elements": [{
                                         "title": "Classic Grey T-Shirt",
-                                        "image_url": String(image_url),
+                                        "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                         "subtitle": "Soft gray cotton t-shirt is back in style",
                                         "buttons": [{
                                                 "type": "web_url",
