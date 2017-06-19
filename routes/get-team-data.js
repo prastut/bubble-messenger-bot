@@ -3,6 +3,11 @@ const request = require('request');
 const router = express.Router();
 const helper = require("../helper.js");
 
+var webshot = require('webshot');
+
+
+
+
 
 router.get('/', function(req, res, next) {
 
@@ -31,8 +36,23 @@ router.get('/', function(req, res, next) {
 function teamData(data, flag) {
 
     var channel = Object.keys(data)[1 - Object.keys(data).indexOf('instance_id')];
+    var keysSorted = Object.keys(data[channel]).map(Number).sort();
+    var maxKey = keysSorted[keysSorted.length - 1];
+
+    var neg = data[channel][maxKey].reaction_index.neg;
+    var pos = data[channel][maxKey].reaction_index.pos;
+
+    var screenshotUrl = helper.ip + "screenshot" +
+        "?title=" + channel +
+        "&channel=" + channel +
+        "&flag=" + flag +
+        "&neg=" + neg +
+        "&pos=" + pos;
 
 
+    webshot(screenshotUrl, channel + '-screenshot.jpeg', helper.optionsPhone, function(err) {
+        console.log(err);
+    });
 
     var payload = {
         "messages": [{
@@ -59,12 +79,27 @@ function teamData(data, flag) {
                 }
             }
         }, {
-            "text": "Let's check",
+            "text": "Additionally you can do the following as well:",
             "quick_replies": [{
-                "type": "web_url",
-                "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                "title": "Buy Item"
-            }]
+                    "type": "web_url",
+                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+                    "title": "Follow"
+                },
+                {
+                    "type": "web_url",
+                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+                    "title": "Trending Players"
+                },
+                {
+                    "type": "web_url",
+                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+                    "title": "Heroes/Zeroes"
+                }, {
+                    "type": "web_url",
+                    "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
+                    "title": "Track Rival Team"
+                }
+            ]
         }]
     };
 

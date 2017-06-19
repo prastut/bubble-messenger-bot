@@ -13,7 +13,7 @@ const path = require('path');
 const app = express();
 
 app.set('port', (process.env.PORT || 443))
-app.set('view engine', 'pug')
+app.set('view engine', 'ejs')
 
 // Process application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,20 +28,7 @@ app.use('/', require('./routes/index'));
 app.use('/get-live-matches', require('./routes/get-live-matches'));
 app.use('/get-data', require('./routes/get-data'));
 app.use('/get-team-data', require('./routes/get-team-data'));
-
-
-
-//Web Views
-
-app.get('/team', function(req, res) {
-
-    var team = req.query.team;
-    res.render('team', {
-        title: capitalizeFirstLetter(team),
-        message: team
-    });
-});
-
+app.use('/screenshot', require('./routes/screenshot'));
 
 
 
