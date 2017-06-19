@@ -51,6 +51,7 @@ function teamData(data, flag) {
         "&neg=" + neg +
         "&pos=" + pos;
 
+    console.log(screenshotUrl);
 
     webshot(screenshotUrl, channel + '-screenshot.jpeg', helper.optionsPhone, function(err) {
         console.log(err);
