@@ -53,6 +53,7 @@ router.get('/', function(req, res, next) {
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
 
+                    res.send([{ "text": "Hello World" }]);
 
                     // return payload;
                 });
@@ -77,7 +78,7 @@ router.get('/', function(req, res, next) {
                     }]
                 };
 
-                res.send([{ "text": "Hello World" }]);
+
             });
 
     }
