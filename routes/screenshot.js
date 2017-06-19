@@ -5,6 +5,8 @@ const helper = require("../helper.js");
 
 router.get('/', function(req, res, next) {
 
+    console.log(req.query);
+
     res.render('screenshot', {
         title: req.query.title,
         name: req.query.channel,

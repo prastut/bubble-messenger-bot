@@ -20,12 +20,12 @@ router.get('/', function(req, res, next) {
         delete teamResponse.img_url;
 
         request
-            .get(helper.getParams('get-index-data', teamResponse), function callBack(err, httpResponse, body) {
+            .get(helper.getParams('get-index-data', teamResponse), function callBack(err, httpResponse, data) {
                 if (err) {
                     return console.error('upload failed:', err);
                 }
 
-                res.send(teamData(body, flag));
+                res.send(teamData(data, flag));
             });
 
     }
