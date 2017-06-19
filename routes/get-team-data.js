@@ -39,8 +39,10 @@ function teamData(data, flag) {
     var keysSorted = Object.keys(data[channel]).map(Number).sort();
     var maxKey = keysSorted[keysSorted.length - 1];
 
-    var neg = data[channel][maxKey].reaction_index.neg;
-    var pos = data[channel][maxKey].reaction_index.pos;
+    console.log(data);
+
+    var neg = data[channel][maxKey].neg;
+    var pos = data[channel][maxKey].pos;
 
     var screenshotUrl = helper.ip + "screenshot" +
         "?title=" + channel +
