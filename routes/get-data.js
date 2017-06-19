@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
                         "url": helper.ip + 'get-team-data' +
                             "?channel=" + i +
                             "&instance_id=" + data.instance_id +
-                            "&img_url=" + data.channels[i].image_url,
+                            "&img_url=" + data.channels[i].img_url,
                         "type": "json_plugin_url"
                     });
 

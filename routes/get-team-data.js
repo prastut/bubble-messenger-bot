@@ -16,8 +16,8 @@ router.get('/', function(req, res, next) {
     teamResponse.last_timestamp = 0;
 
     if (singleOrBoth == 1) {
-        var flag = teamResponse.image_url;
-        delete teamResponse.image_url;
+        var flag = teamResponse.img_url;
+        delete teamResponse.img_url;
 
         request
             .get(helper.getParams('get-index-data', teamResponse), function callBack(err, httpResponse, body) {
