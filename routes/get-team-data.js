@@ -42,13 +42,15 @@ router.get('/', function(req, res, next) {
                     "&pos=" + pos;
 
 
+                console.log(screenshotUrl);
+
                 var savePath = path.join('/root/bot/public', 'img', 'screenshot', channel + '-screenshot.jpeg');
 
-                console.log(savePath);
+                //                console.log(savePath);
 
                 var image_url = path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg');
 
-                console.log(image_url);
+                //              console.log(image_url);
 
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
@@ -62,7 +64,7 @@ router.get('/', function(req, res, next) {
                                     "image_aspect_ratio": "square",
                                     "elements": [{
                                             "title": "Classic White T-Shirt",
-                                            "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+                                            "image_url": image_url,
                                             "subtitle": "Soft white cotton t-shirt is back in style",
                                             "buttons": [{
                                                     "type": "web_url",
