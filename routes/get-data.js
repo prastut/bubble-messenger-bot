@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 
             var quick_replies = [];
 
-            // console.log(data);
+            console.log(data);
 
             for (var i in data.channels) {
 
