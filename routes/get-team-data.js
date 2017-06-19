@@ -69,38 +69,16 @@ function teamData(data, flag) {
                     "payload": {
                         "template_type": "generic",
                         "elements": [{
-                            "title": helper.capitalizeFirstLetter(channel),
+                            "title": "2",
                             "image_url": image_url,
                             "buttons": [{
                                 "type": "web_url",
-                                "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                "url": "http:/139.59.25.186/img/screenshot/india-screenshot.jpeg",
                                 "title": "View Sentiment Analysis"
                             }]
                         }]
                     }
                 }
-            }, {
-                "text": "Additionally you can do the following as well:",
-                "quick_replies": [{
-                        "type": "web_url",
-                        "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                        "title": "Follow"
-                    },
-                    {
-                        "type": "web_url",
-                        "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                        "title": "Trending Players"
-                    },
-                    {
-                        "type": "web_url",
-                        "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                        "title": "Heroes/Zeroes"
-                    }, {
-                        "type": "web_url",
-                        "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                        "title": "Track Rival Team"
-                    }
-                ]
             }]
         };
 
