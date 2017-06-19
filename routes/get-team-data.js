@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
         delete teamResponse.image_url;
 
         request
-            .get(getParams('get-index-data', teamResponse), function callBack(err, httpResponse, body) {
+            .get(helper.getParams('get-index-data', teamResponse), function callBack(err, httpResponse, body) {
                 if (err) {
                     return console.error('upload failed:', err);
                 }
