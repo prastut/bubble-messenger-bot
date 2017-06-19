@@ -51,7 +51,10 @@ function teamData(data, flag) {
         "&pos=" + pos;
 
 
-    var savePath = path.join(__dirname, 'img', 'screenshot', channel + '-screenshot.jpeg');
+    var savePath = path.join('/root/bot/public', 'img', 'screenshot', channel + '-screenshot.jpeg');
+
+    console.log(savePath);
+
     var image_url = path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg');
 
     console.log(image_url);
