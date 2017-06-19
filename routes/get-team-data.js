@@ -53,30 +53,31 @@ router.get('/', function(req, res, next) {
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
 
-                    var payload = {
-                        "messages": [{
-                            "attachment": {
-                                "type": "template",
-                                "payload": {
-                                    "template_type": "generic",
-                                    "elements": [{
-                                        "title": "2",
-                                        "image_url": 'http://www.indiacelebrating.com/wp-content/uploads/indian-Flag.jpg',
-                                        "buttons": [{
-                                            "type": "web_url",
-                                            "url": "http:/139.59.25.186/img/screenshot/india-screenshot.jpeg",
-                                            "title": "View Sentiment Analysis"
-                                        }]
-                                    }]
-                                }
-                            }
-                        }]
-                    };
 
-                    res.send(payload);
                     // return payload;
                 });
 
+                var payload = {
+                    "messages": [{
+                        "attachment": {
+                            "type": "template",
+                            "payload": {
+                                "template_type": "generic",
+                                "elements": [{
+                                    "title": "2",
+                                    "image_url": 'http://www.indiacelebrating.com/wp-content/uploads/indian-Flag.jpg',
+                                    "buttons": [{
+                                        "type": "web_url",
+                                        "url": "http:/139.59.25.186/img/screenshot/india-screenshot.jpeg",
+                                        "title": "View Sentiment Analysis"
+                                    }]
+                                }]
+                            }
+                        }
+                    }]
+                };
+
+                res.send([{ "text": "Hello World" }]);
             });
 
     }

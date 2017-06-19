@@ -13,8 +13,6 @@ router.get('/', function(req, res, next) {
 
             var quick_replies = [];
 
-            console.log(data);
-
             for (var i in data.channels) {
 
                 if (data.channels[i].type == "team") {
