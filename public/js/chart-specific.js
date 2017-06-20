@@ -23,7 +23,6 @@ $.getJSON(urlGenerator('get-index-data'), params).then(function(data) {
 
     instance_id = data.instance_id;
     pushData(data, 0);
-    console.log(teamData);
     if (parseInt(both) == 0) {
         lineGraph(0, 2);
         bargraph();

@@ -53,7 +53,27 @@ router.get('/', function(req, res, next) {
                     "&instance_id=" + instance_id +
                     "&both=" + 0);
 
-                console.log(webview_url);
+                var quick_replies_options = {
+                    "follow": "Follow",
+                    "trending": "Trending Players",
+                    "herozero": "Heros/Zeros",
+                    "rival": "Track Rival Team"
+                };
+
+                var quick_replies = [];
+
+                for (var key in quick_replies_options) {
+                    if (quick_replies_options.hasOwnProperty(key)) {
+
+                        quick_replies.push({
+                            "url": helper.ip + "quick-replies?type=" + key + "&instance_id=" + instance_id,
+                            "type": "json_plugin_url",
+                            "title": quick_replies_options[key]
+                        });
+
+                    }
+                }
+
 
                 var payload = {
                     "messages": [{
@@ -73,6 +93,9 @@ router.get('/', function(req, res, next) {
                                 }]
                             }
                         }
+                    }, {
+                        "text": "In addition you can do the following as well:",
+                        "quick_replies": quick_replies
                     }]
                 };
 
