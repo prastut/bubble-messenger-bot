@@ -50,6 +50,9 @@ router.get('/', function(req, res, next) {
                 var image_url = path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg');
 
                 console.log(image_url);
+
+                var title = String(helper.capitalizeFirstLetter(channel));
+
                 var payload = {
                     "messages": [{
                         "attachment": {
@@ -58,7 +61,7 @@ router.get('/', function(req, res, next) {
                                 "template_type": "generic",
                                 "image_aspect_ratio": "square",
                                 "elements": [{
-                                    "title": "India",
+                                    "title": title,
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
