@@ -43,15 +43,15 @@ router.get('/', function(req, res, next) {
                     "&pos=" + pos;
 
 
-                console.log(screenshotUrl);
-                console.log("----------------------------------------");
 
                 var savePath = path.join('/root/bot/public', 'img', 'screenshot', channel + '-screenshot.jpeg');
-                var image_url = path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg');
-
-                console.log(image_url);
-
+                var image_url = String(path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg'));
                 var title = String(helper.capitalizeFirstLetter(channel));
+
+                var webview_url = String(helper.ip + "get-sentiment-analysis" +
+                    "?channel=" + channel +
+                    "&instance_id=" + instance_id +
+                    "&both=" + 0);
 
                 var payload = {
                     "messages": [{
@@ -65,7 +65,7 @@ router.get('/', function(req, res, next) {
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
-                                        "url": "www.google.com",
+                                        "url": webview_url,
                                         "title": "View More!"
                                     }]
                                 }]
@@ -74,7 +74,6 @@ router.get('/', function(req, res, next) {
                     }]
                 };
 
-                console.log(JSON.stringify(payload));
 
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
