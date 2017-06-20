@@ -50,38 +50,35 @@ router.get('/', function(req, res, next) {
                 var image_url = path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg');
 
                 console.log(image_url);
+                var payload = {
+                    "messages": [{
+                        "attachment": {
+                            "type": "template",
+                            "payload": {
+                                "template_type": "generic",
+                                "image_aspect_ratio": "square",
+                                "elements": [{
+                                    "title": helper.capitalizeFirstLetter(channel) + "'s Crowd Sentiment",
+                                    "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
+                                    "buttons": [{
+                                        "type": "web_url",
+                                        "url": helper.ip + "get-sentiment-analysis" +
+                                            "?channel=" + channel +
+                                            "&instance_id=" + instance_id +
+                                            "&both=" + 0,
+                                        "title": "Get Sentiment Analysis"
+                                    }]
+                                }]
+                            }
+                        }
+                    }]
+                };
+
+                console.log(JSON.stringify(payload));
 
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
-
-                    var payload = {
-                        "messages": [{
-                            "attachment": {
-                                "type": "template",
-                                "payload": {
-                                    "template_type": "generic",
-                                    "image_aspect_ratio": "square",
-                                    "elements": [{
-                                        "title": helper.capitalizeFirstLetter(channel) + "'s Crowd Sentiment",
-                                        "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
-                                        "buttons": [{
-                                            "type": "web_url",
-                                            "url": helper.ip + "get-sentiment-analysis" +
-                                                "?channel=" + channel +
-                                                "&instance_id=" + instance_id +
-                                                "&both=" + 0,
-                                            "title": "Get Sentiment Analysis"
-                                        }]
-                                    }]
-                                }
-                            }
-                        }]
-                    };
-
-
                     res.send(payload);
-
-                    // return payload;
                 });
 
             });
