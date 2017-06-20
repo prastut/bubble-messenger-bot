@@ -13,7 +13,7 @@ module.exports = {
 
     },
 
-    ip: "https://139.59.25.186/",
+    ip: "https://bubble.social/",
 
     optionsPhone: {
         screenSize: {
