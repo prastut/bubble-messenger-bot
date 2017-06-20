@@ -44,13 +44,7 @@ app.use('/screenshot', require('./routes/screenshot'));
 app.use('/get-sentiment-analysis', require('./routes/get-sentiment-analysis'));
 
 
-https.createServer(options, app).listen(app.get('port'), function() {
-
-    console.log('running on port', app.get('port'));
+app.listen(app.get('port'), function() {
+    console.log('running on port', app.get('port'))
 
 });
-
-// app.listen(app.get('port'), function() {
-//     console.log('running on port', app.get('port'))
-
-// });
