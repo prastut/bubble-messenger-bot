@@ -58,7 +58,7 @@ router.get('/', function(req, res, next) {
                                 "template_type": "generic",
                                 "image_aspect_ratio": "square",
                                 "elements": [{
-                                    "title": "" + helper.capitalizeFirstLetter(channel),
+                                    "title": "India",
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
