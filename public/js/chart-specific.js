@@ -551,5 +551,5 @@ function customSettings(url, id, channel, second) {
 }
 
 function urlGenerator(url) {
-    return "http://bubble.social/" + url;
+    return "http://api.bubble.social/" + url;
 }
