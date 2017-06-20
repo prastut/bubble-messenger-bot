@@ -67,7 +67,7 @@ router.get('/', function(req, res, next) {
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
-                                        "url": webview_url,
+                                        "url": "" + webview_url,
                                         "title": "View More!"
                                     }]
                                 }]

@@ -9,6 +9,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
+
+var key = fs.readFileSync('encryption/bubble_social_private.key');
+var cert = fs.readFileSync('encryption/bubble_social_certificate.crt');
+var ca = fs.readFileSync('encryption/bubble_social_ca_bundle.crt');
+
+var options = {
+    key: key,
+    cert: cert,
+    ca: ca
+};
 
 const app = express();
 
@@ -32,8 +44,13 @@ app.use('/screenshot', require('./routes/screenshot'));
 app.use('/get-sentiment-analysis', require('./routes/get-sentiment-analysis'));
 
 
-// Spin up the server
-app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
+https.createServer(options, app).listen(443, function() {
+
+    console.log('running on port', 443);
 
 });
+
+// app.listen(app.get('port'), function() {
+//     console.log('running on port', app.get('port'))
+
+// });
