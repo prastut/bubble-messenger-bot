@@ -4,7 +4,7 @@ module.exports = {
     },
 
     customUrlGenerator: function(url) {
-        return "http://bubble.social/" + url;
+        return "http://api.bubble.social/" + url;
     },
 
     capitalizeFirstLetter: function(string) {
@@ -13,7 +13,7 @@ module.exports = {
 
     },
 
-    ip: "http://139.59.25.186/",
+    ip: "https://139.59.25.186/",
 
     optionsPhone: {
         screenSize: {
