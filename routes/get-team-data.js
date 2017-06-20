@@ -81,7 +81,7 @@ router.get('/', function(req, res, next) {
 
                 });
 
-                res.send(payload);
+                res.send(JSON.parse(JSON.stringify(payload)));
 
 
             });
