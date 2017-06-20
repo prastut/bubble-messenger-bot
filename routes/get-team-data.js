@@ -78,8 +78,11 @@ router.get('/', function(req, res, next) {
 
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
-                    res.send(payload);
+
                 });
+
+                res.send(payload);
+
 
             });
 
