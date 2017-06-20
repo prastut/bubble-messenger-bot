@@ -10,6 +10,7 @@ const webshot = require('webshot');
 router.get('/', function(req, res, next) {
 
     var teamResponse = req.query;
+    var instance_id = req.query.instance_id;
     console.log(teamResponse);
     var singleOrBoth = teamResponse.channel == "both" ? 2 : 1;
 
@@ -61,20 +62,16 @@ router.get('/', function(req, res, next) {
                                     "template_type": "generic",
                                     "image_aspect_ratio": "square",
                                     "elements": [{
-                                        "title": "Classic Grey T-Shirt",
+                                        "title": helper.capitalizeFirstLetter(channel) + "'s Crowd Sentiment",
                                         "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
-                                        "subtitle": "Soft gray cotton t-shirt is back in style",
                                         "buttons": [{
-                                                "type": "web_url",
-                                                "url": "https://petersapparel.parseapp.com/view_item?item_id=101",
-                                                "title": "View Item"
-                                            },
-                                            {
-                                                "type": "web_url",
-                                                "url": "https://petersapparel.parseapp.com/buy_item?item_id=101",
-                                                "title": "Buy Item"
-                                            }
-                                        ]
+                                            "type": "web_url",
+                                            "url": helper.ip + "get-sentiment-analysis" +
+                                                "?channel=" + channel +
+                                                "&instance_id=" + instance_id +
+                                                "&both=" + 0,
+                                            "title": "Get Sentiment Analysis"
+                                        }]
                                     }]
                                 }
                             }

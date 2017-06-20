@@ -29,7 +29,7 @@ app.use('/get-live-matches', require('./routes/get-live-matches'));
 app.use('/get-data', require('./routes/get-data'));
 app.use('/get-team-data', require('./routes/get-team-data'));
 app.use('/screenshot', require('./routes/screenshot'));
-
+app.use('/get-sentiment-analysis', require('./routes/get-sentiment-analysis'));
 
 
 // Spin up the server
