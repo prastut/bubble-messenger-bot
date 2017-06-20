@@ -58,14 +58,11 @@ router.get('/', function(req, res, next) {
                                 "template_type": "generic",
                                 "image_aspect_ratio": "square",
                                 "elements": [{
-                                    "title": "Hello",
+                                    "title": "" + helper.capitalizeFirstLetter(channel),
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
-                                        "url": "" + helper.ip + "get-sentiment-analysis" +
-                                            "?channel=" + channel +
-                                            "&instance_id=" + instance_id +
-                                            "&both=" + 0,
+                                        "url": "www.google.com",
                                         "title": "View More!"
                                     }]
                                 }]
