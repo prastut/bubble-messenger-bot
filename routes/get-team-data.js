@@ -62,8 +62,11 @@ router.get('/', function(req, res, next) {
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
-                                        "url": "www.google.com",
-                                        "title": "Get Sentiment Analysis"
+                                        "url": helper.ip + "get-sentiment-analysis" +
+                                            "?channel=" + channel +
+                                            "&instance_id=" + instance_id +
+                                            "&both=" + 0,
+                                        "title": "View More!"
                                     }]
                                 }]
                             }
@@ -78,7 +81,7 @@ router.get('/', function(req, res, next) {
 
                 });
 
-                res.send(payload);
+                res.send(JSON.parse(JSON.stringify(payload)));
 
 
             });
