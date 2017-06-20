@@ -53,6 +53,8 @@ router.get('/', function(req, res, next) {
                     "&instance_id=" + instance_id +
                     "&both=" + 0);
 
+                console.log(webview_url);
+
                 var payload = {
                     "messages": [{
                         "attachment": {
