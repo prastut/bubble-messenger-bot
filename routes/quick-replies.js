@@ -6,9 +6,14 @@ const helper = require("../helper.js");
 
 router.get('/', function(req, res, next) {
 
-    var response = req.query;
+    var response = {};
+    Object.assign(response, req.query);
     var type = response.type;
     delete response.type;
+
+
+
+    var quick_replies = helper.quickReplies(instance_id, type);
 
 
     if (type == "trending" || type == "herozero") {
@@ -58,6 +63,9 @@ router.get('/', function(req, res, next) {
                                     "elements": elements
                                 }
                             }
+                        }, {
+                            "text": "In addition you can do the following as well:",
+                            "quick_replies": quick_replies
                         }]
                     };
 
@@ -118,10 +126,12 @@ router.get('/', function(req, res, next) {
                                 "type": "template",
                                 "payload": {
                                     "template_type": "list",
-                                    "top_element_style": "large",
                                     "elements": elements
                                 }
                             }
+                        }, {
+                            "text": "In addition you can do the following as well:",
+                            "quick_replies": quick_replies
                         }]
                     };
 

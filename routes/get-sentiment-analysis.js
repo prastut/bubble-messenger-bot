@@ -5,7 +5,7 @@ const helper = require("../helper.js");
 
 router.get('/', function(req, res, next) {
 
-    var response = {}
+    var response = {};
     Object.assign(response, req.query);
     response.last_timestamp = 0;
     delete response.both;

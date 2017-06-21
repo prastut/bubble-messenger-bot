@@ -22,57 +22,25 @@ router.get('/', function(req, res, next) {
         request
             .get(helper.getParams('get-index-data', teamResponse), function callBack(err, httpResponse, data) {
                 if (err) {
-                    return console.error('upload failed:', err);
+                    res.send([{ "text": "Get Index Data Failed" }]);
                 }
 
                 var channel = Object.keys(data)[1 - Object.keys(data).indexOf('instance_id')];
                 var keysSorted = Object.keys(data[channel]).map(Number).sort();
                 var maxKey = keysSorted[keysSorted.length - 1];
 
-                // console.log(data);
-
                 var neg = data[channel][maxKey].neg;
                 var pos = data[channel][maxKey].pos;
 
-                var screenshotUrl = helper.ip + "screenshot" +
-                    "?title=" + channel +
-                    "&channel=" + channel +
-                    "&flag=" + flag +
-                    "&neg=" + neg +
-                    "&pos=" + pos;
-
-
+                var screenshotUrl = helper.screenshotURL(channel, flag, neg, pos);
 
                 var savePath = path.join('/root/bot/public', 'img', 'screenshot', channel + '-screenshot.jpeg');
                 var image_url = String(path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg'));
                 var title = String(helper.capitalizeFirstLetter(channel));
 
-                var webview_url = String(helper.ip + "get-sentiment-analysis" +
-                    "?channel=" + channel +
-                    "&instance_id=" + instance_id +
-                    "&both=" + 0);
+                var webview_url = helper.webviewURL(channel, instance_id);
 
-                var quick_replies_options = {
-                    "follow": "Follow",
-                    "trending": "Trending Players",
-                    "herozero": "Heros/Zeros",
-                    "rival": "Track Rival Team"
-                };
-
-                var quick_replies = [];
-
-                for (var key in quick_replies_options) {
-                    if (quick_replies_options.hasOwnProperty(key)) {
-
-                        quick_replies.push({
-                            "url": helper.ip + "quick-replies?type=" + key + "&instance_id=" + instance_id,
-                            "type": "json_plugin_url",
-                            "title": quick_replies_options[key]
-                        });
-
-                    }
-                }
-
+                var quick_replies = helper.quickReplies(instance_id);
 
                 var payload = {
                     "messages": [{
@@ -86,7 +54,7 @@ router.get('/', function(req, res, next) {
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
-                                        "url": "" + webview_url,
+                                        "url": webview_url,
                                         "title": "View More!",
                                         "webview_height_ratio": "tall",
 
@@ -104,7 +72,6 @@ router.get('/', function(req, res, next) {
                 webshot(screenshotUrl, savePath, helper.optionsPhone, function(err) {
                     console.log(err);
                     res.send(payload);
-
                 });
 
 
