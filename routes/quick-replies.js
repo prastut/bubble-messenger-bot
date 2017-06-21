@@ -115,9 +115,9 @@ router.get('/', function(req, res, next) {
                         "messages": [{
                             "attachment": {
                                 "type": "template",
-                                "top_element_style": "compact",
                                 "payload": {
                                     "template_type": "list",
+                                    "top_element_style": "compact",
                                     "elements": elements
                                 }
                             }
