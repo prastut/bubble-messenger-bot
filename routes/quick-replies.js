@@ -13,7 +13,6 @@ router.get('/', function(req, res, next) {
 
 
 
-    var quick_replies = helper.quickReplies(instance_id, type);
 
 
     if (type == "trending" || type == "herozero") {
@@ -26,7 +25,8 @@ router.get('/', function(req, res, next) {
                     instance_id = data.instance_id,
                     i,
                     player,
-                    web_url;
+                    web_url,
+                    quick_replies = helper.quickReplies(instance_id, type);
 
                 if (type == "trending") {
 
@@ -35,11 +35,8 @@ router.get('/', function(req, res, next) {
                     for (i in trendingPlayers) {
 
                         player = Object.keys(trendingPlayers[i])[0];
-                        webview_url = helper.ip + "get-sentiment-analysis" +
-                            "?channel=" + player +
-                            "&instance_id=" + instance_id +
-                            "&both=0";
 
+                        webview_url = helper.webviewURL(player, instance_id);
 
                         elements.push({
                             "title": trendingPlayers[i][player].name,
@@ -74,16 +71,11 @@ router.get('/', function(req, res, next) {
                     var hero = data.heros;
                     var zero = data.zeros;
 
-
-
                     for (i in hero) {
 
                         player = Object.keys(hero[i])[0];
-                        webview_url = helper.ip + "get-sentiment-analysis" +
-                            "?channel=" + player +
-                            "&instance_id=" + instance_id +
-                            "&both=0";
 
+                        webview_url = helper.webviewURL(player, instance_id);
 
                         elements.push({
                             "title": hero[i][player].name,
@@ -101,11 +93,7 @@ router.get('/', function(req, res, next) {
                     for (i in zero) {
 
                         player = Object.keys(zero[i])[0];
-                        webview_url = helper.ip + "get-sentiment-analysis" +
-                            "?channel=" + player +
-                            "&instance_id=" + instance_id +
-                            "&both=0";
-
+                        webview_url = helper.webviewURL(player, instance_id);
 
                         elements.push({
                             "title": zero[i][player].name,
