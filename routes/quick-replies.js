@@ -46,8 +46,8 @@ router.get('/', function(req, res, next) {
                             "buttons": [{
                                 "type": "web_url",
                                 "url": webview_url,
-                                "title": "View More"
-
+                                "title": "View More",
+                                "webview_height_ratio": "tall"
                             }]
                         });
                     }

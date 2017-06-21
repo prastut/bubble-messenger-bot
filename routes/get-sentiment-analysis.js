@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
     delete response.both;
     delete response.name;
 
-    console.log(JSON.stringify(response));
+    console.log("GS->" + JSON.stringify(req.query));
 
     res.render('web-view', {
         title: req.query.name,
