@@ -229,7 +229,7 @@ function lineGraph(start, end, specific) {
 
     var graph = new Rickshaw.Graph({
         element: document.getElementById("line"),
-        width: $(window).width() - 20,
+        width: $(window).width() - 40,
         height: 500,
         renderer: 'line',
         stroke: true,
