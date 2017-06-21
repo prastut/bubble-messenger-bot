@@ -4,7 +4,7 @@ module.exports = {
     },
 
     customUrlGenerator: function(url) {
-        return "http://api.bubble.social/" + url;
+        return "https://api.bubble.social/" + url;
     },
 
     capitalizeFirstLetter: function(string) {
