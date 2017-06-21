@@ -38,7 +38,7 @@ router.get('/', function(req, res, next) {
                 var image_url = String(path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg'));
                 var title = String(helper.capitalizeFirstLetter(channel));
 
-                var webview_url = helper.webviewURL(channel, instance_id);
+                var webview_url = helper.webviewURL(channel, channel, instance_id);
 
                 var quick_replies = helper.quickReplies(instance_id);
 

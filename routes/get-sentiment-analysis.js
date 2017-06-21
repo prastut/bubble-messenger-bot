@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const helper = require("../helper.js");
 
 
@@ -9,17 +9,16 @@ router.get('/', function(req, res, next) {
     Object.assign(response, req.query);
     response.last_timestamp = 0;
     delete response.both;
+    delete response.name;
 
+    console.log(JSON.stringify(response));
 
     res.render('web-view', {
-        title: helper.capitalizeFirstLetter(response.channel),
+        title: req.query.name,
         name: response.channel,
         params: JSON.stringify(response),
         both: JSON.stringify(req.query.both)
     });
-
-
-
 
 
 });

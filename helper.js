@@ -36,10 +36,10 @@ module.exports = {
 
     },
 
-    webviewURL: function(channel, instance_id, both) {
+    webviewURL: function(channel, name, instance_id, both) {
 
         both = both || 0;
-        var url = "" + module.exports.ip + "get-sentiment-analysis?channel=" + channel + "&instance_id=" + instance_id + "&both=" + both;
+        var url = "" + module.exports.ip + "get-sentiment-analysis?channel=" + channel + "&name=" + name + "&instance_id=" + instance_id + "&both=" + both;
         return url;
 
     },

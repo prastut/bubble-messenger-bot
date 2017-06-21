@@ -21,13 +21,15 @@ var instance_id;
 
 $.getJSON(urlGenerator('get-index-data'), params).then(function(data) {
 
+    console.log(params);
+
     instance_id = data.instance_id;
     pushData(data, 0);
-    if (parseInt(both) == 0) {
+
+    if (parseInt(both) === 0) {
         lineGraph(0, 2);
         bargraph();
     }
-
 
 
 });

@@ -25,6 +25,7 @@ router.get('/', function(req, res, next) {
                     instance_id = data.instance_id,
                     i,
                     player,
+                    name,
                     web_url,
                     quick_replies = helper.quickReplies(instance_id, type);
 
@@ -35,8 +36,8 @@ router.get('/', function(req, res, next) {
                     for (i in trendingPlayers) {
 
                         player = Object.keys(trendingPlayers[i])[0];
-
-                        webview_url = helper.webviewURL(player, instance_id);
+                        name = trendingPlayers[i][player].name;
+                        webview_url = helper.webviewURL(player, name, instance_id);
 
                         elements.push({
                             "title": trendingPlayers[i][player].name,
@@ -74,8 +75,8 @@ router.get('/', function(req, res, next) {
                     for (i in hero) {
 
                         player = Object.keys(hero[i])[0];
-
-                        webview_url = helper.webviewURL(player, instance_id);
+                        name = hero[i][player].name;
+                        webview_url = helper.webviewURL(player, name, instance_id);
 
                         elements.push({
                             "title": hero[i][player].name,
@@ -84,8 +85,8 @@ router.get('/', function(req, res, next) {
                             "buttons": [{
                                 "type": "web_url",
                                 "url": webview_url,
-                                "title": "View More"
-
+                                "title": "View More",
+                                "webview_height_ratio": "tall",
                             }]
                         });
                     }
@@ -93,7 +94,8 @@ router.get('/', function(req, res, next) {
                     for (i in zero) {
 
                         player = Object.keys(zero[i])[0];
-                        webview_url = helper.webviewURL(player, instance_id);
+                        name = zero[i][player].name;
+                        webview_url = helper.webviewURL(player, name, instance_id);
 
                         elements.push({
                             "title": zero[i][player].name,
@@ -102,7 +104,8 @@ router.get('/', function(req, res, next) {
                             "buttons": [{
                                 "type": "web_url",
                                 "url": webview_url,
-                                "title": "View More"
+                                "title": "View More",
+                                "webview_height_ratio": "tall",
 
                             }]
                         });
@@ -112,6 +115,7 @@ router.get('/', function(req, res, next) {
                         "messages": [{
                             "attachment": {
                                 "type": "template",
+                                "top_element_style": "compact",
                                 "payload": {
                                     "template_type": "list",
                                     "elements": elements
