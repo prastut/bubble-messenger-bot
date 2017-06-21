@@ -137,12 +137,6 @@ router.get('/', function(req, res, next) {
 
     }
 
-
-
-    if (type == "")
-        res.send([{ "text": type }]);
-
-
 });
 
 module.exports = router;
