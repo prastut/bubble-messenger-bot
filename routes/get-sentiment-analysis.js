@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 
     res.render('web-view', {
         title: req.query.name,
-        name: response.channel,
+        name: req.query.name,
         params: JSON.stringify(response),
         both: JSON.stringify(req.query.both)
     });

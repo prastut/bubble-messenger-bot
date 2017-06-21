@@ -21,7 +21,8 @@ var instance_id;
 
 $.getJSON(urlGenerator('get-index-data'), params).then(function(data) {
 
-    console.log(params);
+    console.log("PARAMS->", params);
+    console.log("DATA", data);
 
     instance_id = data.instance_id;
     pushData(data, 0);
