@@ -11,7 +11,6 @@ router.get('/', function(req, res, next) {
 
     var teamResponse = req.query;
     var instance_id = req.query.instance_id;
-    console.log(teamResponse);
     var singleOrBoth = teamResponse.channel == "both" ? 2 : 1;
 
     teamResponse.last_timestamp = 0;
