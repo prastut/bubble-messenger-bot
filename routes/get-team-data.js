@@ -81,14 +81,15 @@ router.get('/', function(req, res, next) {
                             "payload": {
                                 "template_type": "generic",
                                 "image_aspect_ratio": "square",
-                                "webview_height_ratio": "tall",
                                 "elements": [{
                                     "title": title,
                                     "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
                                         "url": "" + webview_url,
-                                        "title": "View More!"
+                                        "title": "View More!",
+                                        "webview_height_ratio": "tall",
+
                                     }]
                                 }]
                             }
