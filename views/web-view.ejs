@@ -78,7 +78,7 @@
                 <div class="col-sm-12 col-xs-12" id="team-1">
 
                     <div class="intro-text">
-                        <h1 class="name"><%= name %></h1>
+                        <h1 class="name"><%- name %></h1>
                         <hr class="star-light">
                         <span class="bar" id="bar"></span>
                     </div>
@@ -195,6 +195,7 @@
   		<script>
 			var params = <%- params %>;
 			var both = <%- both %>;
+            var name = <%- name %>;
 		</script>
 		<script src="js/chart-specific.js"></script>
 	<% } %>

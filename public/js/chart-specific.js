@@ -25,7 +25,7 @@ $.getJSON(urlGenerator('get-index-data'), params).then(function(data) {
     console.log("DATA", data);
 
     instance_id = data.instance_id;
-    pushData(data, 0);
+    pushData(data, name, 0);
 
     if (parseInt(both) === 0) {
         lineGraph(0, 2);
@@ -167,9 +167,9 @@ function bargraph() {
                 })
                 .attr("fill", function(d, i) {
                     if (i == 0) {
-                        return "red"
+                        return "red";
                     } else {
-                        return "green"
+                        return "green";
                     }
                 })
                 .on('mouseover', tip.show)
@@ -337,7 +337,7 @@ function scatterGraph(start, end, specific) {
         series.push({
             color: palette.color(),
             data: teamData[i],
-            name: teamData[i][0].channel.charAt(0).toUpperCase() + teamData[i][0].channel.slice(1)
+            name: teamData[i][0].channel
         });
 
     }
@@ -487,7 +487,7 @@ function clearGraph() {
     $('#line, #timeline, #line_slider, #scatter, #scatter_slider').empty();
 }
 
-function pushData(object, indexOfSeries) {
+function pushData(object, name, indexOfSeries) {
 
     var channel = Object.keys(object)[1 - Object.keys(object).indexOf('instance_id')];
     var keysSorted = Object.keys(object[channel]).map(Number).sort();
@@ -500,14 +500,14 @@ function pushData(object, indexOfSeries) {
         teamData[indexOfSeries].push({
             x: keysSorted[index],
             y: object[channel][timestamp].neg,
-            channel: channel
+            channel: name
 
         });
 
         teamData[indexOfSeries + 1].push({
             x: keysSorted[index],
             y: object[channel][timestamp].pos,
-            channel: channel
+            channel: name
 
         });
     });

@@ -49,7 +49,7 @@ module.exports = {
         "follow": "Follow",
         "trending": "Trending Players",
         "herozero": "Heros/Zeros",
-        "rival": "Track Rival Team"
+        "support": "Change Support"
     },
 
     quickReplies: function(instance_id, type) {
@@ -63,14 +63,31 @@ module.exports = {
             if (options.hasOwnProperty(key)) {
 
                 if (key != type) {
-                    quick_replies.push({
-                        "url": ip + "quick-replies?type=" + key + "&instance_id=" + instance_id,
-                        "type": "json_plugin_url",
-                        "title": options[key]
-                    });
+
+                    if (key != "support") {
+                        quick_replies.push({
+                            "url": ip + "quick-replies?type=" + key + "&instance_id=" + instance_id,
+                            "type": "json_plugin_url",
+                            "title": options[key]
+                        });
+
+                    } else {
+
+                        quick_replies.push({
+
+                            "url": ip + "get-data" + "?instance_id=" + instance_id,
+                            "type": "json_plugin_url",
+                            "title": options[key]
+                        });
+
+
+                    }
+
+
 
 
                 }
+
 
 
             }

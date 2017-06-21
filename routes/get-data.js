@@ -29,12 +29,13 @@ router.get('/', function(req, res, next) {
                 }
             }
 
-            quick_replies.push({
-                "title": "Both",
-                "url": helper.ip + 'get-team-data' + "?channel=" + "both" + "&instance_id=" + data.instance_id,
-                "type": "json_plugin_url"
+            //Both Code
+            // quick_replies.push({
+            //     "title": "Both",
+            //     "url": helper.ip + 'get-team-data' + "?channel=" + "both" + "&instance_id=" + data.instance_id,
+            //     "type": "json_plugin_url"
 
-            });
+            // });
 
             var payload = {
                 "messages": [{
