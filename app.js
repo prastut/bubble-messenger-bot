@@ -12,16 +12,6 @@ const path = require('path');
 const fs = require('fs');
 const https = require('https');
 
-var key = fs.readFileSync('encryption/bubble_social_private.key');
-var cert = fs.readFileSync('encryption/bubble_social_certificate.crt');
-var ca = fs.readFileSync('encryption/bubble_social_ca_bundle.crt');
-
-var options = {
-    key: key,
-    cert: cert,
-    ca: ca
-};
-
 const app = express();
 
 app.set('port', (process.env.PORT || 443))
@@ -44,6 +34,11 @@ app.use('/screenshot', require('./routes/screenshot'));
 app.use('/get-sentiment-analysis', require('./routes/get-sentiment-analysis'));
 app.use('/quick-replies', require('./routes/quick-replies'));
 
+
+app.use(function(err, req, res, next) {
+    console.error(err.stack)
+    res.status(500).send([{ "text": "Sorry! (Check Logs" }]);
+});
 
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
