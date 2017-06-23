@@ -43,7 +43,7 @@ $('#submit').click(function(event) {
         name = $('#name').val(),
         key = name.toLowerCase().replace(" ", "_"),
         team = $('#team').val().toLowerCase().replace(" ", "_"),
-        keywords = $('#keywords').val().split(","),
+        keywords = $('#keywords').val().split(",").map(function(keyword) { return keyword.replace(/\s+/g, ''); }),
         url = $('#url').val();
 
     data.channels[key] = getObject(name, type, url, keywords, team);
@@ -122,5 +122,5 @@ function customSettings(url, object) {
 }
 
 function urlGenerator(url) {
-    return "http://ec2-54-186-88-186.us-west-2.compute.amazonaws.com:5000/" + url;
+    return "https://api.bubble.social" + url;
 }
