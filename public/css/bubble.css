@@ -881,3 +881,14 @@ label[for=step] {
     top: 100%;
     left: 0;
 }
+
+.image-cropper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.flag {
+    height: 250px;
+    width: 300px;
+}

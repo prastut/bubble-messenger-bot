@@ -12,40 +12,33 @@ var dataArrayGenerator = function(length) {
 
 var teamData = dataArrayGenerator(8);
 var barData = {};
-var channels = [];
-
-
 var gEvents = [];
 var instance_id;
 
-$.getJSON(urlGenerator('matches')).then(function(data) {
-    instance_id = data[0].instance_id;
-    channels = data[0].channels;
+//Last Timestamp
+var maxKey;
 
-    $.when(
-            $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0])),
-            $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1])),
-            $.ajax(customSettings(urlGenerator('events'), instance_id, ""))
-        )
-        .done(function(team1, team2, events) {
-            console.log("HEllo");
-            pushData(team1, 0);
-            pushData(team2, 2);
-            pushEventData(events);
-            lineGraph();
-            bargraph();
+$.when(
+        $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0])),
+        $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1])),
+        $.ajax(customSettings(urlGenerator('events'), instance_id, ""))
+    )
+    .done(function(team1, team2, events) {
+        // console.log("HEllo");
+        pushData(team1, 0);
+        pushData(team2, 2);
+        pushEventData(events);
+        lineGraph();
+        bargraph();
 
-            // console.log(event);
-            console.log(gEvents);
+        // console.log(events);
+        // console.log(gEvents);
 
 
-            // updateData();
-            // console.log(channels);
-            // console.log(barData);
-
-        });
-});
-
+        updateData();
+        // console.log(channels);
+        // console.log(barData);
+    });
 
 $(".ui-data-element").click(function(event) {
 
@@ -100,29 +93,42 @@ $(".ui-data-element").click(function(event) {
 
 
 function updateData() {
-    var x = 1496570109000;
+
+    var callTime = maxKey - 10;
+
     setInterval(
         function() {
 
-            barData[channels[0]] = [Math.random(), Math.random()];
-            barData[channels[1]] = [Math.random(), Math.random()];
 
-            bargraph();
 
-            for (var i = 0; i < 4; i++) {
+            $.when(
+                $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0], callTime)),
+                $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1], callTime))
 
-                teamData[i].shift();
-            }
-            teamData[0].push({ 'x': x + 1000, 'y': Math.random() * 10, 'channel': "ind" });
-            teamData[1].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "ind" });
-            teamData[2].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "pak" });
-            teamData[3].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "pak" });
+            ).done(function(team1, team2) {
 
-            x = x + 1000;
 
-            console.log("PD");
+                pushData(team1, 0, true);
+                pushData(team2, 2, true);
+                bargraph();
+
+                callTime = maxKey;
+
+
+            });
+
+
+            // 
+            // teamData[0].push({ 'x': x + 1000, 'y': Math.random() * 10, 'channel': "ind" });
+            // teamData[1].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "ind" });
+            // teamData[2].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "pak" });
+            // teamData[3].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "pak" });
+
+            // x = x + 1000;
+
+            // console.log("PD");
         },
-        1000);
+        10000);
 
 
 
@@ -152,6 +158,27 @@ function updateData() {
     // });
 }
 
+
+function bgLive(object, channel) {
+
+    // console.log(object);
+
+    maxKey = Object.keys(object[channel])[Object.keys(object[channel]).length - 1];
+
+    if (maxKey) {
+
+        barData[channel] = [
+            object[channel][maxKey].neg,
+            object[channel][maxKey].pos
+        ];
+
+
+
+    }
+
+
+}
+
 function bargraph() {
     //Width and height
     var w = 110;
@@ -160,11 +187,13 @@ function bargraph() {
 
     $.each($('.bar'), function(index, element) {
         var key = channels[index];
-
         var dataset = barData[key];
-        // console.log(dataset);
+
+        $(element).empty();
 
         if (dataset) {
+            // console.log(key);
+            // console.log("DS->", dataset);
 
             var sum = dataset.reduce((a, b) => a + b, 0);
 
@@ -182,7 +211,7 @@ function bargraph() {
 
 
             $('.d3-tip').hide();
-            $(element).empty();
+
 
             var svg = d3.select("#" + $(element).attr("id"))
                 .append("svg")
@@ -191,7 +220,7 @@ function bargraph() {
 
             svg.call(tip);
 
-            var rect = svg.selectAll("rect")
+            svg.selectAll("rect")
                 .data(dataset)
                 .enter()
                 .append("rect")
@@ -207,9 +236,9 @@ function bargraph() {
                 })
                 .attr("fill", function(d, i) {
                     if (i == 0) {
-                        return "red"
+                        return "red";
                     } else {
-                        return "green"
+                        return "green";
                     }
                 })
                 .on('mouseover', tip.show)
@@ -240,11 +269,25 @@ function lineGraph(start, end, specific) {
 
     var pushData = function() {
         series = [];
+        var color;
+        var name;
         for (var i = start; i < end; i++) {
+
+
+            if (i % 2 === 0) {
+
+                color = "red";
+                name = toTitleCase(teamData[i][0].channel) + "'s NEG";
+
+            } else {
+                color = "green";
+                name = toTitleCase(teamData[i][0].channel) + "'s POS";
+            }
+
             series.push({
-                color: palette.color(),
+                color: color,
                 data: teamData[i],
-                name: teamData[i][0].channel.charAt(0).toUpperCase() + teamData[i][0].channel.slice(1)
+                name: name
             });
 
         }
@@ -276,7 +319,7 @@ function lineGraph(start, end, specific) {
         graph: graph,
         xFormatter: function(x) {
             var d = new Date(0);
-            d.setUTCSeconds(x / 1000);
+            d.setUTCSeconds(x);
             return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
         }
     });
@@ -315,7 +358,7 @@ function lineGraph(start, end, specific) {
         graph: graph,
         tickFormat: function(x) {
             var d = new Date(0);
-            d.setUTCSeconds(x / 1000);
+            d.setUTCSeconds(x);
             return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 
         }
@@ -339,7 +382,7 @@ function lineGraph(start, end, specific) {
     $.each(gEvents, function(index, element) {
 
 
-        annotator.add(teamData[2][teamData[2].length - 1].x, element.y);
+        annotator.add(element.x, element.y);
         annotator.update();
 
     });
@@ -357,15 +400,31 @@ function scatterGraph(start, end, specific) {
         scheme: 'classic9'
     });
 
+    var pushData = function() {
+        series = [];
+        var color;
+        var name;
+        for (var i = start; i < end; i++) {
 
-    for (i = start; i < end; i++) {
-        series.push({
-            color: palette.color(),
-            data: teamData[i],
-            name: teamData[i][0].channel.charAt(0).toUpperCase() + teamData[i][0].channel.slice(1)
-        });
+            if (i % 2 === 0) {
+                color = "red";
+                name = toTitleCase(teamData[i][0].channel) + "'s NEG";
 
-    }
+            } else {
+                color = "green";
+                name = toTitleCase(teamData[i][0].channel) + "'s POS";
+            }
+
+            series.push({
+                color: color,
+                data: teamData[i],
+                name: name
+            });
+
+        }
+    };
+
+    pushData();
 
     var graph = new Rickshaw.Graph({
         element: document.getElementById("scatter"),
@@ -390,7 +449,7 @@ function scatterGraph(start, end, specific) {
         graph: graph,
         xFormatter: function(x) {
             var d = new Date(0);
-            d.setUTCSeconds(x / 1000);
+            d.setUTCSeconds(x);
             return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
         }
     });
@@ -429,7 +488,7 @@ function scatterGraph(start, end, specific) {
         graph: graph,
         tickFormat: function(x) {
             var d = new Date(0);
-            d.setUTCSeconds(x / 1000);
+            d.setUTCSeconds(x);
             return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 
         }
@@ -509,37 +568,86 @@ function clearGraph() {
     $('#line, #timeline, #line_slider, #scatter, #scatter_slider').empty();
 }
 
-function pushData(response, indexOfSeries) {
+function pushData(response, indexOfSeries, live) {
+    live = live || false;
     var object = response[0];
     var channel = Object.keys(object)[1 - Object.keys(object).indexOf('instance_id')];
 
     var keysSorted = Object.keys(object[channel]).map(Number).sort();
-    console.log(keysSorted);
-    var maxKey = keysSorted[keysSorted.length - 1];
+    // console.log(keysSorted);
+    maxKey = keysSorted[keysSorted.length - 1];
+
+    if (live) {
+
+
+        for (var j = 0; j < keysSorted.length; j++) {
+
+            teamData[indexOfSeries].shift();
+            teamData[indexOfSeries + 1].shift();
+
+        }
+    }
+
+
 
     // Line Chart Data
     $.each(keysSorted, function(index, timestamp) {
 
         teamData[indexOfSeries].push({
-            x: object[channel][timestamp].reaction_index.time,
-            y: object[channel][timestamp].reaction_index.pos,
+            x: timestamp,
+            y: object[channel][timestamp].neg,
             channel: channel
 
         });
 
         teamData[indexOfSeries + 1].push({
-            x: object[channel][timestamp].reaction_index.time,
-            y: object[channel][timestamp].reaction_index.neg,
+            x: timestamp,
+            y: object[channel][timestamp].pos,
             channel: channel
 
         });
     });
 
     barData[channel] = [
-        object[channel][maxKey].reaction_index.neg,
-        object[channel][maxKey].reaction_index.pos
+        object[channel][maxKey].neg,
+        object[channel][maxKey].pos
     ];
 }
+
+
+// function liveData(response, indexOfSeries) {
+//     var object = response[0];
+//     var channel = Object.keys(object)[1 - Object.keys(object).indexOf('instance_id')];
+
+//     var keysSorted = Object.keys(object[channel]).map(Number).sort();
+//     // console.log(keysSorted);
+//     maxKey = keysSorted[keysSorted.length - 1];
+
+
+//     // Line Chart Data
+//     $.each(keysSorted, function(index, timestamp) {
+
+//         teamData[indexOfSeries].push({
+//             x: timestamp,
+//             y: object[channel][timestamp].neg,
+//             channel: channel
+
+//         });
+
+//         teamData[indexOfSeries + 1].push({
+//             x: timestamp,
+//             y: object[channel][timestamp].pos,
+//             channel: channel
+
+//         });
+//     });
+
+//     barData[channel] = [
+//         object[channel][maxKey].neg,
+//         object[channel][maxKey].pos
+//     ];
+
+// }
 
 function pushEventData(response) {
 
@@ -548,11 +656,32 @@ function pushEventData(response) {
     $.each(events, function(index, element) {
         gEvents.push({
 
-            x: element.seconds,
+            x: Math.round(element.timestamp),
             y: element.event
         });
     });
+
+    playerData(events[events.length - 1]);
 }
+
+function playerData(currentObj) {
+
+    // console.log(currentObj);
+
+    if (channels.length == 4) {
+        channels.splice(-1, 3);
+
+    }
+
+    // channels.push(currentObj.batsmen_channel[0]);
+    // channls.push(currentObj.bowler_channel[0]);
+
+
+
+}
+
+
+
 
 function customSettings(url, id, channel, second) {
     second = second || 0;
@@ -560,21 +689,34 @@ function customSettings(url, id, channel, second) {
         "async": true,
         "crossDomain": true,
         "url": url,
-        "type": "POST",
-        "method": "POST",
+        "type": "GET",
+        "method": "GET",
         "headers": {
             "content-type": "application/json",
             "cache-control": "no-cache",
         },
         "processData": false,
-        "data": JSON.stringify({
+        "data": $.param({
             "instance_id": id,
             "channel": channel,
-            "last_second": second
+            "last_timestamp": second
         })
     };
 }
 
 function urlGenerator(url) {
-    return "http://bubble.social/" + url;
+    return "https://api.bubble.social/" + url;
+}
+
+function toTitleCase(str) {
+
+
+    if (str.indexOf('_') != -1) {
+
+        str = str.replace('_', " ");
+        // console.log(str);
+    }
+
+    str = str.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+    return str;
 }
