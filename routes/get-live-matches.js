@@ -14,18 +14,18 @@ router.get('/', function(req, res, next) {
 
             var elements = [];
 
-            for (var i in data) {
+            // for (var i in data) {
 
-                elements.push({
-                    "title": data[i].name,
-                    "image_url": data[i].url,
-                    "buttons": [{
-                        "url": helper.ip + "get-data" + "?instance_id=" + data[i].instance_id,
-                        "title": "Track this!",
-                        "type": "json_plugin_url"
-                    }]
-                });
-            }
+            elements.push({
+                "title": data[0].name,
+                "image_url": data[0].url,
+                "buttons": [{
+                    "url": helper.ip + "get-data" + "?instance_id=" + data[0].instance_id,
+                    "title": "Track this!",
+                    "type": "json_plugin_url"
+                }]
+            });
+            // }
 
 
 
