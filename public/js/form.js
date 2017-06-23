@@ -155,5 +155,5 @@ function customSettings(url, object) {
 }
 
 function urlGenerator(url) {
-    return "https://api.bubble.social" + url;
+    return "https://api.bubble.social/" + url;
 }
