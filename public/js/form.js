@@ -50,7 +50,7 @@ $('#type').on('change', function() {
 
 $('#submit').click(function(event) {
     var type = $('#type').val(),
-        name = $('#name').val(),
+        name = $('#name').val().trim(),
         key = name.toLowerCase().replace(" ", "_"),
         keywords = $('#keywords').val().split(",").map(function(keyword) { return keyword.replace(/\s+/g, ''); }),
         url = $('#url').val();
