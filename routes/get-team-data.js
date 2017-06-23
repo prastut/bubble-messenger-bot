@@ -44,6 +44,7 @@ router.get('/', function(req, res, next) {
 
                 var quick_replies = helper.quickReplies(instance_id);
 
+                console.log(image_url);
                 var payload = {
                     "messages": [{
                         "attachment": {
@@ -53,7 +54,7 @@ router.get('/', function(req, res, next) {
                                 "image_aspect_ratio": "square",
                                 "elements": [{
                                     "title": title,
-                                    "image_url": image_url,
+                                    "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot-' + date + '.jpeg',
                                     "buttons": [{
                                         "type": "web_url",
                                         "url": webview_url,
