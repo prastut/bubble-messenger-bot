@@ -98,7 +98,9 @@ $('#add-to-db').click(function(event) {
 
     event.preventDefault();
 
-    $.ajax(customSettings(urlGenerator('add-match-details'), data))
+    var postObj = JSON.parse($("#preview").val());
+
+    $.ajax(customSettings(urlGenerator('add-match-details'), postObj))
         .done(function() {
             console.log("POSTED");
         })
