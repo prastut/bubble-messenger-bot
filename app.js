@@ -34,6 +34,7 @@ app.use('/screenshot', require('./routes/screenshot'));
 app.use('/get-sentiment-analysis', require('./routes/get-sentiment-analysis'));
 app.use('/quick-replies', require('./routes/quick-replies'));
 app.use('/match-view', require('./routes/match-view'));
+app.use('/form', require('./routes/form'))
 
 
 app.use(function(err, req, res, next) {
