@@ -28,6 +28,16 @@ $('#event-btn').click(function(event) {
 
 });
 
+
+
+
+
+if ($('#type').val() == "team") {
+
+    $('#team-container').hide();
+}
+
+
 $('#type').on('change', function() {
 
     if (this.value == "team") {
@@ -42,11 +52,34 @@ $('#submit').click(function(event) {
     var type = $('#type').val(),
         name = $('#name').val(),
         key = name.toLowerCase().replace(" ", "_"),
-        team = $('#team').val().toLowerCase().replace(" ", "_"),
         keywords = $('#keywords').val().split(",").map(function(keyword) { return keyword.replace(/\s+/g, ''); }),
         url = $('#url').val();
 
-    data.channels[key] = getObject(name, type, url, keywords, team);
+
+    if ($('#type').val() == "team") {
+        data.channels[key] = getObject(name, type, url, keywords, null);
+    } else {
+
+
+        team = $('#team').val().toLowerCase().replace(" ", "_");
+        data.channels[key] = getObject(name, type, url, keywords, team);
+
+    }
+
+    var channels = Object.keys(data.channels);
+    var teams = [];
+
+    if (channels.length == 2) {
+
+        $("#team")
+            .append('<option value=' + channels[0] + '>' + channels[0] + '</option>')
+            .append('<option value=' + channels[1] + '>' + channels[1] + '</option>');
+
+        $('#team-container').show();
+        $('#type').val('player');
+
+    }
+
 
     $("#details-submit").html(name + " details stored");
 
