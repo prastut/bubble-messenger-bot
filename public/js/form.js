@@ -24,8 +24,6 @@ $('#event-btn').click(function(event) {
     $("#preview").val(prettyPrint(data));
     $('#event-btn').hide();
     $('.form-details').show();
-
-
 });
 
 

@@ -46,7 +46,6 @@ module.exports = {
 
 
     quick_replies_options: {
-        "follow": "Follow",
         "trending": "Trending Players",
         "herozero": "Heros/Zeros",
         "support": "Change Support"
