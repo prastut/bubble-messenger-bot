@@ -579,12 +579,15 @@ function pushData(response, indexOfSeries, live) {
 
     if (live) {
 
+        if (teamData[0].length > 150) {
 
-        for (var j = 0; j < keysSorted.length; j++) {
 
-            teamData[indexOfSeries].shift();
-            teamData[indexOfSeries + 1].shift();
+            for (var j = 0; j < keysSorted.length; j++) {
 
+                teamData[indexOfSeries].shift();
+                teamData[indexOfSeries + 1].shift();
+
+            }
         }
     }
 

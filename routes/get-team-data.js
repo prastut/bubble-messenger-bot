@@ -34,8 +34,10 @@ router.get('/', function(req, res, next) {
 
                 var screenshotUrl = helper.screenshotURL(channel, flag, neg, pos);
 
-                var savePath = path.join('/root/bot/public', 'img', 'screenshot', channel + '-screenshot.jpeg');
-                var image_url = String(path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot.jpeg'));
+                var date = new Date().getDate();
+
+                var savePath = path.join('/root/bot/public', 'img', 'screenshot', channel + '-screenshot-' + date + '.jpeg');
+                var image_url = String(path.join(helper.ip, 'img', 'screenshot', channel + '-screenshot-' + date + '.jpeg'));
                 var title = String(helper.capitalizeFirstLetter(channel));
 
                 var webview_url = helper.webviewURL(channel, channel, instance_id);
@@ -51,7 +53,7 @@ router.get('/', function(req, res, next) {
                                 "image_aspect_ratio": "square",
                                 "elements": [{
                                     "title": title,
-                                    "image_url": helper.ip + "img/screenshot/" + channel + '-screenshot.jpeg',
+                                    "image_url": image_url,
                                     "buttons": [{
                                         "type": "web_url",
                                         "url": webview_url,
