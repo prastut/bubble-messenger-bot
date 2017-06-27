@@ -39,7 +39,8 @@
         });
     });
 
-    $(".up-arrow").hide();
+    $(".up-arrow, .player-btn, #close-specific-view").hide();
+
 
 
 

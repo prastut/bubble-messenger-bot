@@ -1,94 +1,269 @@
 var $ = jQuery;
-
-var dataArrayGenerator = function(length) {
-    var i, array = [];
-    for (i = 0; i < length; i++) {
-        array.push([]);
-    }
-
-    return array;
-};
-
-
-var teamData = dataArrayGenerator(8);
+var lineData = {};
 var barData = {};
 var gEvents = [];
-var instance_id;
-
-//Last Timestamp
 var maxKey;
 
 $.when(
         $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0])),
         $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1])),
-        $.ajax(customSettings(urlGenerator('events'), instance_id, ""))
+        $.ajax(customSettings(urlGenerator('events'), instance_id, "")),
+        $.ajax(customSettings(urlGenerator('get-trending-players'), instance_id, ""))
+
     )
-    .done(function(team1, team2, events) {
-        // console.log("HEllo");
-        pushData(team1, 0);
-        pushData(team2, 2);
-        pushEventData(events);
+    .done(function(team1, team2, events, playerData) {
+
+        generatePlayerUI(playerData[0]);
+
+        pushData(team1[0], "both");
+        pushData(team2[0], "both");
+
+        // pushEventData(events);
+        // pushPlayersBarGraphData(trendingData);
         lineGraph();
         bargraph();
+
+        //Showing Trending by Default
+        $('.up-arrow, #herozero-players').hide();
+        $('#player-container-heading').text('Trending Players');
+        $('.player-btn').text("Show Hero/Zero Players").show();
+
+        attachClickHandler();
 
         // console.log(events);
         // console.log(gEvents);
 
 
-        updateData();
+
+        // updateData();
         // console.log(channels);
         // console.log(barData);
     });
 
-$(".ui-data-element").click(function(event) {
 
-    var clicked = $(this).attr('id');
-    var element = clicked.split('-')[0];
-    var clickedIndex = clicked.split('-')[1];
-    // console.log(element);
+function generatePlayerUI(playerData) {
 
-    $("#pointing-" + element).css({
-        "padding-bottom": "0"
+    var heros = playerData.heros;
+    var zeros = playerData.zeros;
+    var trending = playerData.trending;
+    var trendingUI = "";
+    var trendingArrowUI = "";
+
+    var herozeroUI = "";
+    var herozeroArrowUI = "";
+
+    $.each(trending, function(index, element) {
+
+        var channel = Object.keys(trending[index]);
+        var channelData = trending[index][channel];
+
+        barData[channel] = [
+            channelData.neg_sum,
+            channelData.pos_sum
+        ];
+
+        trendingUI +=
+            '<div class="col-md-3 col-lg-3 ui-data-element" id="player-' + channel + '-trending">' +
+            '<div class="player-img-container">' +
+            '<img src="' + channelData.img_url + '" class="player-img" alt="">' +
+            '</div>' +
+            '<div class="intro-text">' +
+            '<h1 class="player-name">' + channelData.name + '</h1>' +
+            '<hr class="star-light">' +
+            '<span class="bar" id="bar-' + channel + '-trending"></span>' +
+            '</div></div>';
+
+        trendingArrowUI +=
+            '<div class="col-sm-3">' +
+            '<div class="up-arrow" id="player-' + channel + '-trending-arrow"></div>' +
+            '</div>';
+
+
+        // console.log(Object.keys(element));
     });
 
-    $.each($('.ui-data-element'), function() {
-        $(this).fadeTo(0, 1);
+    $('#trending-players').html(trendingUI);
+    $('#trending-player-arrows').html(trendingArrowUI);
+
+    $.each(heros, function(index, element) {
+        var channel = Object.keys(heros[index]);
+        var channelData = heros[index][channel];
+
+        barData[channel] = [
+            channelData.neg_sum,
+            channelData.pos_sum
+        ];
+
+        herozeroUI += '<div class="col-md-3 col-lg-3 ui-data-element" id="player-' + channel + '-herozero">' +
+            '<div class="player-img-container">' +
+            '<img src="' + channelData.img_url + '" class="player-img" alt="">' +
+            '</div>' +
+            '<div class="intro-text">' +
+            '<h1 class="player-name">' + channelData.name + '</h1>' +
+            '<hr class="star-light">' +
+            '<span class="bar" id="bar-' + channel + '-herozero"></span>' +
+            '</div></div>';
+
+        herozeroArrowUI +=
+            '<div class="col-sm-3">' +
+            '<div class="up-arrow" id="player-' + channel + '-herozero-arrow"></div>' +
+            '</div>';
     });
 
-
-    var playerOrTeam = element == "player" ? "player" : "team";
-    var notClicked = clickedIndex == "1" ? "2" : "1";
-
-    $("#" + clicked).fadeTo(0, 1);
-    $("#" + element + "-" + notClicked).fadeTo("slow", 0.5);
-    $(".up-arrow").hide();
-    $("#" + clicked + "-arrow").show();
-
-    if (playerOrTeam == "player") {
-
-        // console.log("player");
+    $.each(zeros, function(index, element) {
 
 
-    } else {
-        clickedIndex == "1" ? generateGraphs(0, 2) : generateGraphs(2, 4)
-    }
+
+        var channel = Object.keys(zeros[index]);
+        var channelData = zeros[index][channel];
+
+        barData[channel] = [
+            channelData.neg_sum,
+            channelData.pos_sum
+        ];
+
+        herozeroUI += '<div class="col-md-3 col-lg-3 ui-data-element" id="player-' + channel + '-herozero">' +
+            '<div class="player-img-container">' +
+            '<img src="' + channelData.img_url + '" class="player-img" alt="">' +
+            '</div>' +
+            '<div class="intro-text">' +
+            '<h1 class="player-name">' + channelData.name + '</h1>' +
+            '<hr class="star-light">' +
+            '<span class="bar" id="bar-' + channel + '-herozero"></span>' +
+            '</div></div>';
 
 
-    function generateGraphs(start, end) {
+        herozeroArrowUI +=
+            '<div class="col-sm-3">' +
+            '<div class="up-arrow" id="player-' + channel + '-herozero-arrow"></div>' +
+            '</div>';
+    });
+
+    $('#herozero-players').html(herozeroUI);
+    $('#herozero-player-arrows').html(herozeroArrowUI);
+
+
+
+}
+
+function attachClickHandler() {
+
+    $(".ui-data-element").click(function(event) {
+
+        $('#close-specific-view').show();
+        var clicked = $(this).attr('id');
+        var element = clicked.split('-')[0];
+        var channel = clicked.split('-')[1];
+        var notClicked;
+
+        $("#pointing-" + element).css({
+            "padding-bottom": "0"
+        });
+
+        $(".up-arrow").hide();
+
+        $.each($('.ui-data-element'), function() {
+            $(this).fadeTo(0, 1);
+            if (element == "team" && $(this).attr('id').split('-')[0] == "team" && $(this).attr('id') != clicked) {
+
+                notClicked = $(this).attr('id');
+                $("#" + clicked).fadeTo(0, 1);
+                $("#" + notClicked).fadeTo("slow", 0.5);
+                $("#" + clicked + "-arrow").show();
+
+            } else if (element == "player" && $(this).attr('id').split('-')[0] == "player") {
+
+                if ($(this).attr('id').split('-')[2] == "trending") {
+
+                    if ($(this).attr('id') != clicked) {
+                        $(this).fadeTo("slow", 0.5);
+                    } else {
+                        $("#" + clicked + "-arrow").show();
+                    }
+
+                } else if ($(this).attr('id').split('-')[2] == "herozero") {
+
+                    if ($(this).attr('id') != clicked) {
+                        $(this).fadeTo("slow", 0.5);
+                    } else {
+                        $("#" + clicked + "-arrow").show();
+                    }
+                }
+            }
+
+        });
+
+
+        var playerOrTeam = element == "player" ? "player" : "team";
+
+        if (element == "player") {
+            playerLineGraph(channel);
+
+        } else {
+            generateGraphs(channel);
+
+            function generateGraphs(channel) {
+                clearGraph();
+                clearIntervals();
+                // scatterGraph(start, end);
+                lineGraph(channel);
+
+            }
+
+        }
+
+
+        var timelineTop = $("#timeline-container").offset().top;
+        $('html, body').animate({
+            scrollTop: timelineTop
+        }, 500);
+
+    });
+
+    $(".player-btn").click(function() {
+
+
+        var value = $(this).val();
+
+        if (value == "herozero") {
+            $(this).attr('value', "trending");
+            $('.up-arrow, #trending-players').hide();
+            $('#herozero-players').fadeIn("slow");
+            $('.player-btn').text("Show Trending Players");
+            $('#player-container-heading').text('Heros & Zeros');
+
+
+        } else {
+            $(this).attr('value', "herozero");
+            $('.up-arrow, #herozero-players').hide();
+            $('#trending-players').fadeIn("slow");
+            $('.player-btn').text("Show Hero/Zero Players");
+            $('#player-container-heading').text('Trending Players');
+
+        }
+
+    });
+
+    $('#close-specific-view').click(function() {
         clearGraph();
-        clearIntervals();
-        scatterGraph(start, end);
-        lineGraph(start, end);
+        lineGraph();
+        $('#close-specific-view').hide();
+    });
 
-    }
+}
 
-    var timelineTop = $("#timeline-container").offset().top;
-    $('html, body').animate({
-        scrollTop: timelineTop
-    }, 500);
 
-});
+function playerLineGraph(channel) {
 
+    $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channel)).done(function(data) {
+
+        pushData(data, "both");
+        clearGraph();
+        lineGraph(channel);
+
+    });
+
+}
 
 
 
@@ -99,150 +274,132 @@ function updateData() {
     setInterval(
         function() {
 
+            // clearGraph();
+            // lineGraph();
+
+            // $.when(
+            //     $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0], callTime)),
+            //     $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1], callTime))
+
+            // ).done(function(team1, team2) {
 
 
-            $.when(
-                $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0], callTime)),
-                $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1], callTime))
+            //     pushData(team1, 0, true);
+            //     pushData(team2, 2, true);
+            //     bargraph();
 
-            ).done(function(team1, team2) {
-
-
-                pushData(team1, 0, true);
-                pushData(team2, 2, true);
-                bargraph();
-
-                callTime = maxKey;
+            //     callTime = maxKey;
 
 
-            });
+            // });
 
 
-            // 
-            // teamData[0].push({ 'x': x + 1000, 'y': Math.random() * 10, 'channel': "ind" });
-            // teamData[1].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "ind" });
-            // teamData[2].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "pak" });
-            // teamData[3].push({ 'x': x + 1000, 'y': Math.random(), 'channel': "pak" });
+            // For Show Purpose;
 
-            // x = x + 1000;
-
-            // console.log("PD");
+            barData[channels[0]] = [Math.random(), Math.random()]
+            barData[channels[1]] = [Math.random(), Math.random()]
+            bargraph("update");
         },
         10000);
 
-
-
-    // d3.csv("data-alt.csv", function(error, data) {
-    //     data.forEach(function(d) {
-    //         d.date = parseDate(d.date);
-    //         d.close = +d.close;
-    //     });
-
-    //     // Scale the range of the data again 
-    //     x.domain(d3.extent(data, function(d) { return d.date; }));
-    //     y.domain([0, d3.max(data, function(d) { return d.close; })]);
-
-    //     // Select the section we want to apply our changes to
-    //     var svg = d3.select("body").transition();
-
-    //     svg.select(".line") // change the line
-    //         .duration(750)
-    //         .attr("d", valueline(data));
-    //     svg.select(".x.axis") // change the x axis
-    //         .duration(750)
-    //         .call(xAxis);
-    //     svg.select(".y.axis") // change the y axis
-    //         .duration(750)
-    //         .call(yAxis);
-
-    // });
 }
 
 
-function bgLive(object, channel) {
+function bargraph(update) {
 
-    // console.log(object);
-
-    maxKey = Object.keys(object[channel])[Object.keys(object[channel]).length - 1];
-
-    if (maxKey) {
-
-        barData[channel] = [
-            object[channel][maxKey].neg,
-            object[channel][maxKey].pos
-        ];
-
-
-
-    }
-
-
-}
-
-function bargraph() {
+    update = update == "update" ? true : false;
     //Width and height
     var w = 110;
     var h = 50;
     var barPadding = 5;
+    var tip;
+
 
     $.each($('.bar'), function(index, element) {
-        var key = channels[index];
-        var dataset = barData[key];
-
-        $(element).empty();
-
+        var dataset = barData[$(element).attr('id').split('-')[1]];
         if (dataset) {
-            // console.log(key);
-            // console.log("DS->", dataset);
-
             var sum = dataset.reduce((a, b) => a + b, 0);
 
-            var tip = d3.tip()
-                .attr('class', 'd3-tip')
-                .offset([-10, 0])
-                .html(function(d, i) {
-                    if (i == 0) {
-                        return "<span style='color:red'>" + Math.round((d / sum) * 100) + "%</span>";
-                    } else {
-                        return "<span style='color:green'>" + Math.round((d / sum) * 100) + "%</span>";
-                    }
+            if (!update) {
+                tip = d3.tip()
+                    .attr('class', 'd3-tip')
+                    .offset([-10, 0])
+                    .html(function(d, i) {
+                        if (i == 0) {
+                            return "<span style='color:red'>" + Math.round((d / sum) * 100) + "%</span>";
+                        } else {
+                            return "<span style='color:green'>" + Math.round((d / sum) * 100) + "%</span>";
+                        }
 
-                });
-
-
-            $('.d3-tip').hide();
+                    });
 
 
-            var svg = d3.select("#" + $(element).attr("id"))
-                .append("svg")
-                .attr("width", w)
-                .attr("height", h);
 
-            svg.call(tip);
+                var svg = d3.select("#" + $(element).attr("id"))
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
 
-            svg.selectAll("rect")
-                .data(dataset)
-                .enter()
-                .append("rect")
-                .attr("height", function(d) {
-                    return 50;
-                })
-                .attr("x", function(d, i) {
-                    return (i * dataset[0] / sum) * 100 + i * barPadding;
-                })
-                .attr("y", 0)
-                .attr("width", function(d) {
-                    return (d / sum) * 100;
-                })
-                .attr("fill", function(d, i) {
-                    if (i == 0) {
-                        return "red";
-                    } else {
-                        return "green";
-                    }
-                })
-                .on('mouseover', tip.show)
-                .on('mouseout', tip.hide);
+                svg.call(tip);
+
+                svg.selectAll("rect")
+                    .data(dataset)
+                    .enter()
+                    .append("rect")
+                    .attr("height", function(d) {
+                        return 50;
+                    })
+                    .attr("x", function(d, i) {
+                        return (i * dataset[0] / sum) * 100 + i * barPadding;
+                    })
+                    .attr("y", 0)
+                    .attr("width", function(d) {
+                        return (d / sum) * 100;
+                    })
+                    .attr("fill", function(d, i) {
+                        if (i == 0) {
+                            return "red";
+                        } else {
+                            return "green";
+                        }
+                    })
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide);
+
+            } else {
+
+                $('.d3-tip:lt(1)').remove();
+
+                tip = d3.tip()
+                    .attr('class', 'd3-tip')
+                    .offset([-10, 0])
+                    .html(function(d, i) {
+                        if (i == 0) {
+                            return "<span style='color:red'>" + Math.round((d / sum) * 100) + "%</span>";
+                        } else {
+                            return "<span style='color:green'>" + Math.round((d / sum) * 100) + "%</span>";
+                        }
+
+                    });
+
+                var updateSVGDiv = d3.select("#" + $(element).attr("id"));
+                var updateSVG = d3.select("#" + $(element).attr("id") + "> svg");
+                updateSVG.call(tip);
+
+                updateSVG.selectAll("rect")
+                    .data(dataset)
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide)
+                    .transition()
+                    .attr("x", function(d, i) {
+                        return (i * dataset[0] / sum) * 100 + i * barPadding;
+                    })
+                    .attr("y", 0)
+                    .attr("width", function(d) {
+                        return (d / sum) * 100;
+                    });
+
+            }
         }
 
 
@@ -251,15 +408,9 @@ function bargraph() {
 
 }
 
-function drawdata(svg, dataset) {
 
-}
-
-
-function lineGraph(start, end, specific) {
-    start = start || 0;
-    end = end || 4;
-    specific = specific || false;
+function lineGraph(entity) {
+    entity = entity || false;
 
     var series = [];
 
@@ -267,38 +418,63 @@ function lineGraph(start, end, specific) {
         scheme: 'classic9'
     });
 
-    var pushData = function() {
+
+    var graphData = function() {
         series = [];
-        var color;
-        var name;
-        for (var i = start; i < end; i++) {
+        var sentiments = ["neg", "pos"];
+        var s;
 
+        if (entity) {
+            for (s in sentiments) {
 
-            if (i % 2 === 0) {
+                if (sentiments[s] == "neg") {
+                    series.push({
+                        color: "red",
+                        data: lineData[entity].neg,
+                        name: toTitleCase(entity) + "'s NEG"
+                    });
+                } else {
+                    series.push({
+                        color: "green",
+                        data: lineData[entity].pos,
+                        name: toTitleCase(entity) + "'s POS"
+                    });
+                }
 
-                color = "red";
-                name = toTitleCase(teamData[i][0].channel) + "'s NEG";
-
-            } else {
-                color = "green";
-                name = toTitleCase(teamData[i][0].channel) + "'s POS";
             }
 
-            series.push({
-                color: color,
-                data: teamData[i],
-                name: name
-            });
+        } else {
 
+            var teams = Object.keys(lineData);
+            for (var i in teams) {
+
+                for (s in sentiments) {
+
+                    if (sentiments[s] == "neg") {
+                        series.push({
+                            color: "red",
+                            data: lineData[teams[i]].neg,
+                            name: toTitleCase(teams[i]) + "'s NEG"
+                        });
+                    } else {
+                        series.push({
+                            color: "green",
+                            data: lineData[teams[i]].pos,
+                            name: toTitleCase(teams[i]) + "'s POS"
+                        });
+
+                    }
+                }
+            }
         }
     };
 
-    pushData();
+    graphData();
 
     var graph = new Rickshaw.Graph({
         element: document.getElementById("line"),
         width: 1100,
-        height: 500,
+        height: 400,
         renderer: 'line',
         stroke: true,
         preserve: true,
@@ -373,10 +549,12 @@ function lineGraph(start, end, specific) {
 
     yAxis.render();
 
-    setInterval(function() {
-        pushData();
-        graph.update();
-    }, 10000);
+    // setInterval(function() {
+    //     // hoverDetail._removeListeners();
+    //     // hoverDetail._addListeners();
+    //     pushData();
+    //     graph.update();
+    // }, 10000);
 
 
     $.each(gEvents, function(index, element) {
@@ -408,16 +586,16 @@ function scatterGraph(start, end, specific) {
 
             if (i % 2 === 0) {
                 color = "red";
-                name = toTitleCase(teamData[i][0].channel) + "'s NEG";
+                name = toTitleCase(lineData[i][0].channel) + "'s NEG";
 
             } else {
                 color = "green";
-                name = toTitleCase(teamData[i][0].channel) + "'s POS";
+                name = toTitleCase(lineData[i][0].channel) + "'s POS";
             }
 
             series.push({
                 color: color,
-                data: teamData[i],
+                data: lineData[i],
                 name: name
             });
 
@@ -505,8 +683,8 @@ function scatterGraph(start, end, specific) {
 
     // var timer = setInterval(function() {
     //     $.when(
-    //             $.ajax(customSettings(instance_id, teamData[0][0].team), -1),
-    //             $.ajax(customSettings(instance_id, teamData[2][0].team), -1)
+    //             $.ajax(customSettings(instance_id, lineData[0][0].team), -1),
+    //             $.ajax(customSettings(instance_id, lineData[2][0].team), -1)
     //         )
     //         .done(function(team1, team2) {
     //             console.log("Chala");
@@ -544,7 +722,7 @@ function scatterGraph(start, end, specific) {
 
     // function addAnnotation(force) {
     //     if (messages.length > 0 && (force || Math.random() >= 0.95)) {
-    //         annotator.add(teamData[2][teamData[2].length - 1].x, messages.shift());
+    //         annotator.add(lineData[2][lineData[2].length - 1].x, messages.shift());
     //         annotator.update();
     //     }
     // }
@@ -568,89 +746,56 @@ function clearGraph() {
     $('#line, #timeline, #line_slider, #scatter, #scatter_slider').empty();
 }
 
-function pushData(response, indexOfSeries, live) {
+function pushData(response, both, live) {
     live = live || false;
-    var object = response[0];
+    both = both == "both" ? true : false;
+
+    var object = response;
     var channel = Object.keys(object)[1 - Object.keys(object).indexOf('instance_id')];
 
     var keysSorted = Object.keys(object[channel]).map(Number).sort();
     // console.log(keysSorted);
     maxKey = keysSorted[keysSorted.length - 1];
 
-    if (live) {
+    // if (live) {
 
-        if (teamData[0].length > 150) {
+    //     if (lineData[0].length > 150) {
 
 
-            for (var j = 0; j < keysSorted.length; j++) {
+    //         for (var j = 0; j < keysSorted.length; j++) {
 
-                teamData[indexOfSeries].shift();
-                teamData[indexOfSeries + 1].shift();
+    //             lineData[indexOfSeries].shift();
+    //             lineData[indexOfSeries + 1].shift();
 
-            }
-        }
+    //         }
+    //     }
+    // }
+
+    if (both) {
+        lineData[channel] = {};
+        lineData[channel].neg = [];
+        lineData[channel].pos = [];
+
+        // Line Chart Data
+        $.each(keysSorted, function(index, timestamp) {
+            lineData[channel].neg.push({
+                x: timestamp,
+                y: object[channel][timestamp].neg,
+            });
+
+            lineData[channel].pos.push({
+                x: timestamp,
+                y: object[channel][timestamp].pos,
+            });
+        });
+
     }
-
-
-
-    // Line Chart Data
-    $.each(keysSorted, function(index, timestamp) {
-
-        teamData[indexOfSeries].push({
-            x: timestamp,
-            y: object[channel][timestamp].neg,
-            channel: channel
-
-        });
-
-        teamData[indexOfSeries + 1].push({
-            x: timestamp,
-            y: object[channel][timestamp].pos,
-            channel: channel
-
-        });
-    });
 
     barData[channel] = [
         object[channel][maxKey].neg,
         object[channel][maxKey].pos
     ];
 }
-
-
-// function liveData(response, indexOfSeries) {
-//     var object = response[0];
-//     var channel = Object.keys(object)[1 - Object.keys(object).indexOf('instance_id')];
-
-//     var keysSorted = Object.keys(object[channel]).map(Number).sort();
-//     // console.log(keysSorted);
-//     maxKey = keysSorted[keysSorted.length - 1];
-
-
-//     // Line Chart Data
-//     $.each(keysSorted, function(index, timestamp) {
-
-//         teamData[indexOfSeries].push({
-//             x: timestamp,
-//             y: object[channel][timestamp].neg,
-//             channel: channel
-
-//         });
-
-//         teamData[indexOfSeries + 1].push({
-//             x: timestamp,
-//             y: object[channel][timestamp].pos,
-//             channel: channel
-
-//         });
-//     });
-
-//     barData[channel] = [
-//         object[channel][maxKey].neg,
-//         object[channel][maxKey].pos
-//     ];
-
-// }
 
 function pushEventData(response) {
 
@@ -683,9 +828,6 @@ function playerData(currentObj) {
 
 }
 
-
-
-
 function customSettings(url, id, channel, second) {
     second = second || 0;
     return {
@@ -717,7 +859,6 @@ function toTitleCase(str) {
     if (str.indexOf('_') != -1) {
 
         str = str.replace('_', " ");
-        // console.log(str);
     }
 
     str = str.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
