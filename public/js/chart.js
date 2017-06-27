@@ -35,7 +35,7 @@ $.when(
 
 
 
-        // updateData();
+        updateData();
         // console.log(channels);
         // console.log(barData);
     });
@@ -296,11 +296,10 @@ function updateData() {
 
             // For Show Purpose;
 
-            barData[channels[0]] = [Math.random(), Math.random()]
-            barData[channels[1]] = [Math.random(), Math.random()]
+            barData['bulls'] = [Math.random(), Math.random()]
             bargraph("update");
         },
-        10000);
+        1000);
 
 }
 
@@ -444,6 +443,7 @@ function lineGraph(entity) {
             }
 
         } else {
+
 
             var teams = Object.keys(lineData);
             for (var i in teams) {
@@ -664,6 +664,7 @@ function scatterGraph(start, end, specific) {
 
     var xAxis = new Rickshaw.Graph.Axis.X({
         graph: graph,
+        orientation: "bottom",
         tickFormat: function(x) {
             var d = new Date(0);
             d.setUTCSeconds(x);
