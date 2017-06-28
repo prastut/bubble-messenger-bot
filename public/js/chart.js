@@ -753,24 +753,17 @@ function pushData(response, both, live) {
 
     var object = response;
     var channel = Object.keys(object)[1 - Object.keys(object).indexOf('instance_id')];
-
     var keysSorted = Object.keys(object[channel]).map(Number).sort();
-    // console.log(keysSorted);
     maxKey = keysSorted[keysSorted.length - 1];
 
-    // if (live) {
-
-    //     if (lineData[0].length > 150) {
-
-
-    //         for (var j = 0; j < keysSorted.length; j++) {
-
-    //             lineData[indexOfSeries].shift();
-    //             lineData[indexOfSeries + 1].shift();
-
-    //         }
-    //     }
-    // }
+    if (live) {
+        if (lineData[channel].neg.length > 150) {
+            for (var j = 0; j < keysSorted.length; j++) {
+                lineData[channel].neg.shift();
+                lineData[channel].pos.shift();
+            }
+        }
+    }
 
     if (both) {
         lineData[channel] = {};

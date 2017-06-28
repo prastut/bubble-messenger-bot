@@ -8,47 +8,24 @@ router.get('/', function(req, res, next) {
 
 
     request
-        .get(helper.getParams('get-match-details', req.query), function callBack(err, httpResponse, data) {
+        .get(helper.getParamsTrending('trending', req.query), function callBack(err, httpResponse, data) {
             if (err) {
                 return console.error('upload failed:', err);
             }
 
-            // console.log(data);
 
-            var nameOfMatch = data.name;
+            var channels = Object.keys(data.trending_channels);
+            var channelsData = data.trending_channels;
             var instance_id = data.instance_id;
-            var channels = Object.keys(data.channels);
-            var teams = [];
-
-            for (var i in channels) {
-
-                if (data.channels[channels[i]].type == "team") {
-
-                    teams.push(channels[i]);
-
-                }
-
-            }
-
 
             res.render('trending', {
-
-                title: nameOfMatch,
+                title: 'Trending',
                 instance_id: instance_id,
-                teams: teams,
-                teamProps: data.channels
+                channels: channels,
+                channelsData: channelsData
             });
 
         });
-
-
-    // Object.assign(response, req.query);
-    // response.last_timestamp = 0;
-    // delete response.both;
-    // delete response.name;
-
-
-
 
 });
 

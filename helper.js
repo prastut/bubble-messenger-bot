@@ -7,10 +7,17 @@ module.exports = {
         return "https://api.bubble.social/" + url;
     },
 
+    getParamsTrending: function(url, params) {
+        return { url: module.exports.customUrlGeneratorTrending(url), qs: params, json: true };
+    },
+
+    customUrlGeneratorTrending: function(url) {
+        return "https://trendingapi.bubble.social/" + url;
+
+    },
+
     capitalizeFirstLetter: function(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
-
-
     },
 
     ip: "https://bubble.social/",
@@ -44,7 +51,6 @@ module.exports = {
 
     },
 
-
     quick_replies_options: {
         "trending": "Trending Players",
         "herozero": "Heros/Zeros",
@@ -69,22 +75,14 @@ module.exports = {
                             "type": "json_plugin_url",
                             "title": options[key]
                         });
-
                     } else {
-
                         quick_replies.push({
 
                             "url": ip + "get-data" + "?instance_id=" + instance_id,
                             "type": "json_plugin_url",
                             "title": options[key]
                         });
-
-
                     }
-
-
-
-
                 }
 
 

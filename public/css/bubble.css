@@ -103,6 +103,14 @@ header .intro-text .name {
     font-size: 2em;
 }
 
+header .intro-text .trending-name {
+    display: block;
+    font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 2em;
+    text-transform: none;
+}
+
 header .intro-text .skills {
     font-size: 1.25em;
     font-weight: 300;
@@ -231,6 +239,14 @@ section.success {
     cursor: pointer;
 }
 
+.trending-cards {
+    background: rgba(43, 61, 79, 0.5);
+    padding: 20px;
+    border-radius: 2%;
+    margin-bottom: 20px;
+    min-height: 211px;
+}
+
 #pointing-team {
     background: black;
     padding-top: 20px;
@@ -239,6 +255,16 @@ section.success {
 
 #pointing-player {
     background: white;
+}
+
+.trending-up-arrow {
+    margin-right: auto;
+    margin-left: auto;
+    border-color: white transparent;
+    border-style: solid;
+    border-width: 0px 30px 30px 30px;
+    height: 0px;
+    width: 0px;
 }
 
 #pointing-team .up-arrow {
@@ -536,7 +562,7 @@ fieldset[disabled] .btn-success.active {
     line-height: 28px;
 }
 
-.timeline-modal .modal-content {
+.trending-modal .modal-content {
     border-radius: 0;
     background-clip: border-box;
     -webkit-box-shadow: none;
@@ -547,20 +573,20 @@ fieldset[disabled] .btn-success.active {
     text-align: center;
 }
 
-.timeline-modal .modal-content h2 {
+.trending-modal .modal-content h2 {
     margin: 0;
     font-size: 3em;
 }
 
-.timeline-modal .modal-content img {
+.trending-modal .modal-content img {
     margin-bottom: 30px;
 }
 
-.timeline-modal .modal-content .item-details {
+.trending-modal .modal-content .item-details {
     margin: 30px 0;
 }
 
-.timeline-modal .close-modal {
+.trending-modal .close-modal {
     position: absolute;
     width: 75px;
     height: 75px;
@@ -570,11 +596,11 @@ fieldset[disabled] .btn-success.active {
     cursor: pointer;
 }
 
-.timeline-modal .close-modal:hover {
+.trending-modal .close-modal:hover {
     opacity: 0.3;
 }
 
-.timeline-modal .close-modal .lr {
+.trending-modal .close-modal .lr {
     height: 75px;
     width: 1px;
     margin-left: 35px;
@@ -587,7 +613,7 @@ fieldset[disabled] .btn-success.active {
     z-index: 1051;
 }
 
-.timeline-modal .close-modal .lr .rl {
+.trending-modal .close-modal .lr .rl {
     height: 75px;
     width: 1px;
     background-color: #2C3E50;
@@ -599,7 +625,7 @@ fieldset[disabled] .btn-success.active {
     z-index: 1052;
 }
 
-.timeline-modal .modal-backdrop {
+.trending-modal .modal-backdrop {
     opacity: 0;
     display: none;
 }
