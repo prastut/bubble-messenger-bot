@@ -29,15 +29,7 @@ $.when(
         $('.player-btn').text("Show Hero/Zero Players").show();
 
         attachClickHandler();
-
-        // console.log(events);
-        // console.log(gEvents);
-
-
-
         updateData();
-        // console.log(channels);
-        // console.log(barData);
     });
 
 

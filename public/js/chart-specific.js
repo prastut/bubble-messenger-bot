@@ -1,16 +1,6 @@
 var $ = jQuery;
 
-var dataArrayGenerator = function(length) {
-    var i, array = [];
-    for (i = 0; i < length; i++) {
-        array.push([]);
-    }
-
-    return array;
-};
-
-
-var teamData = dataArrayGenerator(2);
+var teamData = {};
 var barData = {};
 var channels = [];
 
@@ -20,9 +10,6 @@ var instance_id;
 
 
 $.getJSON(urlGenerator('get-index-data'), params).then(function(data) {
-
-    console.log("PARAMS->", params);
-    console.log("DATA", data);
 
     instance_id = data.instance_id;
     pushData(data, name, 0);
