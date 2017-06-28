@@ -35,32 +35,6 @@ $.getJSON(urlGenerator('get-index-data'), params).then(function(data) {
 
 });
 
-// $.getJSON(urlGenerator('matches')).then(function(data) {
-//     instance_id = data[0].instance_id;
-//     channels = data[0].channels;
-
-//     $.when(
-//             $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels))
-//         )
-//         .done(function(team1, team2, events) {
-//             console.log("HEllo");
-//             pushData(team1, 0);
-//             pushData(team2, 2);
-//             pushEventData(events);
-//             lineGraph();
-//             bargraph();
-
-//             // console.log(event);
-//             console.log(gEvents);
-
-
-//             // updateData();
-//             // console.log(channels);
-//             // console.log(barData);
-
-//         });
-// });
-
 function updateData() {
     var x = 1496570109000;
     setInterval(
@@ -86,32 +60,6 @@ function updateData() {
         },
         1000);
 
-
-
-    // d3.csv("data-alt.csv", function(error, data) {
-    //     data.forEach(function(d) {
-    //         d.date = parseDate(d.date);
-    //         d.close = +d.close;
-    //     });
-
-    //     // Scale the range of the data again 
-    //     x.domain(d3.extent(data, function(d) { return d.date; }));
-    //     y.domain([0, d3.max(data, function(d) { return d.close; })]);
-
-    //     // Select the section we want to apply our changes to
-    //     var svg = d3.select("body").transition();
-
-    //     svg.select(".line") // change the line
-    //         .duration(750)
-    //         .attr("d", valueline(data));
-    //     svg.select(".x.axis") // change the x axis
-    //         .duration(750)
-    //         .call(xAxis);
-    //     svg.select(".y.axis") // change the y axis
-    //         .duration(750)
-    //         .call(yAxis);
-
-    // });
 }
 
 function bargraph() {
@@ -422,53 +370,6 @@ function scatterGraph(start, end, specific) {
 
     yAxis.render();
 
-    // var timer = setInterval(function() {
-    //     $.when(
-    //             $.ajax(customSettings(instance_id, teamData[0][0].team), -1),
-    //             $.ajax(customSettings(instance_id, teamData[2][0].team), -1)
-    //         )
-    //         .done(function(team1, team2) {
-    //             console.log("Chala");
-    //             pushData(team1, 0);
-    //             pushData(team2, 2);
-    //             graph.update();
-    //         });
-
-    // }, 10000);
-    // console.log(team1);
-
-    // setInterval(function() {
-    //     $.when($.ajax(customSettings(instance_id, teams[0])), $.ajax(customSettings(instance_id, teams[1])))
-    //         .done(function(team1, team2) {
-    //             pushData(team1, 0);
-    //             pushData(team2, 2);
-    //             lineGraph();
-    //         });
-
-    // }, 10000);
-
-
-
-    // var controls = new RenderControls({
-    //     element: document.querySelector('form'),
-    //     graph: graph
-    // });
-
-    // add some data every so often
-
-    // var messages = [
-    //     "That's a Six",
-    //     "Wicket!",
-    // ];
-
-    // function addAnnotation(force) {
-    //     if (messages.length > 0 && (force || Math.random() >= 0.95)) {
-    //         annotator.add(teamData[2][teamData[2].length - 1].x, messages.shift());
-    //         annotator.update();
-    //     }
-    // }
-
-    // addAnnotation(true);
 
 }
 

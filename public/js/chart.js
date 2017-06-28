@@ -7,8 +7,8 @@ var maxKey;
 $.when(
         $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0])),
         $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1])),
-        $.ajax(customSettings(urlGenerator('events'), instance_id, "")),
-        $.ajax(customSettings(urlGenerator('get-trending-players'), instance_id, ""))
+        $.ajax(customSettings(urlGenerator('events'), instance_id, "empty")),
+        $.ajax(customSettings(urlGenerator('get-trending-players'), instance_id, "empty"))
 
     )
     .done(function(team1, team2, events, playerData) {
