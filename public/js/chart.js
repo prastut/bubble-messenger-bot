@@ -4,6 +4,10 @@ var barData = {};
 var gEvents = [];
 var maxKey;
 
+//Graph Global Objects
+var graph;
+var hoverDetail;
+
 $.when(
         $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0])),
         $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1])),
@@ -15,8 +19,8 @@ $.when(
 
         generatePlayerUI(playerData[0]);
 
-        pushData(team1[0], "both");
-        pushData(team2[0], "both");
+        pushData(team1[0], "team");
+        pushData(team2[0], "team");
 
         // pushEventData(events);
         // pushPlayersBarGraphData(trendingData);
@@ -29,7 +33,7 @@ $.when(
         $('.player-btn').text("Show Hero/Zero Players").show();
 
         attachClickHandler();
-        updateData();
+        // updateData();
     });
 
 
@@ -248,9 +252,8 @@ function attachClickHandler() {
 function playerLineGraph(channel) {
 
     $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channel)).done(function(data) {
-
-        pushData(data, "both");
         clearGraph();
+        pushData(data, "both");
         lineGraph(channel);
 
     });
@@ -262,34 +265,40 @@ function playerLineGraph(channel) {
 function updateData() {
 
     var callTime = maxKey - 10;
+    console.log(callTime);
+
 
     setInterval(
         function() {
 
-            // clearGraph();
+
             // lineGraph();
 
-            // $.when(
-            //     $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0], callTime)),
-            //     $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1], callTime))
+            var totalChannels = Object.keys(lineData);
+            console.log(totalChannels);
 
-            // ).done(function(team1, team2) {
+            $.when(
+                $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[0], callTime)),
+                $.ajax(customSettings(urlGenerator('get-index-data'), instance_id, channels[1], callTime))
+
+            ).done(function(team1, team2) {
+
+                pushData(team1[0], "both", "live");
+                pushData(team2[0], "both", "live");
 
 
-            //     pushData(team1, 0, true);
-            //     pushData(team2, 2, true);
-            //     bargraph();
 
-            //     callTime = maxKey;
+                callTime = maxKey;
+                console.log(callTime);
 
 
-            // });
+            });
 
 
             // For Show Purpose;
 
-            barData['bulls'] = [Math.random(), Math.random()]
-            bargraph("update");
+            // barData['bulls'] = [Math.random(), Math.random()]
+            // bargraph("update");
         },
         1000);
 
@@ -463,7 +472,7 @@ function lineGraph(entity) {
 
     graphData();
 
-    var graph = new Rickshaw.Graph({
+    graph = new Rickshaw.Graph({
         element: document.getElementById("line"),
         width: 1100,
         height: 400,
@@ -483,7 +492,7 @@ function lineGraph(entity) {
         element: document.getElementById('line_slider'),
     });
 
-    var hoverDetail = new Rickshaw.Graph.HoverDetail({
+    hoverDetail = new Rickshaw.Graph.HoverDetail({
         graph: graph,
         xFormatter: function(x) {
             var d = new Date(0);
@@ -739,28 +748,33 @@ function clearGraph() {
     $('#line, #timeline, #line_slider, #scatter, #scatter_slider').empty();
 }
 
-function pushData(response, both, live) {
-    live = live || false;
-    both = both == "both" ? true : false;
+function pushData(response, entity, live) {
+    live = live == "live" ? true : false;
+
 
     var object = response;
     var channel = Object.keys(object)[1 - Object.keys(object).indexOf('instance_id')];
     var keysSorted = Object.keys(object[channel]).map(Number).sort();
-    maxKey = keysSorted[keysSorted.length - 1];
 
-    if (live) {
-        if (lineData[channel].neg.length > 150) {
-            for (var j = 0; j < keysSorted.length; j++) {
-                lineData[channel].neg.shift();
-                lineData[channel].pos.shift();
+    // Check if there is any data
+    if (keysSorted.length > 0) {
+        maxKey = keysSorted[keysSorted.length - 1];
+
+        if (live) {
+            if (lineData[channel].neg.length > 150) {
+                for (var j = 0; j < keysSorted.length; j++) {
+                    lineData[channel].neg.shift();
+                    lineData[channel].pos.shift();
+                }
             }
         }
-    }
 
-    if (both) {
-        lineData[channel] = {};
-        lineData[channel].neg = [];
-        lineData[channel].pos = [];
+        if (!(channel in lineData)) {
+            lineData[channel] = {};
+            lineData[channel].neg = [];
+            lineData[channel].pos = [];
+            lineData[channel].type = entity;
+        }
 
         // Line Chart Data
         $.each(keysSorted, function(index, timestamp) {
@@ -775,12 +789,12 @@ function pushData(response, both, live) {
             });
         });
 
+        barData[channel] = [
+            object[channel][maxKey].neg,
+            object[channel][maxKey].pos
+        ];
     }
 
-    barData[channel] = [
-        object[channel][maxKey].neg,
-        object[channel][maxKey].pos
-    ];
 }
 
 function pushEventData(response) {
@@ -798,21 +812,6 @@ function pushEventData(response) {
     playerData(events[events.length - 1]);
 }
 
-function playerData(currentObj) {
-
-    // console.log(currentObj);
-
-    if (channels.length == 4) {
-        channels.splice(-1, 3);
-
-    }
-
-    // channels.push(currentObj.batsmen_channel[0]);
-    // channls.push(currentObj.bowler_channel[0]);
-
-
-
-}
 
 function customSettings(url, id, channel, second) {
     second = second || 0;

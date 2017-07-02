@@ -3,7 +3,6 @@ var router = express.Router();
 const helper = require("../helper.js");
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log(req.connection.remoteAddress);
     res.send("Hey I am a Bubble Social Chatbot");
 });
 

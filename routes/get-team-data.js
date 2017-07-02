@@ -44,7 +44,6 @@ router.get('/', function(req, res, next) {
 
                 var quick_replies = helper.quickReplies(instance_id);
 
-                console.log(image_url);
                 var payload = {
                     "messages": [{
                         "attachment": {
