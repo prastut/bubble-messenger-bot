@@ -17,30 +17,19 @@ router.get('/', function(req, res, next) {
 
             for (var i in data) {
 
-                request
-                    .get(helper.getParams('teams', { instance_id: data[i].instance_id }),
-                        function callBack(err, httpResponse, match) {
-
-                            var teamsOfMatch = Object.keys(match.teams);
-                            var title = helper.capitalizeFirstLetter(teamsOfMatch[0]) +
-                                ' vs ' +
-                                helper.capitalizeFirstLetter(teamsOfMatch[1]);
-
-                            elements.push({
-                                "title": title,
-                                "image_url": data[i].url,
-                                "subtitle": data[i].name,
-                                "buttons": [{
-                                    "url": helper.ip + "get-data" + "?instance_id=" + data[i].instance_id,
-                                    "title": "Track this!",
-                                    "type": "json_plugin_url"
-                                }]
-                            });
-                        });
-
+                elements.push({
+                    "title": data[i].name,
+                    "image_url": data[i].url,
+                    "buttons": [{
+                        "url": helper.ip + "get-data" + "?instance_id=" + data[i].instance_id,
+                        "title": "Track this!",
+                        "type": "json_plugin_url"
+                    }]
+                });
             }
 
-            console.log(elements);
+
+            // console.log(elements);
 
             var liveData = {
                 "messages": [{
