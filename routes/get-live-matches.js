@@ -12,22 +12,24 @@ router.get('/', function(req, res, next) {
                 return console.error('upload failed:', err);
             }
 
-            var elements = [];
 
-            // for (var i in data) {
+            // console.log(data);
 
-            elements.push({
-                "title": data[0].name,
-                "image_url": data[0].url,
-                "buttons": [{
-                    "url": helper.ip + "get-data" + "?instance_id=" + data[0].instance_id,
-                    "title": "Track this!",
-                    "type": "json_plugin_url"
-                }]
-            });
-            // }
+            for (var i in data) {
+
+                elements.push({
+                    "title": data[i].name,
+                    "image_url": data[i].url,
+                    "buttons": [{
+                        "url": helper.ip + "get-data" + "?instance_id=" + data[0].instance_id,
+                        "title": "Track this!",
+                        "type": "json_plugin_url"
+                    }]
+                });
+            }
 
 
+            // console.log(elements);
 
             var liveData = {
                 "messages": [{
