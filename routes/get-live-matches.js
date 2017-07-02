@@ -40,7 +40,7 @@ router.get('/', function(req, res, next) {
 
             }
 
-            // console.log(elements);
+            console.log(elements);
 
             var liveData = {
                 "messages": [{
