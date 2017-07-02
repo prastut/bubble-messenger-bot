@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
                 return console.error('upload failed:', err);
             }
 
-
+            var elements = [];
             // console.log(data);
 
             for (var i in data) {
