@@ -54,69 +54,44 @@
                 <div class="col-12" id="event">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">Tournament Name</div>
-                            <input type="text" class="form-control data" id="nameOfTour">
-                        </div>
-                        <div class="input-group" style="margin-top:20px">
-                            <div class="input-group-addon">Match Name</div>
-                            <input type="text" class="form-control data" id="nameOfMatch">
-                        </div>
-                         <div class='input-group date' style="margin-top:20px">
-                             <div class="input-group-addon">Start Time</div>
-                            <input type="datetime-local" class="form-control data" id="start">
+                            <div class="input-group-addon">Select Match</div>
+                            <select class="form-control" id="select-match">
+                                <option value="no">Choose a match</option>
+                            </select>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 text-center">
-                    <button type="" style="margin-top: 2em;" id="event-btn" class="btn btn-primary">Submit Event</button>
                 </div>
             </div>
 
-            <div class="form-details row">
-                <div class="col-3">
+            <div class="form-details row" style="margin-top:20px" id="event-details">
+                <div class="col-6">
                     <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon">Type</div>
-                            <select class="form-control" id="type" disabled>
-									<option value="team">team</option>
-									<option value="player">player</option>
-							</select>
+                         <div class='input-group'>
+                             <div class="input-group-addon">Event Time</div>
+                            <input type="datetime-local" class="form-control data" id="time">
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">Name</div>
+                            <div class="input-group-addon">Name of Event</div>
                             <input type="text" class="form-control data" id="name">
                         </div>
                     </div>
                 </div>
-                <div class="col-3" id="team-container">
+                <div class="col-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">Team</div>
-                            <select class="form-control" id="team">
-
-							</select>
+                            <div class="input-group-addon">Event Description</div>
+                            <input type="text" class="form-control data" id="description">
                         </div>
                     </div>
                 </div>
-                <div class="col-3">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon">Keywords</div>
-                            <input type="text" class="form-control data" id="keywords">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon">URL</div>
-                            <input type="text" class="form-control data" id="url">
-                        </div>
+                <div class="col-6">
+                   <div class="input-group" style="margin-top:10px">
+                            <div class="input-group-addon">Select Player</div>
+                            <select class="form-control" id="select-player" multiple></select>
                     </div>
                 </div>
 

@@ -37,6 +37,7 @@ app.use('/quick-replies', require('./routes/bot/step-3/quick-replies'));
 app.use('/match-view', require('./routes/web/match-view'));
 app.use('/form', require('./routes/web/form'));
 app.use('/trending', require('./routes/web/trending'));
+app.use('/form-events', require('./routes/web/form-events'));
 
 
 app.use(function(err, req, res, next) {
