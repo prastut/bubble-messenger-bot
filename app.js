@@ -30,7 +30,7 @@ app.use('/get-support', require('./routes/bot/step-2/get-support'));
 
 app.use('/get-team-data', require('./routes/bot/step-3/get-team-data'));
 app.use('/screenshot', require('./routes/bot/step-3/screenshot'));
-app.use('/get-webview', require('./routes/bot/step-3/webview'));
+app.use('/get-webview', require('./routes/bot/step-3/bot-web-view'));
 app.use('/quick-replies', require('./routes/bot/step-3/quick-replies'));
 
 //Web Routes

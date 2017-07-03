@@ -12,14 +12,12 @@ router.get('/', function(req, res, next) {
     delete response.name;
 
     console.log("GS->" + JSON.stringify(req.query));
+    console.log(response);
 
-    res.render('web-view', {
+    res.render('bot-web-view', {
         title: req.query.name,
-        name: req.query.name,
-        nameforJS: JSON.stringify(req.query.name),
+        channel: JSON.stringify(req.query.channel),
         params: JSON.stringify(response),
-        both: JSON.stringify(req.query.both),
-
     });
 
 

@@ -2,11 +2,13 @@ var $ = jQuery;
 
 var data = {
     "name": "",
+    "pretty_name": "",
+    "start": "",
     "index": {},
     "channels": {},
     "event_type": "cricket-match",
     "events": { "balls": [] },
-    "time": ""
+
 };
 
 
@@ -19,8 +21,13 @@ $('#event-btn').click(function(event) {
     event.preventDefault();
 
     $('#event').hide();
-    var nameOfEvent = $('#nameOfEvent').val();
-    data.name = nameOfEvent;
+    var nameOfTour = $('#nameOfTour').val();
+    var nameOfMatch = $("#nameOfMatch").val();
+    var start = $("#start").val();
+    data.name = nameOfTour;
+    data.pretty_name = nameOfMatch;
+    data.start = start;
+
     $("#preview").val(prettyPrint(data));
     $('#event-btn').hide();
     $('.form-details').show();
@@ -49,7 +56,7 @@ $('#type').on('change', function() {
 $('#submit').click(function(event) {
     var type = $('#type').val(),
         name = $('#name').val().trim(),
-        key = name.toLowerCase().replace(" ", "_"),
+        key = name.toLowerCase().split(' ').join('_'),
         keywords = $('#keywords').val().split(",").map(function(keyword) { return keyword.replace(/\s+/g, ''); }),
         url = $('#url').val();
 

@@ -11,22 +11,12 @@
 
     <title>Bubble</title>
 
-    <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="css/bubble.css">
     <!--<link rel="stylesheet" href="css/chart.css">-->
 
-    <script src="vendor/d3/d3.v3.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    <script>
-        jQuery.noConflict();
-    </script>
-
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-    <script src="js/rickshaw.js"></script>
-
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
@@ -59,38 +49,20 @@
     <section class="container">
         <h1>Data Entry</h1>
         <form>
-            <!--<div class="row form-group">
-                <div class="col-8">
-                    <label for="match-id">Match-ID</label>
-                    <input class="form-control" id="match-id">
-                </div>
-                <div class="col-4">
-                    <button type="button" id="match-id-submit" class="btn btn-primary">Submit</button>
-                </div>
-            </div>-->
-
-            <!--<div class="row form-group">
-                <div class="col-4">
-                    <label for="team-1">Team 1</label>
-                    <input type="text" class="form-control team" id="team-1">
-                </div>
-                <div class="col-4">
-                    <label for="team-2">Team 2</label>
-                    <input type="text" class="form-control team" id="team-2">
-                </div>
-            </div>-->
-            <!--<div class="row">
-                <div class="col-12 text-center">
-                    <button style="margin-top: 2em; margin-bottom:2em;" type="button" id="match-submit" class="btn btn-primary">Team Submit</button>
-                </div>
-            </div>-->
-            <!--<h3>Player Entry</h3>-->
             <div class="row">
                 <div class="col-12" id="event">
                     <div class="form-group">
                         <div class="input-group">
-                            <div class="input-group-addon">Name of Event</div>
-                            <input type="text" class="form-control data" id="nameOfEvent">
+                            <div class="input-group-addon">Tournament Name</div>
+                            <input type="text" class="form-control data" id="nameOfTour">
+                        </div>
+                        <div class="input-group" style="margin-top:20px">
+                            <div class="input-group-addon">Match Name</div>
+                            <input type="text" class="form-control data" id="nameOfMatch">
+                        </div>
+                        <div class="input-group" style="margin-top:20px">
+                            <div class="input-group-addon">Match Start Time</div>
+                            <input type="text" class="form-control data" id="start">
                         </div>
                     </div>
                 </div>
