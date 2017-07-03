@@ -23,7 +23,7 @@ if (window.location.pathname == "/form") {
         $('#event').hide();
         var nameOfTour = $('#nameOfTour').val();
         var nameOfMatch = $("#nameOfMatch").val();
-        var start = $("#start").val();
+        var start = toUnix($("#start").val());
         data.name = nameOfTour;
         data.pretty_name = nameOfMatch;
 
@@ -198,7 +198,7 @@ if (window.location.pathname == "/form") {
 
                         postData.event_name = $("#name").val();
                         postData.event_description = $("#description").val();
-                        postData.time = $("#time").val();
+                        postData.time = toUnix($("#time").val());
                         postData.player = playerObj;
 
                         $("#preview").val(prettyPrint(postData));
@@ -287,4 +287,12 @@ function customSettings(url, object) {
         "processData": false,
         "data": JSON.stringify(object)
     };
+}
+
+function toUnix(date) {
+
+    var stringDate = new Date(date);
+    var epoch = stringDate.getTime() / 1000.0;
+    return epoch;
+
 }
