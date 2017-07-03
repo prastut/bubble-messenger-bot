@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const helper = require("../helper.js");
+const helper = require("../../../helper");
 const d3 = require('d3');
 const jsdom = require('jsdom');
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
-const helper = require("../helper.js");
+const helper = require("../../../helper");
 
 
 router.get('/', function(req, res, next) {
