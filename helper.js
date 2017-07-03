@@ -46,7 +46,7 @@ module.exports = {
     webviewURL: function(channel, name, instance_id, both) {
 
         both = both || 0;
-        var url = "" + module.exports.ip + "get-sentiment-analysis?channel=" + channel + "&name=" + name + "&instance_id=" + instance_id + "&both=" + both;
+        var url = "" + module.exports.ip + "get-webview?channel=" + channel + "&name=" + name + "&instance_id=" + instance_id + "&both=" + both;
         return url;
 
     },
@@ -78,7 +78,7 @@ module.exports = {
                     } else {
                         quick_replies.push({
 
-                            "url": ip + "get-data" + "?instance_id=" + instance_id,
+                            "url": ip + "get-support" + "?instance_id=" + instance_id,
                             "type": "json_plugin_url",
                             "title": options[key]
                         });

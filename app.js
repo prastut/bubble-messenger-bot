@@ -1,10 +1,5 @@
 'use strict'
 
-var ip = "http://139.59.25.186/";
-var trackingLiveMatchUrl = "get-data";
-var getTeamData = 'get-team-data';
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
@@ -27,15 +22,21 @@ app.use('/webhook/', require('./routes/fb-webhook'));
 
 // Routes
 app.use('/', require('./routes/index'));
-app.use('/get-live-matches', require('./routes/get-live-matches'));
-app.use('/get-data', require('./routes/get-data'));
-app.use('/get-team-data', require('./routes/get-team-data'));
-app.use('/screenshot', require('./routes/screenshot'));
-app.use('/get-sentiment-analysis', require('./routes/get-sentiment-analysis'));
+
+// Bot Routes
+app.use('/get-live-matches', require('./routes/bot/step-1/get-live-matches'));
+
+app.use('/get-support', require('./routes/bot/step-2/get-support'));
+
+app.use('/get-team-data', require('./routes/bot/step-3/get-team-data'));
+app.use('/screenshot', require('./routes/bot/step-3/screenshot'));
+app.use('/get-webview', require('./routes/bot/step-3/webview'));
 app.use('/quick-replies', require('./routes/quick-replies'));
-app.use('/match-view', require('./routes/match-view'));
-app.use('/form', require('./routes/form'));
-app.use('/trending', require('./routes/trending'));
+
+//Web Routes
+app.use('/match-view', require('./routes/web/match-view'));
+app.use('/form', require('./routes/web/form'));
+app.use('/trending', require('./routes/web/trending'));
 
 
 app.use(function(err, req, res, next) {
