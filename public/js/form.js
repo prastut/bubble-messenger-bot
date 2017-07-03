@@ -26,6 +26,7 @@ $('#event-btn').click(function(event) {
     var start = $("#start").val();
     data.name = nameOfTour;
     data.pretty_name = nameOfMatch;
+
     data.start = start;
 
     $("#preview").val(prettyPrint(data));
@@ -56,7 +57,7 @@ $('#type').on('change', function() {
 $('#submit').click(function(event) {
     var type = $('#type').val(),
         name = $('#name').val().trim(),
-        key = name.toLowerCase().split(' ').join('_'),
+        key = name.toLowerCase().split(' ').filter(Boolean).join('_'),
         keywords = $('#keywords').val().split(",").map(function(keyword) { return keyword.replace(/\s+/g, ''); }),
         url = $('#url').val();
 
