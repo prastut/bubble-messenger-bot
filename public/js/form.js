@@ -242,7 +242,7 @@ if (window.location.pathname == "/form") {
 }
 
 function formeventsUrlGenerator(url) {
-    return "http://localhost:8080/" + url;
+    return "http://localhost:5000/" + url;
 }
 
 function urlGenerator(url) {
