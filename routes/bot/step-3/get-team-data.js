@@ -10,8 +10,9 @@ const webshot = require('webshot');
 router.get('/', function(req, res, next) {
 
     var teamResponse = req.query;
-    var instance_id = req.query.instance_id;
-    var singleOrBoth = teamResponse.channel == "both" ? 2 : 1;
+    var channel = teamResponse.channel;
+    var instance_id = teamResponse.instance_id;
+    var singleOrBoth = channel == "both" ? 2 : 1;
 
     teamResponse.last_timestamp = 0;
 
@@ -25,14 +26,12 @@ router.get('/', function(req, res, next) {
                     res.send([{ "text": "Get Index Data Failed" }]);
                 }
 
-                var channel = Object.keys(data)[1 - Object.keys(data).indexOf('instance_id')];
-                var keysSorted = Object.keys(data[channel]).map(Number).sort();
-                var maxKey = keysSorted[keysSorted.length - 1];
-
-                var neg = data[channel][maxKey].neg;
-                var pos = data[channel][maxKey].pos;
+                var neg = data[data.length - 1][channel].neg;
+                var pos = data[data.length - 1][channel].pos;
 
                 var screenshotUrl = helper.screenshotURL(channel, flag, neg, pos);
+
+                console.log(screenshotUrl);
 
                 var date = new Date().getDate();
 
