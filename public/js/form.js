@@ -212,7 +212,7 @@ if (window.location.pathname == "/form") {
 
                         var postObj = JSON.parse($("#preview").val());
 
-                        $.ajax(customSettings(formeventsUrlGenerator('add-event-details'), postObj))
+                        $.ajax(customSettings(urlGenerator('add-event-details'), postObj))
                             .done(function() {
                                 console.log("POSTED");
                             })
