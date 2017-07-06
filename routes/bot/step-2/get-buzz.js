@@ -52,7 +52,7 @@ router.get('/', function(req, res, next) {
 
                                 elements.push({
                                     "title": teams[i],
-                                    "image_url": url[teams[i]].image_url,
+                                    "image_url": "https:/bubble.social/img/screenshot/chile-screenshot-6.jpeg",
                                     "buttons": [{
                                         "type": "web_url",
                                         "url": "https:/bubble.social/img/screenshot/chile-screenshot-6.jpeg",
