@@ -51,7 +51,7 @@ router.get('/', function(req, res, next) {
                             for (i in teams) {
 
                                 elements.push({
-                                    "title": "hello",
+                                    "title": teams[i],
                                     "image_url": "https://www.w3schools.com/css/img_fjords.jpg",
                                     "buttons": [{
                                         "type": "web_url",
