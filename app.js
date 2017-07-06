@@ -26,7 +26,7 @@ app.use('/', require('./routes/index'));
 // Bot Routes
 app.use('/get-live-matches', require('./routes/bot/step-1/get-live-matches'));
 
-app.use('/get-support', require('./routes/bot/step-2/get-support'));
+app.use('/get-buzz', require('./routes/bot/step-2/get-buzz'));
 
 app.use('/get-team-data', require('./routes/bot/step-3/get-team-data'));
 app.use('/screenshot', require('./routes/bot/step-3/screenshot'));

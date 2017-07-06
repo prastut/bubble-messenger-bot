@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
                     "title": data[i].name,
                     "image_url": data[i].url,
                     "buttons": [{
-                        "url": helper.ip + "get-support" + "?instance_id=" + data[i].instance_id,
+                        "url": helper.ip + "get-buzz" + "?instance_id=" + data[i].instance_id,
                         "title": "Track this!",
                         "type": "json_plugin_url"
                     }]
