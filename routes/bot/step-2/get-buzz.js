@@ -27,7 +27,9 @@ router.get('/', function(req, res, next) {
             });
 
             async.map([teamsObject[0], teamsObject[1]], fetch, function(err, results) {
-                if (err) {} else {
+                if (err) {
+
+                } else {
                     var i;
                     var url = urlmaker(results, teams, instance_id);
 
@@ -49,11 +51,11 @@ router.get('/', function(req, res, next) {
                             for (i in teams) {
 
                                 elements.push({
-                                    "title": teams[i],
-                                    "image_url": url[teams[i]].image_url,
+                                    "title": "hello",
+                                    "image_url": "https://www.w3schools.com/css/img_fjords.jpg",
                                     "buttons": [{
                                         "type": "web_url",
-                                        "url": url[teams[i]].webview,
+                                        "url": "https://www.w3schools.com/css/img_fjords.jpg",
                                         "title": "View More!",
                                         "webview_height_ratio": "tall",
 
