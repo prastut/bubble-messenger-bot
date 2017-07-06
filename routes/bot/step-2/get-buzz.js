@@ -62,7 +62,7 @@ router.get('/', function(req, res, next) {
                                                 "buttons": [{
                                                     "type": "web_url",
                                                     "url": url[teams[0]].webview,
-                                                    "title": "View More!",
+                                                    "title": "Explore Buzz",
                                                     "webview_height_ratio": "tall",
 
                                                 }]
@@ -72,7 +72,7 @@ router.get('/', function(req, res, next) {
                                                 "buttons": [{
                                                     "type": "web_url",
                                                     "url": url[teams[1]].webview,
-                                                    "title": "View More!",
+                                                    "title": "Explore Buzz",
                                                     "webview_height_ratio": "tall",
 
                                                 }]
@@ -80,7 +80,7 @@ router.get('/', function(req, res, next) {
                                         }
                                     }
                                 }, {
-                                    "text": "In addition you can do the following as well:",
+                                    "text": "You can also check what people have to say about the players:",
                                     "quick_replies": quick_replies
                                 }]
                             };

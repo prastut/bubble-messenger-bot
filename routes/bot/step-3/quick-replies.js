@@ -6,6 +6,7 @@ const helper = require("../../../helper");
 
 router.get('/', function(req, res, next) {
 
+    console.log(req.query);
     var response = {};
     Object.assign(response, req.query);
     var type = response.type;
