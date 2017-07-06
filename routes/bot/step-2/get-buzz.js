@@ -48,20 +48,6 @@ router.get('/', function(req, res, next) {
 
                             var quick_replies = helper.quickReplies(instance_id);
                             var elements = [];
-                            for (i in teams) {
-
-                                elements.push({
-                                    "title": teams[i],
-                                    "image_url": "https:/bubble.social/img/screenshot/chile-screenshot-6.jpeg",
-                                    "buttons": [{
-                                        "type": "web_url",
-                                        "url": "https:/bubble.social/img/screenshot/chile-screenshot-6.jpeg",
-                                        "title": "View More!",
-                                        "webview_height_ratio": "tall",
-
-                                    }]
-                                });
-                            }
 
                             var payload = {
                                 "messages": [{
@@ -75,7 +61,7 @@ router.get('/', function(req, res, next) {
                                                 "image_url": helper.ip + "img/screenshot/" + teams[0] + '-screenshot-' + 6 + '.jpeg',
                                                 "buttons": [{
                                                     "type": "web_url",
-                                                    "url": "https://www.google.com",
+                                                    "url": url[teams[0]].webview,
                                                     "title": "View More!",
                                                     "webview_height_ratio": "tall",
 
@@ -85,7 +71,7 @@ router.get('/', function(req, res, next) {
                                                 "image_url": helper.ip + "img/screenshot/" + teams[1] + '-screenshot-' + 6 + '.jpeg',
                                                 "buttons": [{
                                                     "type": "web_url",
-                                                    "url": "https://www.google.com",
+                                                    "url": url[teams[1]].webview,
                                                     "title": "View More!",
                                                     "webview_height_ratio": "tall",
 
