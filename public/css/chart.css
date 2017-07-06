@@ -23,6 +23,15 @@
       clip-path: url(#clip);
   }
   
+  .events {
+      fill: #6F257F;
+      clip-path: url(#clip);
+  }
+  
+  .point {
+      clip-path: url(#clip);
+  }
+  
   .line {
       fill: none;
       stroke: #6F257F;
@@ -30,16 +39,16 @@
   }
   
   .hover-line {
-      stroke: black;
+      stroke: #6F257F;
       stroke-dasharray: 3, 3;
   }
   
   .tooltip-text {
       position: absolute;
       text-align: center;
-      width: 60px;
-      height: 25px;
-      padding-top: 10px;
+      width: 90px;
+      height: 35px;
+      padding: 10px;
       font: 12px sans-serif;
       background: black;
       color: white;
