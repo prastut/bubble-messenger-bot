@@ -1,55 +1,146 @@
 const express = require('express');
 const request = require('request');
-const router = express.Router();
+const async = require('async');
 const helper = require("../../../helper");
+const path = require('path');
+const webshot = require('webshot');
+const router = express.Router();
+
 
 router.get('/', function(req, res, next) {
 
+    var instance_id = req.query.instance_id;
+
+
     request
-        .get(helper.getParams('get-buzz', req.query), function callBack(err, httpResponse, data) {
+        .get(helper.getParams('teams', req.query), function callBack(err, httpResponse, data) {
             if (err) {
-                return console.error('upload failed:', err);
+                res.send([{ "text": "Get Index Data Failed" }]);
             }
 
-            console.log(req.query);
+            var teams = Object.keys(data.teams);
+            var teamsObject = teams.map(function(i) {
+                return {
+                    instance_id: instance_id,
+                    channel: i
+                };
+            });
 
-            // var quick_replies = [];
+            async.map([teamsObject[0], teamsObject[1]], fetch, function(err, results) {
+                if (err) {} else {
+                    var i;
+                    var url = urlmaker(results, teams, instance_id);
 
-            // for (var i in data.channels) {
+                    var screenshotRequests = [];
+                    for (i in teams) {
 
-            //     if (data.channels[i].type == "team") {
+                        screenshotRequests.push(url[teams[i]]);
 
-            //         quick_replies.push({
-            //             "title": data.channels[i].name,
-            //             "url": helper.ip + 'get-team-data' +
-            //                 "?channel=" + i +
-            //                 "&instance_id=" + data.instance_id +
-            //                 "&img_url=" + data.channels[i].img_url,
-            //             "type": "json_plugin_url"
-            //         });
+                    }
 
-            //     }
-            // }
+                    async.map(screenshotRequests, clickPhotu, function(err, results) {
+                        if (err) {
+                            console.log(err);
 
-            // //Both Code
-            // // quick_replies.push({
-            // //     "title": "Both",
-            // //     "url": helper.ip + 'get-team-data' + "?channel=" + "both" + "&instance_id=" + data.instance_id,
-            // //     "type": "json_plugin_url"
+                        } else {
 
-            // // });
+                            var quick_replies = helper.quickReplies(instance_id);
+                            var elements = [];
+                            for (i in teams) {
 
-            // var payload = {
-            //     "messages": [{
-            //         "text": "Which team are you supporting?",
-            //         "quick_replies": quick_replies
-            //     }]
-            // };
+                                elements.push({
+                                    "title": teams[i],
+                                    "image_url": url[teams[i]].image_url,
+                                    "buttons": [{
+                                        "type": "web_url",
+                                        "url": url[teams[i]].webview,
+                                        "title": "View More!",
+                                        "webview_height_ratio": "tall",
 
-            // res.send(payload);
+                                    }]
+                                });
+                            }
+
+                            var payload = {
+                                "messages": [{
+                                    "attachment": {
+                                        "type": "template",
+                                        "payload": {
+                                            "template_type": "generic",
+                                            "image_aspect_ratio": "square",
+                                            "elements": elements
+                                        }
+                                    }
+                                }, {
+                                    "text": "In addition you can do the following as well:",
+                                    "quick_replies": quick_replies
+                                }]
+                            };
+
+                            res.send(payload);
+                        }
+                    });
+                }
+            });
         });
+
 
 });
 
+
+
+
+var clickPhotu = function(team, callBack) {
+
+
+    webshot(
+        team.screenshot,
+        team.savepath,
+        helper.optionsPhone,
+        function(err) {
+            callBack(err);
+        });
+
+};
+
+
+var urlmaker = function(results, teams, instance_id) {
+
+    var date = new Date().getDate();
+    var obj = {};
+
+    results.map(function(val, i) {
+        var team = teams[i];
+        var neg = val[team].neg;
+        var pos = val[team].pos;
+
+        var nameOfImg = team + '-screenshot-' + date + '.jpeg';
+
+
+        obj[team] = {
+            'screenshot': helper.screenshotURL(teams[i], "flag", neg, pos),
+            'savepath': path.join(path.resolve("."), 'public/img/screenshot', nameOfImg),
+            'image_url': path.join(helper.ip, 'img/screenshot', nameOfImg),
+            'webview': helper.webviewURL(instance_id, teams[i])
+        };
+
+    });
+
+    return obj;
+};
+
+var fetch = function(team, callBack) {
+
+    team.start_timestamp = -1;
+
+    request
+        .get(helper.getParams('get-index-data', team), function(err, httpResponse, data) {
+            if (err) {
+                callBack(err);
+            } else {
+                callBack(null, data);
+            }
+        });
+};
 
 module.exports = router;

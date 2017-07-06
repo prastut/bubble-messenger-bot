@@ -38,15 +38,14 @@ module.exports = {
     screenshotURL: function(channel, flag, neg, pos) {
 
 
-        var screenshotUrl = "" + module.exports.ip + "screenshot?title=" + channel + "&channel=" + channel + "&flag=" + flag + "&neg=" + neg + "&pos=" + pos;
+        var screenshotUrl = "" + module.exports.ip + "screenshot?&channel=" + channel + "&flag=" + flag + "&neg=" + neg + "&pos=" + pos;
         return screenshotUrl;
 
     },
 
-    webviewURL: function(channel, name, instance_id, both) {
+    webviewURL: function(instance_id, channel) {
 
-        both = both || 0;
-        var url = "" + module.exports.ip + "get-webview?channel=" + channel + "&name=" + name + "&instance_id=" + instance_id + "&both=" + both;
+        var url = module.exports.ip + "get-webview?instance_id=" + instance_id + "&channel=" + channel;
         return url;
 
     },
