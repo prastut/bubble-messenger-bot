@@ -45,7 +45,7 @@ module.exports = {
 
     webviewURL: function(instance_id, channel) {
 
-        var url = module.exports.ip + "get-webview?instance_id=" + instance_id + "&channel=" + channel;
+        var url = "" + module.exports.ip + "get-webview?instance_id=" + instance_id + "&channel=" + channel;
         return url;
 
     },

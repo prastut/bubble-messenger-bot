@@ -70,7 +70,17 @@ router.get('/', function(req, res, next) {
                                         "payload": {
                                             "template_type": "generic",
                                             "image_aspect_ratio": "square",
-                                            "elements": elements
+                                            "elements": [{
+                                                "title": "title",
+                                                "image_url": helper.ip + "img/screenshot/" + teams[0] + '-screenshot-' + 6 + '.jpeg',
+                                                "buttons": [{
+                                                    "type": "web_url",
+                                                    "url": "https://www.google.com",
+                                                    "title": "View More!",
+                                                    "webview_height_ratio": "tall",
+
+                                                }]
+                                            }]
                                         }
                                     }
                                 }, {
@@ -120,7 +130,7 @@ var urlmaker = function(results, teams, instance_id) {
 
 
         obj[team] = {
-            'screenshot': helper.screenshotURL(teams[i], "flag", neg, pos),
+            'screenshot': helper.screenshotURL(team, "flag", neg, pos),
             'savepath': path.join(path.resolve("."), 'public/img/screenshot', nameOfImg),
             'image_url': path.join(helper.ip, 'img/screenshot', nameOfImg),
             'webview': helper.webviewURL(instance_id, teams[i])
