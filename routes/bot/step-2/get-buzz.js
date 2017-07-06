@@ -6,10 +6,12 @@ const helper = require("../../../helper");
 router.get('/', function(req, res, next) {
 
     request
-        .get(helper.getParams('get-match-details', req.query), function callBack(err, httpResponse, data) {
+        .get(helper.getParams('get-buzz', req.query), function callBack(err, httpResponse, data) {
             if (err) {
                 return console.error('upload failed:', err);
             }
+
+            console.log(req.query);
 
             // var quick_replies = [];
 
