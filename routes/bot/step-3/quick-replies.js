@@ -6,7 +6,6 @@ const helper = require("../../../helper");
 
 router.get('/', function(req, res, next) {
 
-    console.log(req.query);
     var response = {};
     Object.assign(response, req.query);
     var type = response.type;
@@ -21,6 +20,8 @@ router.get('/', function(req, res, next) {
         request
             .get(helper.getParams('get-trending-players', response), function callBack(err, httpResponse, data) {
 
+
+
                 var payload,
                     elements = [],
                     instance_id = data.instance_id,
@@ -33,6 +34,8 @@ router.get('/', function(req, res, next) {
                 if (type == "trending") {
 
                     var trendingPlayers = data.trending;
+
+                    console.log(trendingPlayers);
 
                     for (i in trendingPlayers) {
 

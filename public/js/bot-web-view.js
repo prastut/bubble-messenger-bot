@@ -50,6 +50,8 @@ var eventBisect = d3.bisector(function(d) {
     return d.x;
 }).left;
 
+params.chart = "line";
+
 var urlToGet = params.chart == "line" ? 'get-index-data' : 'get-scatter-data';
 
 
