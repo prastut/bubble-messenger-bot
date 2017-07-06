@@ -1,7 +1,7 @@
   .sentiment--line {
       fill: none;
       clip-path: url(#clip);
-      stroke-width: 1.5px;
+      stroke-width: 5px;
   }
   
   .sentiment--pos {
