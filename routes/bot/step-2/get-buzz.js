@@ -52,10 +52,10 @@ router.get('/', function(req, res, next) {
 
                                 elements.push({
                                     "title": teams[i],
-                                    "image_url": "https://www.w3schools.com/css/img_fjords.jpg",
+                                    "image_url": url[teams[i]].image_url,
                                     "buttons": [{
                                         "type": "web_url",
-                                        "url": "https://www.w3schools.com/css/img_fjords.jpg",
+                                        "url": "https:/bubble.social/img/screenshot/chile-screenshot-6.jpeg",
                                         "title": "View More!",
                                         "webview_height_ratio": "tall",
 
