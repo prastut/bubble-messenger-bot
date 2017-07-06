@@ -71,8 +71,18 @@ router.get('/', function(req, res, next) {
                                             "template_type": "generic",
                                             "image_aspect_ratio": "square",
                                             "elements": [{
-                                                "title": "title",
+                                                "title": helper.capitalizeFirstLetter(teams[0]),
                                                 "image_url": helper.ip + "img/screenshot/" + teams[0] + '-screenshot-' + 6 + '.jpeg',
+                                                "buttons": [{
+                                                    "type": "web_url",
+                                                    "url": "https://www.google.com",
+                                                    "title": "View More!",
+                                                    "webview_height_ratio": "tall",
+
+                                                }]
+                                            }, {
+                                                "title": helper.capitalizeFirstLetter(teams[1]),
+                                                "image_url": helper.ip + "img/screenshot/" + teams[1] + '-screenshot-' + 6 + '.jpeg',
                                                 "buttons": [{
                                                     "type": "web_url",
                                                     "url": "https://www.google.com",
