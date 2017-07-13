@@ -13,7 +13,7 @@ define(["jquery", "d3",
             params.start_timestamp = 1499019288;
             params.end_timestamp = 1499019289;
 
-
+            var transform;
 
             var scatterDataSample = [
 
@@ -28,7 +28,7 @@ define(["jquery", "d3",
                     }]
                 },
                 {
-                    time: 1499019300,
+                    time: 1499019291,
                     joshua_kimmich: [{
                         sentiment_index: 9.8,
                         text: "Hello World",
@@ -38,9 +38,9 @@ define(["jquery", "d3",
                     }]
                 },
                 {
-                    time: 1499019340,
+                    time: 14990193292,
                     joshua_kimmich: [{
-                        sentiment_index: 9.8,
+                        sentiment_index: 5,
                         text: "Hello World",
                     }, {
                         sentiment_index: 1,
@@ -64,7 +64,7 @@ define(["jquery", "d3",
                         pos: 10.2
                     }
                 }, {
-                    time: 1499019320,
+                    time: 1499019340,
                     joshua_kimmich: {
                         neg: 2,
                         pos: 2
@@ -84,7 +84,7 @@ define(["jquery", "d3",
 
 
             var commonXAxis = d3.scaleTime()
-                .domain(d3.extent(lineDataSample, function(d) { return d.time * 1000; }))
+                .domain([1499019288 * 1000, 1499019340 * 1000])
                 .range([0, width]);
 
 
@@ -97,18 +97,21 @@ define(["jquery", "d3",
             var lineChart = lineGraph.init()
                 .data(lineData[channel])
                 .x(commonXAxis)
-                .xZoom(commonXZoomAxis);
+                .zoom(d3.zoomIdentity);
 
-            var scatterChart = scatterChart.init()
-                .data(scatterChart[channel])
-                .x(commonXAxis);
 
-            svg.call(lineChart, scatterChart);
+            var scatterChart = scatterGraph.init()
+                .data(scatterData[channel])
+                .x(commonXAxis)
+                .zoom(d3.zoomIdentity);
 
+
+            svg.call(lineChart);
+            svg.call(scatterChart);
             // var scatterChart = scatterGraph.init().data(scatterData[channel]);
             // svg.call(scatterChart);
 
-            var zoom = d3.zoom()
+            var overallZoom = d3.zoom()
                 .scaleExtent([1, 10])
                 .translateExtent([
                     [0, 0],
@@ -118,19 +121,26 @@ define(["jquery", "d3",
                     [0, 0],
                     [width, height]
                 ])
-                .on("zoom", zoomed);
+                .on("zoom", zoomHandler);
 
 
-            svg.call(zoom);
+            // svg.append("rect")
+            //     .attr("width", width)
+            //     .attr("height", height)
+            //     .style("fill", "none")
+            //     .style("pointer-events", "all")
+            //     .call(zoom);
+
+            // svg.call(overallZoom);
 
 
 
-            function zoomed() {
+            function zoomHandler() {
 
-                var t = d3.event.transform;
-                commonXAxis.domain(t.rescaleX(commonXZoomAxis).domain());
-                lineChart.x(commonXAxis);
-                // console.log(commonXAxis.domain());
+                transform = d3.event.transform;
+                commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
+                lineChart.x(commonXAxis).zoom(transform);
+                scatterChart.x(commonXAxis).zoom(transform);
 
             }
 
@@ -138,16 +148,61 @@ define(["jquery", "d3",
 
             // var minTime = moment(commonXAxis.domain()[0]).format('X');
             // var maxTime = moment(commonXAxis.domain()[1]).format('X');
-            var mintime = d3.min(lineData[channel].timestamps);
-            var maxTime = d3.max(lineData[channel].timestamps);
+            var mintime = 1499019288 * 1000;
+            var maxTime = 1499019340 * 1000;
+
+
+
+            var time = 1499019340;
+
+            // Update Common Axis
+            setTimeout(function() {
+
+                maxTime = maxTime + 1 * 1000;
+                commonXAxis.domain([mintime, maxTime]);
+                commonXZoomAxis.domain(commonXAxis.domain());
+
+            }, 1000);
+
+            setTimeout(function() {
+
+                console.log("Scatter UPDATE");
+
+                var liveScatter = [];
+
+                liveScatter.push({
+                    time: 1499019293,
+                    joshua_kimmich: [{
+                        sentiment_index: -Math.random() * 10,
+                        text: "Tweet 2",
+                    }, {
+                        sentiment_index: -Math.random() * 10,
+                        text: "Tweet 3"
+                    }, {
+                        sentiment_index: -Math.random() * 10,
+                        text: "Tweet 4"
+                    }]
+                });
+
+
+
+                helper.pS(scatterData, channel, liveScatter);
+                scatterChart.x(commonXAxis).data(scatterData[channel]);
+
+                // svg.call(overallZoom);
+
+
+            }, 1000);
+
+            // Update Line Chart Data
 
             // setInterval(function() {
 
-            //     svg.on(".zoom", null);
-
-            //     var live = [];
+            //     time = time + 5;
+            //     console.log("Line UPDATE");
+            //     var liveLine = [];
             //     live.push({
-            //             time: maxTime / 1000,
+            //             time: time,
             //             joshua_kimmich: {
             //                 neg: Math.random() * 10,
             //                 pos: Math.random() * 10
@@ -156,27 +211,14 @@ define(["jquery", "d3",
 
             //     );
 
-            //     maxTime = maxTime + 5 * 1000;
 
-            //     helper.pL(lineData, channel, live);
-            //     commonXAxis.domain([mintime, maxTime]);
-
-
-            //     // console.log(commonXAxis.domain());
-            //     // commonXZoomAxis.domain(commonXAxis.domain());
-
+            //     helper.pL(lineData, channel, liveLine);
             //     lineChart.x(commonXAxis).data(lineData[channel]);
-
-            //     svg.call(zoom);
+            //     // svg.call(overallZoom);
 
 
             // }, 5000);
 
-            // helper.pL(lineData, channel, live);
-
-            // 
-
-            // console.log(lineData);
 
             // line_chart.data(lineData[channel]);
             // d3.select(window).on('resize', resize);

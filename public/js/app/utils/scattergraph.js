@@ -35,8 +35,6 @@ define(["d3", "twemoji"], function(d3, emoji) {
                 var dom = d3.select(this);
 
                 // Axis
-                x.domain(d3.extent(d3.merge(data), function(d) { return d.x; })).nice().range([0, dom.attr("width")]);
-                xZoom.domain(x.domain()).range(x.range());
                 y.domain(d3.extent(d3.merge(data), function(d) { return d.y.sentiment_index; })).nice().range([dom.attr("height"), 0]);
 
 
@@ -81,21 +79,116 @@ define(["d3", "twemoji"], function(d3, emoji) {
                 coords.splice(coords.length - 1, 1);
                 var height = coords[1] - coords[0];
 
+                updateScatterData = function() {
 
-                onZoom = function() {
-                    if (zoom) {
-                        x.domain(zoom.rescaleX(xZoom).domain());
+                    var t = d3.transition().duration(750);
 
-                        scatter.selectAll(".series")
-                            .selectAll(".point")
-                            .attr("cx", function(d) {
-                                return x(d.x);
-                            })
-                            .attr("cy", function(d, i) {
+                    console.log("UPDATE", data);
+                    var update = scatter.selectAll(".series")
+                        .data(data);
 
-                                return y(d.y.sentiment_index);
-                            });
-                    }
+                    update.exit().remove();
+
+                    var dots = update.enter()
+                        .append("g")
+                        .attr("class", "series")
+                        .merge(update)
+                        .selectAll(".point")
+                        .data(function(d) { return d; })
+                        .enter().append("circle")
+                        .attr("class", "point")
+                        .attr("r", 8);
+
+
+                    dots
+                        .attr("cx", function(d) { return x(d.x); })
+                        .transition(t)
+                        .attr("cy", function(d) { return y(d.y.sentiment_index); })
+                        .style("stroke", function(d) {
+                            if (d.y.type == "-") {
+                                return "red";
+                            } else {
+                                return "green";
+                            }
+                        });
+
+                    dots.on("click", click);
+
+                    // hello(2);
+
+
+                    // console.log(inner);
+
+                    //     .selectAll(".point")
+                    //     .data(function(d) { return d; })
+                    //     .enter().append("circle")
+                    //     .attr("class", "point")
+                    //     .attr("r", 8)
+                    //     .attr("cx", function(d) { return x(d.x); })
+                    //     .attr("cy", function(d) { return y(d.y.sentiment_index); })
+                    //     .style("stroke", function(d) {
+                    //         if (d.y.type == "-") {
+                    //             return "red";
+                    //         } else {
+                    //             return "green";
+                    //         }
+                    //     });
+
+
+
+                    // scatter.selectAll(".series")
+                    //     .data(data)
+                    //     .enter().append("g")
+                    //     .attr("class", "series")
+                    //     .selectAll(".point")
+                    //     .data(function(d) { return d; })
+                    //     .enter().append("circle")
+                    //     .attr("class", "point")
+                    //     .attr("r", 8)
+                    //     .attr("cx", function(d) { return x(d.x); })
+                    //     .attr("cy", function(d) { return y(d.y.sentiment_index); })
+                    //     .style("stroke", function(d) {
+                    //         if (d.y.type == "-") {
+                    //             return "red";
+                    //         } else {
+                    //             return "green";
+                    //         }
+                    //     });
+
+                    // svg.selectAll("circle")
+                    // .data(data) // Update with new data
+                    // .transition() // Transition from old to new
+                    // .duration(1000) // Length of animation
+                    // .each("start", function() { // Start animation
+                    //     d3.select(this) // 'this' means the current element
+                    //         .attr("fill", "red") // Change color
+                    //         .attr("r", 5); // Change size
+                    // })
+                    // .delay(function(d, i) {
+                    //     return i / dataset.length * 500; // Dynamic delay (i.e. each item delays a little longer)
+                    // })
+                    // //.ease("linear")  // Transition easing - default 'variable' (i.e. has acceleration), also: 'circle', 'elastic', 'bounce', 'linear'
+                    // .attr("cx", function(d) {
+                    //     return xScale(d[0]); // Circle's X
+                    // })
+                    // .attr("cy", function(d) {
+                    //     return yScale(d[1]); // Circle's Y
+                    // })
+                    // .each("end", function() { // End animation
+                    //     d3.select(this) // 'this' means the current element
+                    //         .transition()
+                    //         .duration(500)
+                    //         .attr("fill", "black") // Change color
+                    //         .attr("r", 2); // Change radius
+                    // });
+
+                };
+
+                zoomScatter = function() {
+                    scatter.selectAll(".series")
+                        .selectAll(".point")
+                        .attr("cx", function(d) { return x(d.x); })
+                        .attr("cy", function(d) { return y(d.y.sentiment_index); });
                 };
 
 
@@ -125,6 +218,7 @@ define(["d3", "twemoji"], function(d3, emoji) {
                         emoji.html(twemoji.parse('\u2764'))
                             .style("left", (5) + "px")
                             .style("top", (coordsLocal[segmentClicked] + height / 2 + 50) + "px");
+
                     } else {
 
 
@@ -178,8 +272,7 @@ define(["d3", "twemoji"], function(d3, emoji) {
         chart.data = function(value) {
             if (!arguments.length) return data;
             data = value;
-            // console.log(data);
-            // if (typeof updateData === 'function') updateData();
+            if (typeof updateScatterData === 'function') updateScatterData();
             return chart;
         };
 
@@ -187,20 +280,30 @@ define(["d3", "twemoji"], function(d3, emoji) {
         chart.zoom = function(value) {
             if (!arguments.length) return zoom;
             zoom = value;
-            if (typeof onZoom === 'function') onZoom();
+            if (typeof zoomScatter === 'function') zoomScatter();
             return chart;
         };
 
-        chart.x = function(value) {
+        chart.x = function(commonXAxis) {
+            if (!arguments.length) return d3.scaleTime();
+            x = commonXAxis;
+            return chart;
 
-            return x;
         };
+
+        // chart.x = function(value) {
+
+        //     return x;
+        // };
 
 
 
         return chart;
     }
 
+    function hello(value) {
+        console.log(value);
+    }
 
 
     return {

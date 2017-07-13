@@ -50,7 +50,6 @@ define(["moment"], function(moment) {
         var series = [];
         var i;
 
-
         for (i in data) {
 
             var obj = {};
@@ -103,7 +102,50 @@ define(["moment"], function(moment) {
             }
         }
 
-        scatterData[channel] = scatterSeries;
+
+        // First Time Updating
+        if (!(channel in scatterData)) {
+            scatterData[channel] = scatterSeries;
+            // console.log("FIRST TIME", scatterData[channel]);
+
+
+        } else { //Live Updating
+
+            // console.log("NEW DATA", scatterSeries);
+
+            var prevDataLength = scatterData[channel].length;
+            var newDataLength = scatterSeries.length;
+
+            var minLength = Math.min(scatterData[channel].length, scatterSeries.length);
+
+            if (minLength == newDataLength) {
+                // Old Data has larger number of independent arrays
+
+                for (i = 0; i < minLength; i++) {
+
+                    scatterData[channel][i] = scatterData[channel][i].concat(scatterSeries[i]);
+                }
+            } else {
+                // New Data has large number of independent arrays
+                var compartmentsToBeAdded = newDataLength - prevDataLength;
+
+                for (i = 0; i < compartmentsToBeAdded; i++) {
+
+                    scatterData[channel].push([]);
+                }
+
+                for (i = 0; i < newDataLength; i++) {
+
+                    scatterData[channel][i] = scatterData[channel][i].concat(scatterSeries[i]);
+                }
+
+            }
+
+            // console.log("UPDATED", scatterData[channel]);
+
+        }
+
+
     }
 
 

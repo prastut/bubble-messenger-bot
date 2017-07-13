@@ -12,7 +12,7 @@ define(["d3"], function(d3) {
         var xZoom;
         var y = d3.scaleLinear();
 
-        var zoom;
+        var zoom = d3.zoomIdentity;
 
         var sentimentsLine = d3.line()
             .x(function(d) {
@@ -44,73 +44,35 @@ define(["d3"], function(d3) {
                     .attr("d", sentimentsLine);
 
 
-                updateData = function() {
-
+                updateDataLine = function() {
 
                     pos.transition()
                         .attr("d", sentimentsLine(data.pos));
 
                     neg.transition()
                         .attr("d", sentimentsLine(data.neg));
-                    // update
-                    //     .transition()
-                    //     .duration(1000)
-                    //     .attr('y', function(d, i) { return i * barSpacing; })
-                    //     .attr('height', barHeight)
-                    //     .attr('x', 0)
-                    //     .attr('width', function(d) { return d * widthScale; });
-
-                    // update.enter()
-                    //     .append('rect')
-                    //     .attr('class', 'display-bar')
-                    //     .attr('y', function(d, i) { return i * barSpacing; })
-                    //     .attr('height', barHeight)
-                    //     .attr('x', 0)
-                    //     .attr('width', 0)
-                    //     .style('opacity', 0)
-                    //     .transition()
-                    //     .duration(1000)
-                    //     .delay(function(d, i) { return (data.length - i) * 40; })
-                    //     .attr('width', function(d) { return d * widthScale; })
-                    //     .style('opacity', 1);
-
-                    // update.exit()
-                    //     .transition()
-                    //     .duration(650)
-                    //     .delay(function(d, i) { return (data.length - i) * 20; })
-                    //     .style('opacity', 0)
-                    //     .attr('height', 0)
-                    //     .attr('x', 0)
-                    //     .attr('width', 0)
-                    //     .remove();
                 };
 
-                onZoom = function() {
+                zoomLine = function() {
 
-                    console.log(zoom);
-                }
+                    pos.attr("d", sentimentsLine);
+                    neg.attr("d", sentimentsLine);
 
-
-
-
-
-
-
-
+                };
             });
         }
 
         chart.data = function(value) {
             if (!arguments.length) return data;
             data = value;
-            if (typeof updateData === 'function') updateData();
+            if (typeof updateDataLine === 'function') updateDataLine();
             return chart;
         };
 
         chart.zoom = function(value) {
             if (!arguments.length) return zoom;
             zoom = value;
-            if (typeof onZoom === 'function') onZoom();
+            if (typeof zoomLine === 'function') zoomLine();
             return chart;
         };
 
