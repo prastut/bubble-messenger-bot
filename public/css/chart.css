@@ -1,7 +1,8 @@
   .sentiment--line {
       fill: none;
       clip-path: url(#clip);
-      stroke-width: 5px;
+      stroke-width: 1px;
+      stroke-dasharray: 3, 3;
   }
   
   .sentiment--pos {
@@ -30,6 +31,8 @@
   
   .point {
       clip-path: url(#clip);
+      fill: white;
+      stroke-width: 2px;
   }
   
   .line {
@@ -54,4 +57,13 @@
       color: white;
       border: 0px;
       pointer-events: none;
+  }
+  
+  .emoji {
+      height: 40px;
+      font-size: 40px;
+  }
+  
+  .axis--y {
+      display: none;
   }
