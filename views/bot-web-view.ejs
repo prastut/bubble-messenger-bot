@@ -12,16 +12,15 @@
     <title><%= title %></title>
 
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="css/bubble.css">
     <link rel="stylesheet" href="css/chart.css">
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>    
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <script data-main="js/bot-web-view" src="js/lib/require.js"></script>
+
+
 
 </head>
 
@@ -39,36 +38,8 @@
     </nav>
 
     <!-- timeline Grid Section -->
-    <section style="padding: 0 !important" id="timeline-container">
-        <div class="container">
-            <div class="row" style="margin-bottom: 20px">
-                <div id="content">
-                    <div class="col-sm-12 text-center">
-                        <div id="side_panel">
-                            <div id="scatter_legend"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div id="scatter"></div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div id="content">
-                    <div class="col-sm-12 text-center">
-                        <div id="side_panel">
-                            <div id="line_legend"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                       <div id="line"></div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
+    <section id="timeline-container">
+        <div id="chart_container"></div>
     </section>
 
  
@@ -82,9 +53,7 @@
 			var params = <%- params %>;
 		    var channel = <%- channel %>;
 		</script>
-		<script src="js/bot-web-view.js"></script>
 	<% } %>
-    <script src="js/bubble.js"></script>
     <% include ga %>
 </body>
 </html>
