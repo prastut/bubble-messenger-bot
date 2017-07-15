@@ -2,17 +2,22 @@ define(["d3"], function(d3) {
 
     function lineGraph() {
 
-        var updateWidth;
+
+        // Data Model
         var data = {};
-        // var updateHeight;
-        // var updateFillColor;
         var updateData;
 
+        //Axis
         var x;
-        var xZoom;
         var y = d3.scaleLinear();
 
-        var zoom = d3.zoomIdentity;
+        // Dimensions
+        var width;
+        var height;
+        var updateWidth;
+
+        //Initial Zoom Level
+        var zoom;
 
         var sentimentsLine = d3.line()
             .x(function(d) {
@@ -28,7 +33,7 @@ define(["d3"], function(d3) {
             selection.each(function() {
 
                 var dom = d3.select(this);
-                y.domain([0, data.max]).nice().range([dom.attr("height"), 0]);
+                y.domain([0, data.max]).nice().range([height, 0]);
 
                 var line = dom.append("g")
                     .attr("class", "line-chart");
@@ -83,11 +88,18 @@ define(["d3"], function(d3) {
 
         };
 
-        chart.xZoom = function(commonZoomAxis) {
-            if (!arguments.length) return d3.scaleTime();
-            x = commonZoomAxis;
+        chart.width = function(value) {
+            if (!arguments.length) return 960;
+            width = value;
             return chart;
         };
+
+        chart.height = function(value) {
+            if (!arguments.length) return 500;
+            height = value;
+            return chart;
+        };
+
 
         return chart;
     }

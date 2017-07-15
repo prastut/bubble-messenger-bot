@@ -7,6 +7,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     overflow-x: hidden;
+    background: black;
 }
 
 p {
@@ -127,7 +128,7 @@ header .intro-text .skills {
 }
 
 .navbar-custom {
-    background: #171717;
+    background: black;
     text-transform: uppercase;
     font-weight: 700;
     border: none;
@@ -695,7 +696,7 @@ div#maincontent {
 
 #chart_container {
     width: 100%;
-    height: 70%;
+    height: 100%;
     position: absolute;
 }
 

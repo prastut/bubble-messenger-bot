@@ -2,15 +2,15 @@
       fill: none;
       clip-path: url(#clip);
       stroke-width: 1px;
-      stroke-dasharray: 3, 3;
+      stroke-dasharray: 3, 2;
   }
   
   .sentiment--pos {
-      stroke: green;
+      stroke: #00B909;
   }
   
   .sentiment--neg {
-      stroke: red;
+      stroke: #C60606;
   }
   
   .zoom {
@@ -19,14 +19,14 @@
       pointer-events: all;
   }
   
-  .events {
-      fill: #6F257F;
-      clip-path: url(#clip);
+  .event-points {
+      font-size: 20px;
   }
   
-  .events {
-      fill: #6F257F;
-      clip-path: url(#clip);
+  .event-time {
+      font-size: 15px;
+      fill: white;
+      transform: translate(1px, 0);
   }
   
   .point {
@@ -42,21 +42,41 @@
   }
   
   .hover-line {
-      stroke: #6F257F;
-      stroke-dasharray: 3, 3;
+      stroke: white;
+  }
+  
+  .tweet {
+      position: absolute;
+      text-align: center;
+      width: 200px;
+      padding: 10px;
+      font-size: 12px;
+      background: black;
+      color: white;
+      border-radius: 5px;
+      border: 0px;
+      pointer-events: none;
   }
   
   .tooltip-text {
       position: absolute;
       text-align: center;
-      width: 90px;
-      height: 35px;
+      width: 200px;
       padding: 10px;
-      font: 12px sans-serif;
-      background: black;
+      font-size: 12px;
+      background: rgba(54, 61, 82, 0.99);
       color: white;
+      border-radius: 5px;
       border: 0px;
       pointer-events: none;
+  }
+  
+  .events-rect {
+      fill: rgba(54, 61, 82, 0.60);
+  }
+  
+  .segment-clicked-rect {
+      fill: rgba(54, 61, 82, 0.60);
   }
   
   .emoji {
@@ -65,5 +85,5 @@
   }
   
   .axis--y {
-      display: none;
+      stroke: white;
   }
