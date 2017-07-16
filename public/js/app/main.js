@@ -68,8 +68,7 @@ define(["jquery", "d3",
             // Events Chart. 30% of real estate
 
             var eventsChart = eventsGraph.init()
-                // .yPos($('.axis--y')[0].getBoundingClientRect().height + 50)
-                .yPos(600)
+                .yPos($('.axis--y')[0].getBoundingClientRect().height + 20)
                 .height(height)
                 .width(width)
                 .x(commonXAxis)
