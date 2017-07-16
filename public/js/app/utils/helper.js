@@ -6,15 +6,20 @@ define(["moment"], function(moment) {
         live = live == "live" ? true : false;
 
         var timestamps = [];
+        var max;
+
 
         if (!(channel in lineData)) {
             lineData[channel] = {};
             lineData[channel].neg = [];
             lineData[channel].pos = [];
+            lineData[channel].events = [];
             lineData[channel].timestamps = [];
+            max = 0;
+        } else {
+            max = lineData[channel].max;
         }
 
-        var max = 0;
 
         for (var i in data) {
 
@@ -30,7 +35,17 @@ define(["moment"], function(moment) {
                 time: time
             });
 
-            max = Math.max(max, parseFloat(data[i][channel].pos));
+            if (data[i][channel].event) {
+                lineData[channel].events.push({
+                    event: data[i][channel].event,
+                    time: time,
+                    timeDisplay: data[i].timeDisplay,
+                    type: data[i][channel].event.split('<br>')[0].split(':')[0],
+                    country: data[i][channel].event.split('<br>')[1]
+                });
+            }
+
+            max = Math.max(max, Math.max(parseFloat(data[i][channel].pos), parseFloat(data[i][channel].neg)));
             lineData[channel].timestamps.push(time);
 
         }
@@ -148,11 +163,109 @@ define(["moment"], function(moment) {
 
     }
 
+    function fakeDataFormatter(data, startTime, seconds) {
+        seconds = seconds || false;
+
+        var prettyData = [];
+
+
+        for (var i in data) {
+            var obj = {};
+
+            if (seconds) {
+                console.log(startTime);
+                obj.time = startTime + parseInt(data[i].Time);
+                obj.timeDisplay = {};
+                obj.timeDisplay.time = parseInt(data[i].Time);
+                obj.timeDisplay.unit = "seconds";
+            } else {
+                obj.time = startTime + parseInt(data[i].Time) * 60;
+                obj.timeDisplay = {};
+                obj.timeDisplay.time = parseInt(data[i].Time);
+                obj.timeDisplay.unit = "minutes";
+            }
+
+
+            obj.germany = {};
+            obj.germany.neg = data[i].Neg;
+            obj.germany.pos = data[i].Pos;
+            obj.germany.event = data[i].Event;
+
+            prettyData.push(obj);
+
+        }
+
+        // console.log(prettyData);
+
+        return prettyData;
+
+    }
+
+    function fakeDataFormatterScatter(data, startTime, seconds) {
+
+
+        var prettyData = [];
+
+
+        var sample = {
+            time: 1499019290,
+            joshua_kimmich: [{
+                sentiment_index: 2.3,
+                text: "Hello World",
+            }, {
+                sentiment_index: 4.5,
+                text: "Hello 2"
+            }]
+        }
+
+
+
+        var signs = [-1, 1];
+
+        for (var i = 0; i < data.length; i++) {
+
+            if (data[i + 1]) {
+
+                var timeDiff = parseInt(data[i + 1].Time) - parseInt(data[i].Time);
+
+                var totalnoOfTweets = timeDiff < 5 ? Math.ceil(Math.random() * 10) : Math.floor(Math.random() * 20);
+
+                var obj = {};
+                obj.time = startTime;
+                obj.time += seconds ? parseInt(data[i].Time) : parseInt(data[i].Time) * 60;
+                obj.germany = [];
+
+
+
+                for (var j = 0; j < totalnoOfTweets; j++) {
+
+                    var tweet = {};
+                    tweet.sentiment_index = Math.random() * 10 * signs[Math.floor(Math.random() * 2)];
+                    tweet.text = "Lorem Ipsum";
+                    obj.germany.push(tweet);
+
+
+                }
+
+                prettyData.push(obj);
+
+            }
+
+
+        }
+
+
+        return prettyData;
+
+    }
+
 
     return {
         pL: pushLineData,
         pS: pushScatterData,
-        url: urlGenerator
+        url: urlGenerator,
+        fakeDataFormatter: fakeDataFormatter,
+        fakeDataFormatterScatter: fakeDataFormatterScatter
 
     };
 
