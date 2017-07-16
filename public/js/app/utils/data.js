@@ -158,7 +158,6 @@ define(function() {
             "Neg": 1
         }, {
             "Time": "35",
-            "Event": "",
             "Pos": 15,
             "Neg": 2
         }, {
@@ -182,7 +181,7 @@ define(function() {
             "Pos": 14,
             "Neg": 6
         }, {
-            "Time": "60'",
+            "Time": "60",
             "Event": "CHANCE<br>Chile<br><br>Another Chile chance goes begging as they try and find a way back into the game.",
             "Pos": 12,
             "Neg": 8

@@ -113,29 +113,25 @@ define(["d3", "twemoji"], function(d3) {
 
                 updateEvents = function() {
 
-
-                    events.selectAll("text")
+                    // console.log(data);
+                    // console.log(x.domain())
+                    var event = events.selectAll("g")
                         .data(data)
-                        .enter().append("text")
+                        .enter().append("g")
+                        .attr("class", "event");
+
+                    event.append("text")
                         .attr("class", "event-points")
                         .attr("x", function(d, i) {
                             return x(d.time);
 
                         })
-                        .attr("y", 20)
-                        .text("\u26BD");
+                        .attr("dy", 20)
+                        .text(function(d) {
 
-                    events.on(".click", null);
-
-                    events.selectAll("circle")
-                        .filter(function(d) { if (d.event) return d; })
-                        .transition()
-                        .attr("cx", function(d, i) {
-                            return x(d.time);
-
-                        });
-
-                    events.on("mouseover", function() {
+                            return twemoji.convert.fromCodePoint(emojiDict[d.type]);
+                        })
+                        .on("mouseover", function() {
                             tooltipLine.transition().style("opacity", 1);
                             tooltipText.transition().style("opacity", 1);
                         })
@@ -145,6 +141,38 @@ define(["d3", "twemoji"], function(d3) {
                         })
                         .on("mousemove", mousemove)
                         .on("click", mousemove);
+
+                    event.append("text")
+                        .attr("class", "event-time")
+                        .attr("x", function(d, i) {
+                            return x(d.time);
+
+                        })
+                        .attr("dy", 40)
+                        .text(function(d) {
+
+                            return d.timeDisplay.time + "'";
+                        });
+
+
+                    var allEmoji = d3
+                        .selectAll(".event-points")
+                        .transition()
+                        .attr("x", function(d, i) {
+                            return x(d.time);
+
+                        });
+
+                    var allDisplayText = d3
+                        .selectAll(".event-time")
+                        .transition()
+                        .attr("x", function(d, i) {
+                            return x(d.time);
+
+                        });
+
+
+
 
                 };
 
@@ -158,7 +186,7 @@ define(["d3", "twemoji"], function(d3) {
                         })
                         .attr("width", width);
 
-                    emoji
+                    d3.selectAll(".event-points")
                         .attr("x", function(d) {
                             if (zoom.k > 1) {
                                 return x(d.time) - 8;
@@ -178,7 +206,7 @@ define(["d3", "twemoji"], function(d3) {
                             }
                         });
 
-                    displaytime
+                    d3.selectAll(".event-time")
                         .attr("x", function(d, i) {
                             return x(d.time);
 

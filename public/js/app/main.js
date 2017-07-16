@@ -13,7 +13,7 @@ define(["jquery", "d3",
             params.start_timestamp = 1499019288;
             params.end_timestamp = 1499019289;
 
-            var transform;
+            var transform = d3.zoomIdentity;
             var start = 1499019288;
 
 
@@ -62,12 +62,14 @@ define(["jquery", "d3",
             //     .attr("height", height)
             //     .style("fill", "transparent");
 
-            svg.call(lineChart).call(scatterChart);
+            svg.call(lineChart)
+                .call(scatterChart);
 
-            // // // Events Chart. 30% of real estate
+            // Events Chart. 30% of real estate
 
             var eventsChart = eventsGraph.init()
-                .yPos($('.axis--y')[0].getBoundingClientRect().height + 50)
+                // .yPos($('.axis--y')[0].getBoundingClientRect().height + 50)
+                .yPos(600)
                 .height(height)
                 .width(width)
                 .x(commonXAxis)
@@ -100,10 +102,8 @@ define(["jquery", "d3",
             function zoomHandler() {
                 // live("stop");
 
-
-
                 transform = d3.event.transform;
-                console.log(transform);
+                // console.log(transform);
                 commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
                 lineChart.x(commonXAxis).zoom(transform);
                 scatterChart.x(commonXAxis).zoom(transform);
@@ -118,6 +118,7 @@ define(["jquery", "d3",
                 lineData[channel].timestamps[lineData[channel].timestamps.length - 1] / 1000,
                 "seconds");
 
+            console.log(liveData);
 
             // // Update Common Axis
             var xAxisLive;
@@ -126,7 +127,6 @@ define(["jquery", "d3",
 
             var minTime = 1499019468000;
             var maxTime = 1499020728000;
-
 
             function live(state) {
 
@@ -184,25 +184,34 @@ define(["jquery", "d3",
                             helper.pL(lineData, channel, [x]);
                             lineChart.x(commonXAxis).data(lineData[channel]);
                             eventsChart.x(commonXAxis).data(lineData[channel].events);
+                        } else {
+                            console.log("STOPPED");
+                            liveStop();
+                            maxTime = maxTime + 100 * 1000;
+                            commonXAxis.domain([minTime, maxTime]);
+                            commonXZoomAxis.domain(commonXAxis.domain());
+                            eventsChart.x(commonXAxis).data(lineData[channel].events);
+
                         }
 
-                    }, 5000);
+                    }, 1000);
 
                 }
-
-                if (state == "stop") {
-                    console.log(xAxisLive);
-                    clearInterval(xAxisLive);
-                    clearInterval(scatterLive);
-                    clearInterval(lineLive);
-                }
-
 
 
             }
 
+            function liveStop() {
 
-            // live("start");
+                clearInterval(xAxisLive);
+                clearInterval(scatterLive);
+                clearInterval(lineLive);
+
+            }
+
+
+            live();
+            // liveStop();
 
 
 

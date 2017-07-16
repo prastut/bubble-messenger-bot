@@ -173,6 +173,7 @@ define(["moment"], function(moment) {
             var obj = {};
 
             if (seconds) {
+                console.log(startTime);
                 obj.time = startTime + parseInt(data[i].Time);
                 obj.timeDisplay = {};
                 obj.timeDisplay.time = parseInt(data[i].Time);

@@ -144,16 +144,14 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                     update.exit().remove();
 
-                    var dots = update.enter()
+                    var point = update.enter()
                         .append("g")
                         .attr("class", "series")
                         .merge(update)
                         .selectAll(".point")
                         .data(function(d) { return d; })
-                        .enter().append("circle")
-                        .attr("class", "point")
-                        .attr("r", 8);
-
+                        .enter().append("g")
+                        .attr("class", "point");
 
 
                     dots
