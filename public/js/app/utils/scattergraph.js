@@ -54,13 +54,13 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                 // Axis
                 y.domain([0, 9]).range([height, 0]);
 
-                console.log(data);
+                // console.log(data);
 
 
                 var scatter = dom.append("g")
                     .attr("class", "scatter-chart");
 
-                var segementClickedRect = scatter.append('rect')
+                var segmentClickedRect = scatter.append('rect')
                     .attr("class", "segment-clicked-rect");
 
                 var scatterdots = scatter.selectAll(".series")
@@ -114,11 +114,12 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         }
                     });
 
+
+                var coords = [];
+
                 scatter.append("g")
                     .attr("class", "axis axis--y")
                     .call(yAxis.tickValues(d3.range(0, 9, 3)));
-
-                var coords = [];
 
                 scatter.selectAll(".tick").each(function(data) {
                     var tick = d3.select(this);
@@ -134,6 +135,9 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 var heightGrid = coords[1] - coords[0];
 
+
+
+
                 updateScatterData = function() {
 
 
@@ -142,38 +146,40 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     var update = scatter.selectAll(".series")
                         .data(data);
 
+                    console.log(update);
+
                     update.exit().remove();
 
-                    var point = update.enter()
-                        .append("g")
-                        .attr("class", "series")
-                        .merge(update)
-                        .selectAll(".point")
-                        .data(function(d) { return d; })
-                        .enter().append("g")
-                        .attr("class", "point");
+                    // var point = update.enter()
+                    //     .append("g")
+                    //     .attr("class", "series")
+                    //     .merge(update)
+                    //     .selectAll(".point")
+                    //     .data(function(d) { return d; })
+                    //     .enter().append("g")
+                    //     .attr("class", "point");
 
 
-                    dots
-                        .attr("cy", function(d) { return y(d.y.sentiment_index); })
-                        .attr("cx", x.range()[1]) // Transistion from the extreme right to the screen
-                        .transition(t)
-                        .attr("cx", function(d) { return x(d.x); })
-                        .style("stroke", function(d) {
-                            if (d.y.type == "-") {
-                                return "red";
-                            } else {
-                                return "green";
-                            }
-                        });
+                    // dots
+                    //     .attr("cy", function(d) { return y(d.y.sentiment_index); })
+                    //     .attr("cx", x.range()[1]) // Transistion from the extreme right to the screen
+                    //     .transition(t)
+                    //     .attr("cx", function(d) { return x(d.x); })
+                    //     .style("stroke", function(d) {
+                    //         if (d.y.type == "-") {
+                    //             return "red";
+                    //         } else {
+                    //             return "green";
+                    //         }
+                    //     });
 
-                    dots.on("click", click);
+                    // dots.on("click", click);
 
-                    var alldots = scatter.selectAll(".series")
-                        .selectAll(".point")
-                        .attr("cy", function(d) { return y(d.y.sentiment_index); })
-                        .transition(t)
-                        .attr("cx", function(d) { return x(d.x); });
+                    // var alldots = scatter.selectAll(".series")
+                    //     .selectAll(".point")
+                    //     .attr("cy", function(d) { return y(d.y.sentiment_index); })
+                    //     .transition(t)
+                    //     .attr("cx", function(d) { return x(d.x); });
 
 
 
@@ -253,27 +259,31 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .style("left", (5) + "px")
                         .style("top", (coordsLocal[segmentClicked] + heightGrid / 2 + 50) + "px");
 
-                    console.log(coordsLocal[segmentClicked]);
 
-                    // // All rects Design
-                    // coordsLocal.splice(segmentClicked, 1);
-
-                    // var rect = scatter.select('rect')
-                    //     .data(coordsLocal)
-                    //     .enter()
-                    //     .append('rect')
-                    //     .attr("x", 0)
-                    //     .attr("y", function(d) { return d; })
-                    //     .attr("height", heightGrid)
-                    //     .attr("width", width)
-                    //     .style("opacity", 1)
-                    //     .style("fill", "black");
-
-                    segementClickedRect.attr("x", 0)
+                    // Fade rects
+                    segmentClickedRect.attr("x", 0)
                         .attr("y", coordsLocal[segmentClicked])
                         .attr("height", heightGrid)
                         .attr("width", width)
                         .style("opacity", 1);
+
+                    coordsLocal.splice(segmentClicked, 1);
+
+                    console.log(coordsLocal);
+                    var fadeRect = scatter.selectAll('.fade-rect')
+                        .data(coordsLocal)
+                        .enter()
+                        .append('rect')
+                        .attr("class", "fade-rect")
+                        .attr("x", 0)
+                        .attr("y", function(d) {
+                            return d;
+                        })
+                        .attr("height", heightGrid)
+                        .attr("width", width)
+                        .style("opacity", 1)
+                        .style("fill", "black");
+
 
                     setTimeout(function() {
 
@@ -285,11 +295,16 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                             .duration(500)
                             .style("opacity", 0);
 
-                        segementClickedRect.transition()
+                        segmentClickedRect.transition()
                             .duration(500)
                             .style("opacity", 0);
 
-                        // scatter.selectAll("rect").remove();
+                        fadeRect.transition()
+                            .duration(500)
+                            .style("opacity", 0).remove();
+
+
+
                     }, 2000);
 
 

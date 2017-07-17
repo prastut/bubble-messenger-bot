@@ -143,34 +143,34 @@ define(["jquery", "d3",
 
 
 
-                    // scatterLive = setInterval(function() {
+                    scatterLive = setInterval(function() {
 
-                    //     console.log("Scatter UPDATE");
+                        console.log("Scatter UPDATE");
 
-                    //     var liveScatter = [];
+                        // var liveScatter = [];
 
-                    //     liveScatter.push({
-                    //         time: scatterTime,
-                    //         joshua_kimmich: [{
-                    //             sentiment_index: -Math.random() * 10,
-                    //             text: "Tweet 2",
-                    //         }, {
-                    //             sentiment_index: +Math.random() * 10,
-                    //             text: "Tweet 3"
-                    //         }]
-                    //     });
+                        // liveScatter.push({
+                        //     time: scatterTime,
+                        //     joshua_kimmich: [{
+                        //         sentiment_index: -Math.random() * 10,
+                        //         text: "Tweet 2",
+                        //     }, {
+                        //         sentiment_index: +Math.random() * 10,
+                        //         text: "Tweet 3"
+                        //     }]
+                        // });
 
-                    //     scatterTime = scatterTime + 1;
-
-
-
-                    //     helper.pS(scatterData, channel, liveScatter);
-                    //     scatterChart.x(commonXAxis).data(scatterData[channel]);
-
-                    //     // svg.call(overallZoom);
+                        // scatterTime = scatterTime + 1;
 
 
-                    // }, 1000);
+
+                        // helper.pS(scatterData, channel, liveScatter);
+                        scatterChart.x(commonXAxis).data(scatterData[channel]);
+
+                        // svg.call(overallZoom);
+
+
+                    }, 1000);
 
                     // Update Line Chart Data
 
@@ -209,7 +209,7 @@ define(["jquery", "d3",
             }
 
 
-            live();
+            // live();
             // liveStop();
 
 
