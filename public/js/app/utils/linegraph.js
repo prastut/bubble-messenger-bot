@@ -103,17 +103,17 @@ define(["d3", "twemoji"], function(d3) {
                 //     .style("stroke", "green")
                 //     .each(pulse);
 
-                var negPoints = line.append("g")
-                    .attr("class", "sentiment--neg-points")
-                    .selectAll(".line-points")
-                    .data(data.neg)
-                    .enter()
-                    .append("circle")
-                    .attr("class", "pos-point")
-                    .attr("cx", function(d) { return x(d.time); })
-                    .attr("cy", function(d) { return y(d.sentiment); })
-                    .attr("r", "2")
-                    .style("fill", "white");
+                // var negPoints = line.append("g")
+                //     .attr("class", "sentiment--neg-points")
+                //     .selectAll(".line-points")
+                //     .data(data.neg)
+                //     .enter()
+                //     .append("circle")
+                //     .attr("class", "pos-point")
+                //     .attr("cx", function(d) { return x(d.time); })
+                //     .attr("cy", function(d) { return y(d.sentiment); })
+                //     .attr("r", "2")
+                //     .style("fill", "white");
 
 
 
