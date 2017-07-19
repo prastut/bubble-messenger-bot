@@ -41,17 +41,22 @@ define(["d3", "twemoji"], function(d3) {
 
                 var dom = d3.select(this);
 
-                var backgroundRect = dom.append("rect")
+
+
+
+                var eventsChart = dom.append("g")
+                    .attr("class", "events-chart");
+
+                var backgroundRect = eventsChart.append("rect")
                     .attr("class", "events-rect")
                     .attr("height", 50)
                     .attr("width", width)
                     .attr("transform", "translate(0," + (yPos - 2) + ")");
 
-
-                var events = dom.append("g")
+                //Events
+                var events = eventsChart.append("g")
                     .attr("class", "events")
                     .attr("transform", "translate(0," + (yPos) + ")");
-
 
                 var event = events.selectAll("g")
                     .data(data)
@@ -95,16 +100,18 @@ define(["d3", "twemoji"], function(d3) {
 
 
 
-                var tooltip = dom.append("g")
-                    .attr("class", "tooltip-graph")
-                    // .attr("transform", "translate(" + margin.left + "," + 390 + ")");
+                //
+                // .attr("transform", "translate(" + margin.left + "," + 390 + ")");
+                var eventTooltip = eventsChart.append("g")
+                    .attr("class", "event-tooltip");
 
                 var tooltipText = d3.select("body")
                     .append("div")
-                    .attr("class", "tooltip-text")
+                    .attr("class", "event-tooltip-text")
                     .style("opacity", 0);
 
-                var tooltipLine = tooltip.append("line")
+
+                var tooltipLine = eventTooltip.append("line")
                     .attr("class", "x-hover-line hover-line")
                     .attr("y1", 0)
                     .attr("y2", yPos - 10)
@@ -227,7 +234,7 @@ define(["d3", "twemoji"], function(d3) {
                             .style("left", (xTooltip - 50 - 50) + "px")
                             .style("top", (overallheight * 0.4) + "px");
 
-                        tooltip.attr("transform", "translate(" + (xTooltip + 10) + ",0)");
+                        eventTooltip.attr("transform", "translate(" + (xTooltip + 10) + ",0)");
                     }
                 }
 

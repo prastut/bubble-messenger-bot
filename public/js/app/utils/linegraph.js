@@ -1,4 +1,4 @@
-define(["d3"], function(d3) {
+define(["d3", "twemoji"], function(d3) {
 
     function lineGraph() {
 
@@ -27,6 +27,22 @@ define(["d3"], function(d3) {
                 return y(d.sentiment);
             });
 
+        var bisectLine = d3.bisector(function(d) { return d.time; }).left;
+
+        var positiveEmotions = {
+            2: '1F60A',
+            1: '1F601',
+            0: '1F606'
+        };
+
+        var negetiveEmotions = {
+            2: '1F612',
+            1: '1F61E',
+            0: '1F620'
+
+        };
+
+
 
         function chart(selection) {
 
@@ -35,8 +51,18 @@ define(["d3"], function(d3) {
                 var dom = d3.select(this);
                 y.domain([0, data.max]).nice().range([height, 0]);
 
+
+
                 var line = dom.append("g")
-                    .attr("class", "line-chart");
+                    .attr("class", "line-chart")
+                    .on("mouseover", mouseover)
+                    .on("mouseout", mouseout);
+
+                var rect = line.append("rect")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .attr("fill", "transparent");
+
 
                 var neg = line.append("path")
                     .datum(data.neg)
@@ -47,6 +73,68 @@ define(["d3"], function(d3) {
                     .datum(data.pos)
                     .attr("class", "sentiment--line sentiment--pos")
                     .attr("d", sentimentsLine);
+
+
+                // var posPoints = line.append("g")
+                //     .attr("class", "sentiment--pos-points");
+
+                // var posPoint = posPoints.selectAll(".pos-point")
+                //     .data(data.pos)
+                //     .enter()
+                //     .append("circle")
+                //     .attr("class", "pos-point")
+                //     .attr("cx", function(d) { return x(d.time); })
+                //     .attr("cy", function(d) { return y(d.sentiment); })
+                //     .attr("r", "2")
+                //     .style("fill", "white")
+                // .each(pulse);
+
+                // var posPointsStroke = line.append("g")
+                //     .attr("class", "sentiment--pos-points")
+                //     .selectAll(".line-points")
+                //     .data(data.pos)
+                //     .enter()
+                //     .append("circle")
+                //     .attr("class", "pos-point")
+                //     .attr("cx", function(d) { return x(d.time); })
+                //     .attr("cy", function(d) { return y(d.sentiment); })
+                //     .attr("r", 3)
+                //     .style("fill", "none")
+                //     .style("stroke", "green")
+                //     .each(pulse);
+
+                var negPoints = line.append("g")
+                    .attr("class", "sentiment--neg-points")
+                    .selectAll(".line-points")
+                    .data(data.neg)
+                    .enter()
+                    .append("circle")
+                    .attr("class", "pos-point")
+                    .attr("cx", function(d) { return x(d.time); })
+                    .attr("cy", function(d) { return y(d.sentiment); })
+                    .attr("r", "2")
+                    .style("fill", "white");
+
+
+
+
+                // var lineTooltip = line.append("g")
+                //     .attr("class", "line-tooltip");
+                // .attr("transform", "translate(" + margin.left + "," + 390 + ")");
+
+
+                var lineChartToolTipLine = line.append("line")
+                    .attr("class", "x-hover-line line-hover-line")
+                    .style("opacity", "0");
+
+                var lineChartToolTipText = d3.select("body")
+                    .append("div")
+                    .attr("class", "line-tooltip-text")
+                    .style("opacity", "0");
+
+                var posText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-pos");
+                var negText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-neg");
+
 
 
                 updateDataLine = function() {
@@ -60,10 +148,71 @@ define(["d3"], function(d3) {
 
                 zoomLine = function() {
 
+                    mouseout();
                     pos.attr("d", sentimentsLine);
                     neg.attr("d", sentimentsLine);
 
                 };
+
+                function mouseover(d) {
+                    var pos = x.invert(d3.mouse(this)[0]);
+                    var obj = {};
+                    obj.neg = data.neg[bisectLine(data.neg, pos)].sentiment;
+                    obj.pos = data.pos[bisectLine(data.pos, pos)].sentiment;
+                    obj.time = data.pos[bisectLine(data.pos, pos)].time;
+
+                    var sum = [obj.neg, obj.pos].reduce((a, b) => a + b, 0);
+                    var percentage = [obj.neg, obj.pos].map(function(i) { return Math.round(i / sum * 100); });
+                    var yCoords = [obj.neg, obj.pos].map(function(i) { return y(i); });
+
+                    var time = x(obj.time);
+
+                    lineChartToolTipText.transition().style("opacity", "1");
+
+                    negText.html('<span style="font-size:20px">' + twemoji.convert.fromCodePoint(negetiveEmotions[1]) + '</span> ' + percentage[0] + "%")
+                        .style("left", (time) + "px")
+                        .style("top", (yCoords[0] + 60) + "px");
+
+                    posText.html(percentage[1] + "%" + '<span style="font-size:20px">' + twemoji.convert.fromCodePoint(positiveEmotions[1]) + '</span> ')
+                        .style("left", (time - 50) + "px")
+                        .style("top", (yCoords[1] + 60) + "px");
+
+                    lineChartToolTipLine.transition()
+                        .style("opacity", "1")
+                        .attr("transform", "translate(" + time + ",0)")
+                        .attr("y1", yCoords[0])
+                        .attr("y2", yCoords[1]);
+
+
+                }
+
+                function mouseout() {
+
+                    lineChartToolTipText.transition().style("opacity", "0");
+                    lineChartToolTipLine.transition().style("opacity", "0");
+                }
+
+                function pulse() {
+
+                    var circle = d3.select(this);
+
+                    console.log(circle);
+
+                    repeat();
+
+                    function repeat() {
+                        circle.transition()
+                            .duration(2000)
+                            .attr("stroke-width", 2)
+                            .attr("r", 20)
+                            .transition()
+                            .duration(800)
+                            .attr('stroke-width', 3)
+                            .attr("r", 12)
+                            .each("end", repeat);
+                    }
+
+                }
             });
         }
 

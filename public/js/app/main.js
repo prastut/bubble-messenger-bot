@@ -62,8 +62,7 @@ define(["jquery", "d3",
             //     .attr("height", height)
             //     .style("fill", "transparent");
 
-            svg.call(lineChart)
-                .call(scatterChart);
+            svg.call(scatterChart).call(lineChart);
 
             // Events Chart. 30% of real estate
 
@@ -102,7 +101,7 @@ define(["jquery", "d3",
                 // live("stop");
 
                 transform = d3.event.transform;
-                // console.log(transform);
+
                 commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
                 lineChart.x(commonXAxis).zoom(transform);
                 scatterChart.x(commonXAxis).zoom(transform);

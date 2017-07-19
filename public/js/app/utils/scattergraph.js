@@ -269,7 +269,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                     coordsLocal.splice(segmentClicked, 1);
 
-                    console.log(coordsLocal);
                     var fadeRect = scatter.selectAll('.fade-rect')
                         .data(coordsLocal)
                         .enter()
