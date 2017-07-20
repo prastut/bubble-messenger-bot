@@ -58,21 +58,25 @@ define(["d3", "twemoji"], function(d3) {
                     .on("mouseover", mouseover)
                     .on("mouseout", mouseout);
 
-                var rect = line.append("rect")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .attr("fill", "transparent");
+                //
 
 
                 var neg = line.append("path")
                     .datum(data.neg)
                     .attr("class", "sentiment--line sentiment--neg")
-                    .attr("d", sentimentsLine);
+                    .attr("d", sentimentsLine)
+
+
 
                 var pos = line.append("path")
                     .datum(data.pos)
                     .attr("class", "sentiment--line sentiment--pos")
                     .attr("d", sentimentsLine);
+
+                // var rect = line.append("rect")
+                //     .attr("width", width)
+                //     .attr("height", height)
+                //     .attr("fill", "transparent");
 
 
                 // var posPoints = line.append("g")
@@ -122,6 +126,18 @@ define(["d3", "twemoji"], function(d3) {
                 //     .attr("class", "line-tooltip");
                 // .attr("transform", "translate(" + margin.left + "," + 390 + ")");
 
+                // function findYatX(x, linePath) {
+                //     function getXY(len) {
+                //         var point = linePath.getPointAtLength(len);
+                //         return [point.x, point.y];
+                //     }
+                //     var curlen = 0;
+                //     while (getXY(curlen)[0] < x) { curlen += 0.01; }
+                //     return getXY(curlen);
+                // }
+
+                // console.log(findYatX(5, document.getElementsByClassName("sentiment--pos")[0]));
+
 
                 var lineChartToolTipLine = line.append("line")
                     .attr("class", "x-hover-line line-hover-line")
@@ -155,19 +171,30 @@ define(["d3", "twemoji"], function(d3) {
                 };
 
                 function mouseover(d) {
-                    var pos = x.invert(d3.mouse(this)[0]);
-                    var obj = {};
-                    obj.neg = data.neg[bisectLine(data.neg, pos)].sentiment;
-                    obj.pos = data.pos[bisectLine(data.pos, pos)].sentiment;
-                    obj.time = data.pos[bisectLine(data.pos, pos)].time;
+                    var posX = x.invert(d3.mouse(this)[0]);
 
-                    var sum = [obj.neg, obj.pos].reduce((a, b) => a + b, 0);
-                    var percentage = [obj.neg, obj.pos].map(function(i) { return Math.round(i / sum * 100); });
-                    var yCoords = [obj.neg, obj.pos].map(function(i) { return y(i); });
+                    var pos = y.invert(findYatXbyBisection(x(posX), document.getElementsByClassName('sentiment--pos')[0]));
+                    var neg = y.invert(findYatXbyBisection(x(posX), document.getElementsByClassName('sentiment--neg')[0]));
 
-                    var time = x(obj.time);
+                    var array = [neg, pos];
+                    var sum = array.reduce((a, b) => a + b, 0);
+                    var percentage = array.map(function(i) { return Math.round(i / sum * 100); });
+                    var yCoords = array.map(function(i) { return y(i); });
 
-                    lineChartToolTipText.transition().style("opacity", "1");
+
+
+                    // var obj = {};
+                    // obj.neg = data.neg[bisectLine(data.neg, pos)].sentiment;
+                    // obj.pos = data.pos[bisectLine(data.pos, pos)].sentiment;
+                    // obj.time = data.pos[bisectLine(data.pos, pos)].time;
+
+                    // var sum = [obj.neg, obj.pos].reduce((a, b) => a + b, 0);
+                    // var percentage = [obj.neg, obj.pos].map(function(i) { return Math.round(i / sum * 100); });
+                    // var yCoords = [obj.neg, obj.pos].map(function(i) { return y(i); });
+
+                    var time = x(posX);
+
+                    // lineChartToolTipText.transition().style("opacity", "1");
 
                     negText.html('<span style="font-size:20px">' + twemoji.convert.fromCodePoint(negetiveEmotions[1]) + '</span> ' + percentage[0] + "%")
                         .style("left", (time) + "px")
@@ -185,6 +212,37 @@ define(["d3", "twemoji"], function(d3) {
 
 
                 }
+
+
+                var findYatXbyBisection = function(x, path, error) {
+                    // console.log(path);
+                    var length_end = path.getTotalLength(),
+                        length_start = 0,
+                        point = path.getPointAtLength((length_end + length_start) / 2) // get the middle point
+                        ,
+                        bisection_iterations_max = 50,
+                        bisection_iterations = 0
+
+                    error = error || 0.01
+
+                    while (x < point.x - error || x > point.x + error) {
+                        // get the middle point
+                        point = path.getPointAtLength((length_end + length_start) / 2)
+
+                        if (x < point.x) {
+                            length_end = (length_start + length_end) / 2
+                        } else {
+                            length_start = (length_start + length_end) / 2
+                        }
+
+                        // Increase iteration
+                        if (bisection_iterations_max < ++bisection_iterations)
+                            break;
+                    }
+
+                    return point.y;
+                }
+
 
                 function mouseout() {
 
