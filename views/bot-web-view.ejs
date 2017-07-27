@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title><%= title %></title>
+    <title><%= name %></title>
 
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bubble.css">
@@ -32,7 +32,7 @@
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
-                <a class="navbar-brand" href="#page-top"><%= channel.split('"').join(''); %></a>
+                <a class="navbar-brand" href="#page-top"><%= name %></a>
             </div>
         </div>
     </nav>
@@ -55,7 +55,6 @@
 	<% if (params) { %>
   		<script>
 			var params = <%- params %>;
-		    var channel = <%- channel %>;
 		</script>
 	<% } %>
     <% include ga %>

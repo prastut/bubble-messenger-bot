@@ -41,11 +41,11 @@ module.exports = {
 
     },
 
-    webviewURL: function(match_id, channel_id, playerOrTeam) {
+    webviewURL: function(match_id, channel_id, playerOrTeam, name) {
 
-        var channel = playerOrTeam == "player" ? "&player_id=" : "&team_id=";
+        playerOrTeam = playerOrTeam == "player" ? "&player_id=" : "&team_id=";
 
-        return "" + module.exports.ip + "get-webview?match_id=" + match_id + channel + channel_id;
+        return "" + module.exports.ip + "get-webview?match_id=" + match_id + playerOrTeam + channel_id + "&name=" + name;
 
 
     },

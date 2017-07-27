@@ -51,9 +51,9 @@ define(["d3", "twemoji"], function(d3) {
 
 
                 var line = dom.append("g")
-                    .attr("class", "line-chart")
-                    .on("mouseover", mouseover)
-                    .on("mouseout", mouseout);
+                    .attr("class", "line-chart");
+                // .on("mouseover", mouseover)
+                // .on("mouseout", mouseout);
 
 
                 var neg = line.append("path")

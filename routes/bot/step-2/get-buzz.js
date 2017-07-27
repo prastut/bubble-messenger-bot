@@ -95,18 +95,17 @@ router.get('/', function(req, res, next) {
 
 var clickPhotu = function(teamObj, callBack) {
 
-    var team = teamObj[Object.keys(teamObj)];
-    console.log(team.image_url);
-    console.log(team.screenshot);
+    callBack(null, "1")
 
+    // var team = teamObj[Object.keys(teamObj)];
 
-    webshot(
-        team.screenshot,
-        team.savepath,
-        helper.optionsPhone,
-        function(err) {
-            callBack(err);
-        });
+    // webshot(
+    //     team.screenshot,
+    //     team.savepath,
+    //     helper.optionsPhone,
+    //     function(err) {
+    //         callBack(err);
+    //     });
 
 };
 
@@ -130,7 +129,7 @@ var fetch = function(team, callBack) {
                     'screenshot': helper.screenshotURL(team.name, team.flag, teamObj.neg, teamObj.pos),
                     'savepath': path.join(path.resolve("."), 'public/img/screenshot', nameOfImg),
                     'image_url': path.join(helper.ip, 'img/screenshot', nameOfImg),
-                    'webview': helper.webviewURL(team.match_id, team.team_id, "team")
+                    'webview': helper.webviewURL(team.match_id, team.team_id, "team", team.name)
 
                 };
 

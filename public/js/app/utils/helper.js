@@ -259,13 +259,18 @@ define(["moment"], function(moment) {
 
     }
 
+    function widthDependingOnPage(w) {
+        return window.location.pathname == "/get-video-overlay" ? w * 0.70 : w;
+    }
+
 
     return {
         pL: pushLineData,
         pS: pushScatterData,
         url: urlGenerator,
         fakeDataFormatter: fakeDataFormatter,
-        fakeDataFormatterScatter: fakeDataFormatterScatter
+        fakeDataFormatterScatter: fakeDataFormatterScatter,
+        widthDependingOnPage: widthDependingOnPage
 
     };
 
