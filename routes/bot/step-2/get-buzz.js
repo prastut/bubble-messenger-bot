@@ -96,7 +96,8 @@ router.get('/', function(req, res, next) {
 var clickPhotu = function(teamObj, callBack) {
 
     var team = teamObj[Object.keys(teamObj)];
-    console.log(team.savepath);
+    console.log(team.image_url);
+
     webshot(
         team.screenshot,
         team.savepath,

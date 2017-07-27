@@ -89,7 +89,7 @@ module.exports = {
             }
         }
 
-        console.log(JSON.stringify(quick_replies));
+        // console.log(JSON.stringify(quick_replies));
         return quick_replies;
 
     }
