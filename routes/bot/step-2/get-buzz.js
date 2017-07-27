@@ -50,10 +50,9 @@ router.get('/', function(req, res, next) {
 
                                 var obj = {};
                                 obj.title = team;
-                                obj.image_url = results[i][team].image_url;
                                 obj.buttons = [{
                                     "type": "web_url",
-                                    "url": "https://www.google.com",
+                                    "url": results[i][team].webview,
                                     "title": "Explore Buzz",
                                     "webview_height_ratio": "tall",
                                 }];
