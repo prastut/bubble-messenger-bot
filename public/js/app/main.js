@@ -1,8 +1,8 @@
 define(["jquery", "d3",
         "./utils/helper", "./utils/data",
-        "./utils/graph", "./utils/linegraph", "./utils/scattergraph", "./utils/events"
+        "./utils/graph", "./utils/linegraph", "./utils/scattergraph", "./utils/events", "./utils/players"
     ],
-    function($, d3, helper, data, graph, lineGraph, scatterGraph, eventsGraph) {
+    function($, d3, helper, data, graph, lineGraph, scatterGraph, eventsGraph, playersGraph) {
 
         var lineData = {};
         var scatterData = {};
@@ -18,12 +18,15 @@ define(["jquery", "d3",
 
 
             helper.pL(lineData, channel, helper.fakeDataFormatter(data.fakeLine, start));
-
             helper.pS(scatterData, channel, helper.fakeDataFormatterScatter(data.fakeLine, start));
 
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
-            var height = Math.round(parseInt(d3.select("#chart_container").style("height")));
-
+            var height;
+            if (window.location.pathname == "/get-video-overlay") {
+                height = 150;
+            } else {
+                height = Math.round(parseInt(d3.select("#chart_container").style("height")));
+            }
 
             var modelChart = graph.chart().width(width).height(height);
             d3.select('#chart_container').call(modelChart);
@@ -31,7 +34,7 @@ define(["jquery", "d3",
             // //Axis
             var commonXAxis = d3.scaleTime()
                 .domain(d3.extent(lineData[channel].timestamps))
-                .range([0, width]);
+                .range([0, widthDependingOnPage(width)]);
 
             var commonXZoomAxis = d3.scaleTime()
                 .domain(commonXAxis.domain())
@@ -43,24 +46,17 @@ define(["jquery", "d3",
             var svg = d3.select(".chart");
 
             var lineChart = lineGraph.init()
-                .width(width)
-                .height(height * 0.70)
                 .x(commonXAxis)
-                .data(lineData[channel])
-                .zoom(d3.zoomIdentity);
+                .height(height * 0.70)
+                .data(lineData[channel]);
+
 
             var scatterChart = scatterGraph.init()
                 .height(height * 0.70)
-                .width(width)
+                .width(widthDependingOnPage(width))
                 .x(commonXAxis)
                 .data(scatterData[channel])
                 .zoom(d3.zoomIdentity);
-
-            // var rect = svg.append("rect")
-            //     .attr("class", "checking")
-            //     .attr("width", width)
-            //     .attr("height", height)
-            //     .style("fill", "transparent");
 
             svg.call(lineChart).call(scatterChart);
 
@@ -69,7 +65,7 @@ define(["jquery", "d3",
             var eventsChart = eventsGraph.init()
                 .yPos($('.axis--y')[0].getBoundingClientRect().height + 20)
                 .height(height)
-                .width(width)
+                .width(widthDependingOnPage(width))
                 .x(commonXAxis)
                 .data(lineData[channel].events)
                 .zoom(d3.zoomIdentity);
@@ -82,16 +78,36 @@ define(["jquery", "d3",
                 .scaleExtent([1, 10])
                 .translateExtent([
                     [0, 0],
-                    [width, height]
+                    [widthDependingOnPage(width), height]
                 ])
                 .extent([
                     [0, 0],
-                    [width, height]
+                    [widthDependingOnPage(width), height]
                 ])
                 .on("zoom", zoomHandler);
 
+            if (window.location.pathname == "/get-video-overlay") {
+                d3.select("#chart_container").style("opacity", "0");
 
-            svg.call(overallZoom);
+                d3.select(window)
+                    .on('mousemove', mousemoveIframe)
+                    .on("click", mousemoveIframe);
+
+                console.log(widthDependingOnPage(width));
+                var playersChart = playersGraph.init()
+                    .xPos(commonXAxis.range()[1])
+                    .height(height)
+                    .width(widthDependingOnPage(width))
+                    .x(commonXAxis)
+                    .zoom(d3.zoomIdentity);
+
+                svg.call(playersChart);
+
+            } else {
+
+                svg.call(overallZoom);
+            }
+
             // overallZoom.scaleTo(svg, 1);
             // overallZoom.translateBy(svg, -width, -height);
 
@@ -103,9 +119,8 @@ define(["jquery", "d3",
                 transform = d3.event.transform;
                 // console.log(transform);
                 commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
-                lineChart.x(commonXAxis).zoom(transform);
-                scatterChart.x(commonXAxis).zoom(transform);
-                eventsChart.x(commonXAxis).zoom(transform);
+                updateCharts();
+
 
             }
 
@@ -236,15 +251,66 @@ define(["jquery", "d3",
             //     var ui_chart = d3.select('#chart')
             //         .call(model_chart);
 
-            //     // d3.select(window).on('resize', resize);
-
-            //     // function resize() {
-            //     //     console.log(parseInt(d3.select("#chart").style("width")));
-            //     // }
+            //     
 
 
 
             // });
+
+            d3.select(window).on('resize', resize);
+
+
+
+            function resize() {
+
+                width = Math.round(parseInt(d3.select("#chart_container").style("width")));
+
+                //Container Update
+                modelChart.width(width);
+
+                // Axis Update
+                commonXAxis.range([0, widthDependingOnPage(width)]);
+                commonXZoomAxis.range(commonXAxis.range());
+
+                // Charts Update
+                updateCharts();
+
+            }
+
+            function updateCharts() {
+                lineChart.x(commonXAxis);
+                scatterChart.width(widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
+                eventsChart.width(widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
+
+                if (playersChart) {
+
+                    playersChart.width(widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
+                }
+
+            }
+
+
+            function widthDependingOnPage(w) {
+                return window.location.pathname == "/get-video-overlay" ? w * 0.70 : w;
+            }
+
+            var iframetimer;
+
+            function mousemoveIframe() {
+
+                d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
+                d3.select("#chart_container").style("opacity", "1");
+
+
+
+                if (iframetimer) clearTimeout(iframetimer);
+                iframetimer = setTimeout(function() {
+                    d3.select("#chart_container").transition().style("opacity", "0");
+                    d3.select("body").style("background", "none");
+                }, 2000);
+
+            }
+
 
         });
     });

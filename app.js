@@ -31,6 +31,9 @@ app.use('/get-team-data', require('./routes/bot/step-2/get-team-data'));
 app.use('/screenshot', require('./routes/bot/step-2/screenshot'));
 
 app.use('/get-webview', require('./routes/bot/step-3/bot-web-view'));
+
+app.use('/get-video-overlay', require('./routes/bot/step-3/video-overlay'));
+
 app.use('/quick-replies', require('./routes/bot/step-3/quick-replies'));
 
 //Web Routes

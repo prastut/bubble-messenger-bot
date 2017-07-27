@@ -228,7 +228,7 @@ define(["moment"], function(moment) {
 
                 var timeDiff = parseInt(data[i + 1].Time) - parseInt(data[i].Time);
 
-                var totalnoOfTweets = timeDiff < 5 ? Math.ceil(Math.random() * 10) : Math.floor(Math.random() * 20);
+                var totalnoOfTweets = timeDiff < 5 ? Math.ceil(Math.random() * 2) : Math.floor(Math.random() * 5);
 
                 var obj = {};
                 obj.time = startTime;
