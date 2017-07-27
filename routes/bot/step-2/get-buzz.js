@@ -97,6 +97,8 @@ var clickPhotu = function(teamObj, callBack) {
 
     var team = teamObj[Object.keys(teamObj)];
     console.log(team.image_url);
+    console.log(team.screenshot);
+
 
     webshot(
         team.screenshot,
