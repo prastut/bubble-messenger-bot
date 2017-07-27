@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
 
 
 
-                            // var quick_replies = helper.quickReplies(instance_id);
+                            var quick_replies = helper.quickReplies(match_id);
                             var elements = [];
 
                             for (var i in results) {
@@ -62,7 +62,6 @@ router.get('/', function(req, res, next) {
 
                             }
 
-                            console.log(JSON.stringify(elements));
 
                             var payload = {
                                 "messages": [{
@@ -74,11 +73,11 @@ router.get('/', function(req, res, next) {
                                                 "elements": elements
                                             }
                                         }
+                                    },
+                                    {
+                                        "text": "You can also check what people have to say about the players:",
+                                        "quick_replies": quick_replies
                                     }
-                                    // {
-                                    //     "text": "You can also check what people have to say about the players:",
-                                    //     "quick_replies": quick_replies
-                                    // }
                                 ]
                             };
 
