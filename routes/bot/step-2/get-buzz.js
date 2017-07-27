@@ -39,17 +39,17 @@ router.get('/', function(req, res, next) {
                             console.log("Error in clickPhoto", err);
                         } else {
 
-
+                            console.log("Image URL's done");
 
                             var quick_replies = helper.quickReplies(match_id);
                             var elements = [];
-
+                            var date = new Date().getDate();
                             for (var i in results) {
                                 var team = Object.keys(results[i])[0];
 
                                 var obj = {};
                                 obj.title = team;
-                                obj.image_url = "" + results[i][team].image_url;
+                                obj.image_url = helper.ip + "img/screenshot/" + team + '-screenshot-' + date + '.jpeg';
                                 obj.buttons = [{
                                     "type": "web_url",
                                     "url": results[i][team].webview,
