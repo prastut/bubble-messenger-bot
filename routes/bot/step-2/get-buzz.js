@@ -36,8 +36,7 @@ router.get('/', function(req, res, next) {
 
                     async.map(results, clickPhotu, function(err, r) {
                         if (err) {
-                            console.log(err);
-
+                            console.log("Error in clickPhoto", err);
                         } else {
 
 
@@ -81,7 +80,6 @@ router.get('/', function(req, res, next) {
                                 ]
                             };
 
-                            // console.log(JSON.stringify(payload));
                             res.send(payload);
                         }
                     });
@@ -97,9 +95,8 @@ router.get('/', function(req, res, next) {
 
 var clickPhotu = function(teamObj, callBack) {
 
-    callBack(null, "1");
-
     var team = teamObj[Object.keys(teamObj)];
+    console.log(team.savepath);
     webshot(
         team.screenshot,
         team.savepath,
