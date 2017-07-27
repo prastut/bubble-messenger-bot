@@ -50,6 +50,7 @@ router.get('/', function(req, res, next) {
 
                                 var obj = {};
                                 obj.title = team;
+                                obj.image_url = "https://www.hello.com/img_/hello_logo_hero.png";
                                 obj.buttons = [{
                                     "type": "web_url",
                                     "url": results[i][team].webview,
@@ -98,14 +99,14 @@ var clickPhotu = function(teamObj, callBack) {
 
     callBack(null, "1");
 
-    // var team = teamObj[Object.keys(teamObj)];
-    // webshot(
-    //     team.screenshot,
-    //     team.savepath,
-    //     helper.optionsPhone,
-    //     function(err) {
-    //         callBack(err);
-    //     });
+    var team = teamObj[Object.keys(teamObj)];
+    webshot(
+        team.screenshot,
+        team.savepath,
+        helper.optionsPhone,
+        function(err) {
+            callBack(err);
+        });
 
 };
 
