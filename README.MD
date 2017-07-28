@@ -145,114 +145,57 @@
 *	player_id (not required if team_id provided)
 *	start_timestamp (optional, default 0) (pass -1 if last datapoint is required)
 *	end_timestamp (optional, default severtime)	
+*	user_type (optional, (INFLUENCER/FAMOUS/SUBFAMOUS))
+
+>INFO: `user_type` ignored if start_timestamp=-1
 
 
-    URL: https://trendingapi.bubble.social/get-scatter-data?instance_id=59515087281ce634c625877e&last_timestamp=0&channel=awaiting_vivegam_2nd_track
+    URL: http://localhost:5000/get-scatter-data?match_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f&player_id=743c79af-6ed6-11e7-b7a4-a402b9ccba5f&user_type=INFLUENCER
     
 >Sample Response:
 
 	[
-	  {
-	    "bubble_radius": 3.54585588
-        "favorite_count": 0, 
-        "retweet_count": 0, 
-        "retweeted": false, 
-        "sentiment_index": 82.46279619739632, 
-        "text": "IM SO HAPPY", 
-        "timestamp": 1500696981, 
-        "tweet_id": "888696710616231937", 
-        "user": {
-	  "id": 4568745
-          "followers": 18026, 
-          "friends": 9912, 
-          "screen_name": "satanyoongi", 
-          "type": "FAMOUS"
-        	}
-      	}, 
       {
-        "favorite_count": 0, 
-        "retweet_count": 0, 
-        "retweeted": false, 
-        "sentiment_index": 88.47578436317524, 
-        "text": "RT @gentle: \ud83d\ude0a\ud83c\udf08:\nYOU DESERVE TO BE HAPPY\nYOU DESERVE TO BE LOVED\nYOU DESERVE TO BE VALUED", 
-        "timestamp": 1500696981, 
-        "tweet_id": "888696711513866241", 
-        "user": {
-	  "id": 4568745
-          "followers": 18026, 
-          "friends": 9912, 
-          "screen_name": "satanyoongi", 
-          "type": "SUBFAMOUS"
-        	}
+        "time": 1500686404, 
+        "wow": [
+          {
+            "favorite_count": 0, 
+            "retweet_count": 0, 
+            "retweeted": false, 
+            "sentiment_index": 61.95058222123639, 
+            "text": "5 P's to A \"Wow!\" Business https://t.co/jufEF7aqk3 #success https://t.co/9F2c3kc4kI", 
+            "timestamp": 1500706204, 
+            "tweet_id": "888735393373237248", 
+            "user": {
+              "followers": 93184, 
+              "friends": 13964, 
+              "screen_name": "pasquinilli", 
+              "type": "INFLUENCER"
+            }
+          }
+        ]
       }, 
       {
-        "favorite_count": 0, 
-        "retweet_count": 0, 
-        "retweeted": false, 
-        "sentiment_index": 16.00701218303068, 
-        "text": "RT @gs_magazine: \u3010HAPPY BIRTHDAY\u30117\u670822\u65e5\u306f\u3001\u300e\u30e9\u30d6\u30e9\u30a4\u30d6\uff01\u300f\u77e2\u6fa4\u306b\u3053\u3061\u3083\u3093\u306e\u8a95\u751f\u65e5!! -https://t.co/5nmbwLelBH\n#lovelive https://t.co/OopsoXGRdB", 
-        "timestamp": 1500696981, 
-        "tweet_id": "888696708917374977", 
-        "user": {
-	  "id": 4568745
-          "followers": 18026, 
-          "friends": 9912, 
-          "screen_name": "satanyoongi", 
-          "type": "INFLUENCER"
-        	}
+        "time": 1500686518, 
+        "wow": [
+          {
+            "favorite_count": 0, 
+            "retweet_count": 0, 
+            "retweeted": false, 
+            "sentiment_index": 95.69227728913987, 
+            "text": "@ndirish97 Hello, Val. Wow! Great to hear this feedback! We thank you and your family for choosing us!  *ARD", 
+            "timestamp": 1500706318, 
+            "tweet_id": "888735871838638083", 
+            "user": {
+              "followers": 1362322, 
+              "friends": 32677, 
+              "screen_name": "Delta", 
+              "type": "INFLUENCER"
+            }
+          }
+        ]
       }
-	]
-
-### Get Events:
->	Args:
-	
-*	match_id 
-*	start_timestamp (optional)
-*	end_timestamp (optional)
-*	start_timestamp (optional, default 0) (pass -1 if last datapoint is required)
-*	end_timestamp (optional, default severtime)	
-
-
-	URL: http://localhost:5000/get-events?match_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f&start_timestamp=1500686048&end_timestamp=1500686150
-
-
->	Sample Response:
-
-	[
-	  {
-	    "comment": "test comment 1500686109", 
-	    "id": "9f50d6d6-6ed8-11e7-b7a4-a402b9ccba5f", 
-	    "match_id": "fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f", 
-	    "name": "test event", 
-	    "players": [
-	      "p1", 
-	      "p2"
-	    ], 
-	    "time": 1500686109.0
-	  }, 
-	  {
-	    "comment": "test comment 1500686139", 
-	    "id": "a7330b62-6ed8-11e7-b7a4-a402b9ccba5f", 
-	    "match_id": "fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f", 
-	    "name": "test event", 
-	    "players": [
-	      "p1", 
-	      "p2"
-	    ], 
-	    "time": 1500686139.0
-	  }, 
-	  {
-	    "comment": "test comment 1500686109", 
-	    "id": "df5bc29a-6ed8-11e7-b7a4-a402b9ccba5f", 
-	    "match_id": "fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f", 
-	    "name": "test event", 
-	    "players": [
-	      "p1", 
-	      "p2"
-	    ], 
-	    "time": 1500686109.0
-	  }
-	]
+    ]
 
 ### Get Trending, Heros and Zeros
 >Args:
@@ -306,4 +249,98 @@
 	  ], 
 	  "zeros": []
 	}
+
+### Get Team details
+>Args:
+
+* team_id
+
+	URL: https://api.bubble.social/get-team-details?team_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f
+> Sample Response
+
+    {
+        "country": "NA", 
+        "id": "743c79af-6ed6-11e7-b7a4-a402b9ccba5f", 
+        "image_url": "wow", 
+        "index_table": "wow_realtime_index", 
+        "keywords": [
+        "wow"
+        ], 
+        "name": "wow", 
+        "pretty_name": "wow", 
+        "scatter_table": "wow_scatter", 
+        "team": "743c79ad-6ed6-11e7-b7a4-a402b9ccba5f"
+    }
+
+### Get Player details
+>Args:
+
+* player_id
+
+	URL: https://api.bubble.social/get-player-details?player_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f
+> Sample Response
+
+    {
+        "country": "NA", 
+        "id": "743c79af-6ed6-11e7-b7a4-a402b9ccba5f", 
+        "image_url": "wow", 
+        "index_table": "wow_realtime_index", 
+        "keywords": [
+        "wow"
+        ], 
+        "name": "wow", 
+        "pretty_name": "wow", 
+        "scatter_table": "wow_scatter", 
+        "team": "743c79ad-6ed6-11e7-b7a4-a402b9ccba5f"
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
