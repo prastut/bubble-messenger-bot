@@ -76,12 +76,16 @@ module.exports = {
                             "title": options[key]
                         });
                     } else {
-                        quick_replies.push({
 
-                            "url": ip + "get-buzz" + "?match_id=" + match_id,
-                            "type": "json_plugin_url",
-                            "title": options[key]
-                        });
+                        if (type != "general") {
+                            quick_replies.push({
+
+                                "url": ip + "get-buzz" + "?match_id=" + match_id,
+                                "type": "json_plugin_url",
+                                "title": options[key]
+                            });
+                        }
+
                     }
                 }
 
