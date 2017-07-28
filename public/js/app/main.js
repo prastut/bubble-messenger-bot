@@ -11,8 +11,16 @@ define(["jquery", "d3",
 
 
             var channel = params.name;
-            params.start_timestamp = 1500993476;
-            params.end_timestamp = 1500993699;
+
+            if (channel == "germany") {
+                params.start_timestamp = 1499019288;
+                params.end_timestamp = 1499021000;
+                params.user_type = "FAMOUS";
+            } else {
+                params.start_timestamp = 1500993476;
+                params.end_timestamp = 1500993699;
+                params.user_type = "FAMOUS";
+            }
 
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
             var height;
@@ -68,7 +76,14 @@ define(["jquery", "d3",
 
             $.getJSON(helper.url('get-index-data'), params).done(function(index) {
 
-                helper.pL(lineData, channel, index);
+                if (channel == "germany") {
+                    helper.pL(lineData, channel, helper.fakeDataFormatter(data.fakeLine, 1499019288));
+
+                } else {
+                    helper.pL(lineData, channel, index);
+                }
+
+
 
                 lineChart = lineGraph.init()
                     .x(commonXAxis)
@@ -84,7 +99,14 @@ define(["jquery", "d3",
 
             $.getJSON(helper.url('get-scatter-data'), params).done(function(scatter) {
 
-                helper.pS(scatterData, channel, scatter);
+
+
+                if (channel == "germany") {
+                    helper.pS(scatterData, channel, helper.fakeDataFormatterScatter(data.fakeLine, 1499019288));
+                } else {
+                    helper.pS(scatterData, channel, scatter);
+
+                }
 
                 scatterChart = scatterGraph.init()
                     .height(height * 0.70)
@@ -117,9 +139,9 @@ define(["jquery", "d3",
                 scatterChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
                 // eventsChart.width(widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
 
-                if (playersChart) {
-                    playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
-                }
+                // if (playersChart) {
+                //     playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
+                // }
 
             }
 
