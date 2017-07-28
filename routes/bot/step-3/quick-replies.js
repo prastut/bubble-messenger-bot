@@ -7,6 +7,8 @@ const helper = require("../../../helper");
 
 router.get('/', function(req, res, next) {
 
+    console.log(req.query);
+
     var type = req.query.type;
     var match_id = req.query.match_id;
 
