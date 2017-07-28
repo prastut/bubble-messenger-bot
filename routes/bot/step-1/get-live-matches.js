@@ -20,8 +20,9 @@ router.get('/', function(req, res, next) {
                 elements.push({
                     "title": data[i].name,
                     "image_url": data[i].url,
+                    "subtitle": data[i].pretty_name,
                     "buttons": [{
-                        "url": helper.ip + "get-buzz" + "?instance_id=" + data[i].instance_id,
+                        "url": helper.ip + "get-buzz" + "?match_id=" + data[i].id,
                         "title": "Track this!",
                         "type": "json_plugin_url"
                     }]

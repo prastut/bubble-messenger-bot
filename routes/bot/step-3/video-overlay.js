@@ -7,10 +7,14 @@ router.get('/', function(req, res, next) {
 
     var response = {};
     Object.assign(response, req.query);
+    delete response.both;
+    delete response.name;
 
-    res.render('bot-web-view', {
-        name: req.query.name,
-        params: JSON.stringify(req.query),
+
+    res.render('video-overlay', {
+        title: req.query.name,
+        channel: JSON.stringify(req.query.channel),
+        params: JSON.stringify(response),
     });
 
 

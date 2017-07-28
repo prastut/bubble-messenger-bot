@@ -9,80 +9,75 @@ const router = express.Router();
 
 router.get('/', function(req, res, next) {
 
-    var instance_id = req.query.instance_id;
-
+    var match_id = req.query.match_id;
 
     request
-        .get(helper.getParams('teams', req.query), function callBack(err, httpResponse, data) {
+        .get(helper.getParams('get-teams', req.query), function callBack(err, httpResponse, teams) {
             if (err) {
                 res.send([{ "text": "Get Index Data Failed" }]);
             }
 
-            var teams = Object.keys(data.teams);
-            var teamsObject = teams.map(function(i) {
+            // console.log(teams);
+
+            var teamsObject = teams.map(function(team) {
                 return {
-                    instance_id: instance_id,
-                    channel: i
+                    match_id: match_id,
+                    team_id: team.id,
+                    name: team.name,
+                    flag: team.image_url
                 };
             });
 
-            async.map([teamsObject[0], teamsObject[1]], fetch, function(err, results) {
+            async.map([...teamsObject], fetch, function(err, results) {
                 if (err) {
 
                 } else {
-                    var i;
-                    var url = urlmaker(results, teams, instance_id);
+                    console.log("Fetching Done");
 
-                    var screenshotRequests = [];
-                    for (i in teams) {
-
-                        screenshotRequests.push(url[teams[i]]);
-
-                    }
-
-                    async.map(screenshotRequests, clickPhotu, function(err, results) {
+                    async.map(results, clickPhotu, function(err, r) {
                         if (err) {
-                            console.log(err);
-
+                            console.log("Error in clickPhoto", err);
                         } else {
 
-                            var quick_replies = helper.quickReplies(instance_id);
+                            console.log("Image URL's done");
+
+                            var quick_replies = helper.quickReplies(match_id);
                             var elements = [];
+                            var date = new Date().getDate();
+                            for (var i in results) {
+                                var team = Object.keys(results[i])[0];
+
+                                var obj = {};
+                                obj.title = team;
+                                obj.image_url = helper.ip + "img/screenshot/" + team + '-screenshot-' + date + '.jpeg';
+                                obj.buttons = [{
+                                    "type": "web_url",
+                                    "url": results[i][team].webview,
+                                    "title": "Explore Buzz",
+                                    "webview_height_ratio": "tall",
+                                }];
+
+                                elements.push(obj);
+
+                            }
+
 
                             var payload = {
                                 "messages": [{
-                                    "attachment": {
-                                        "type": "template",
-                                        "payload": {
-                                            "template_type": "generic",
-                                            "image_aspect_ratio": "square",
-                                            "elements": [{
-                                                "title": helper.capitalizeFirstLetter(teams[0]),
-                                                "image_url": helper.ip + "img/screenshot/" + teams[0] + '-screenshot-' + 6 + '.jpeg',
-                                                "buttons": [{
-                                                    "type": "web_url",
-                                                    "url": url[teams[0]].webview,
-                                                    "title": "Explore Buzz",
-                                                    "webview_height_ratio": "tall",
-
-                                                }]
-                                            }, {
-                                                "title": helper.capitalizeFirstLetter(teams[1]),
-                                                "image_url": helper.ip + "img/screenshot/" + teams[1] + '-screenshot-' + 6 + '.jpeg',
-                                                "buttons": [{
-                                                    "type": "web_url",
-                                                    "url": url[teams[1]].webview,
-                                                    "title": "Explore Buzz",
-                                                    "webview_height_ratio": "tall",
-
-                                                }]
-                                            }]
+                                        "attachment": {
+                                            "type": "template",
+                                            "payload": {
+                                                "template_type": "generic",
+                                                "image_aspect_ratio": "square",
+                                                "elements": elements
+                                            }
                                         }
+                                    },
+                                    {
+                                        "text": "You can also check what people have to say about the players:",
+                                        "quick_replies": quick_replies
                                     }
-                                }, {
-                                    "text": "You can also check what people have to say about the players:",
-                                    "quick_replies": quick_replies
-                                }]
+                                ]
                             };
 
                             res.send(payload);
@@ -98,55 +93,47 @@ router.get('/', function(req, res, next) {
 
 
 
-var clickPhotu = function(team, callBack) {
+var clickPhotu = function(teamObj, callBack) {
 
+    callBack(null, "1")
 
-    webshot(
-        team.screenshot,
-        team.savepath,
-        helper.optionsPhone,
-        function(err) {
-            callBack(err);
-        });
+    // var team = teamObj[Object.keys(teamObj)];
+
+    // webshot(
+    //     team.screenshot,
+    //     team.savepath,
+    //     helper.optionsPhone,
+    //     function(err) {
+    //         callBack(err);
+    //     });
 
 };
 
-
-var urlmaker = function(results, teams, instance_id) {
-
-    var date = new Date().getDate();
-    var obj = {};
-
-    results.map(function(val, i) {
-        var team = teams[i];
-        var neg = val[team].neg;
-        var pos = val[team].pos;
-
-        var nameOfImg = team + '-screenshot-' + date + '.jpeg';
-
-
-        obj[team] = {
-            'screenshot': helper.screenshotURL(team, "flag", neg, pos),
-            'savepath': path.join(path.resolve("."), 'public/img/screenshot', nameOfImg),
-            'image_url': path.join(helper.ip, 'img/screenshot', nameOfImg),
-            'webview': helper.webviewURL(instance_id, teams[i])
-        };
-
-    });
-
-    return obj;
-};
 
 var fetch = function(team, callBack) {
 
     team.start_timestamp = -1;
-
     request
         .get(helper.getParams('get-index-data', team), function(err, httpResponse, data) {
             if (err) {
                 callBack(err);
             } else {
-                callBack(null, data);
+
+                var teamObj = data[0][team.name];
+                var date = new Date().getDate();
+                var nameOfImg = team.name + '-screenshot-' + date + '.jpeg';
+                var obj = {};
+
+                obj[team.name] = {
+
+                    'screenshot': helper.screenshotURL(team.name, team.flag, teamObj.neg, teamObj.pos),
+                    'savepath': path.join(path.resolve("."), 'public/img/screenshot', nameOfImg),
+                    'image_url': path.join(helper.ip, 'img/screenshot', nameOfImg),
+                    'webview': helper.webviewURL(team.match_id, team.team_id, "team", team.name)
+
+                };
+
+                callBack(null, obj);
             }
         });
 };

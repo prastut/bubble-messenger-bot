@@ -54,14 +54,12 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                 // Axis
                 y.domain([0, 9]).range([height, 0]);
 
-                // console.log(data);
-
 
                 var scatter = dom.append("g")
                     .attr("class", "scatter-chart");
 
-                var segmentClickedRect = scatter.append('rect')
-                    .attr("class", "segment-clicked-rect");
+                // var segmentClickedRect = scatter.append('rect')
+                //     .attr("class", "segment-clicked-rect");
 
                 var scatterdots = scatter.selectAll(".series")
                     .data(data)
@@ -72,13 +70,23 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     .enter().append("g")
                     .attr("class", "point");
 
+                var setCircleSize;
+
+                if (window.location.pathname == "/get-video-overlay") {
+                    setCircleSize = 40;
+
+                } else {
+                    setCircleSize = 20;
+                }
+
+
                 //Clip Circles
                 var clipCircles = scatterdots.append("svg:clipPath")
                     .attr("id", function(d, i) {
                         return "clip-circle-" + d.x + d.y.sentiment_index;
                     })
                     .append("circle")
-                    .attr("r", 10)
+                    .attr("r", setCircleSize)
                     .attr("cx", function(d) { return x(d.x); })
                     .attr("cy", function(d) { return y(d.y.sentiment_index); })
                     .attr("transform", "translate(10,10)");
@@ -88,8 +96,8 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     .attr("class", "point-image")
                     .attr("x", function(d) { return x(d.x); })
                     .attr("y", function(d) { return y(d.y.sentiment_index); })
-                    .attr("width", "20px")
-                    .attr("height", "20px")
+                    .attr("width", (setCircleSize * 2) + "px")
+                    .attr("height", (setCircleSize * 2) + "px")
                     .attr("xlink:href", function(d, i) {
                         return "https://randomuser.me/api/portraits/thumb/men/" + Math.floor(Math.random() * 50) + ".jpg";
                     })
@@ -101,7 +109,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 var strokeCircles = scatterdots.append("circle")
                     .attr("class", "point-image-circle")
-                    .attr("r", 10)
+                    .attr("r", setCircleSize)
                     .attr("cx", function(d) { return x(d.x); })
                     .attr("cy", function(d) { return y(d.y.sentiment_index); })
                     .attr("transform", "translate(10,10)")
@@ -135,6 +143,31 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 var heightGrid = coords[1] - coords[0];
 
+
+                var maskGroup = scatter.append("g")
+                    .attr("class", "mask-rect");
+
+                var mask = maskGroup.append("defs").append("mask").attr("id", "mymask");
+
+                var maskRect = mask.append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", width)
+                    .attr("height", height)
+                    .style("fill", "white")
+                    .style("opacity", 0.9);
+
+                var maskCircle = mask.append("circle");
+
+
+                var overlayRect = maskGroup
+                    .append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", width)
+                    .attr("height", 0)
+                    .attr("mask", "url(#mymask)")
+                    .style("fill", "rgba(54, 61, 82, 5)");
 
 
 
@@ -186,17 +219,20 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                 };
 
                 zoomScatter = function() {
+                    resizeScatter();
+                };
+
+                resizeScatter = function() {
 
                     clipCircles
                         .attr("r", function() {
-                            var width = 20 * zoom.k > 40 ? 40 : 20 * zoom.k;
+                            var width = setScatterAttr();
                             return width / 2;
                         })
                         .attr("cx", function(d) { return x(d.x); })
                         .attr("transform", function() {
 
-                            var translate = 20 * zoom.k > 40 ? 40 : 20 * zoom.k;
-
+                            var translate = setScatterAttr();
                             return "translate(" + (translate / 2) + "," + (translate / 2) + ")";
 
                         });
@@ -206,34 +242,52 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     image
                         .attr("x", function(d) { return x(d.x); })
                         .attr("width", function() {
-                            var width = 20 * zoom.k > 40 ? 40 : 20 * zoom.k;
+                            var width = setScatterAttr();
                             return width;
                         })
                         .attr("height", function() {
-                            var height = 20 * zoom.k > 40 ? 40 : 20 * zoom.k;
+                            var height = setScatterAttr();
                             return height;
 
                         });
 
                     strokeCircles
                         .attr("r", function() {
-                            var width = 20 * zoom.k > 40 ? 40 : 20 * zoom.k;
+                            var width = setScatterAttr();
                             return width / 2;
                         })
                         .attr("cx", function(d) { return x(d.x); })
                         .attr("transform", function() {
-
-                            var translate = 20 * zoom.k > 40 ? 40 : 20 * zoom.k;
-
+                            var translate = setScatterAttr();
                             return "translate(" + (translate / 2) + "," + (translate / 2) + ")";
 
                         });
 
                 };
 
+                updateWidthScatter = function() {
+
+                    maskRect.attr("width", width);
+                    overlayRect.attr("width", width);
+                };
+
 
 
                 function click(d) {
+
+                    var circleCords = d3.select(this.parentNode).select(".point-image-circle");
+
+                    maskCircle
+                        .attr("cx", circleCords.attr("cx"))
+                        .attr("cy", circleCords.attr("cy"))
+                        .attr("r", parseInt(circleCords.attr("r")) + 5)
+                        .attr("transform", circleCords.attr("transform"));
+
+
+                    overlayRect
+                        .transition()
+                        .attr("height", height);
+
 
                     var yClick = d3.mouse(this)[1];
                     var coordsLocal = coords.slice();
@@ -243,8 +297,8 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .style("opacity", 0.9);
 
                     tweetshow.html(d.y.text)
-                        .style("left", (d3.event.pageX + 5) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
+                        .style("left", (width / 2) + "px")
+                        .style("top", (height / 2) + "px");
 
                     emoji.transition()
                         .duration(200)
@@ -260,30 +314,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .style("top", (coordsLocal[segmentClicked] + heightGrid / 2 + 50) + "px");
 
 
-                    // Fade rects
-                    segmentClickedRect.attr("x", 0)
-                        .attr("y", coordsLocal[segmentClicked])
-                        .attr("height", heightGrid)
-                        .attr("width", width)
-                        .style("opacity", 1);
-
-                    coordsLocal.splice(segmentClicked, 1);
-
-                    var fadeRect = scatter.selectAll('.fade-rect')
-                        .data(coordsLocal)
-                        .enter()
-                        .append('rect')
-                        .attr("class", "fade-rect")
-                        .attr("x", 0)
-                        .attr("y", function(d) {
-                            return d;
-                        })
-                        .attr("height", heightGrid)
-                        .attr("width", width)
-                        .style("opacity", 1)
-                        .style("fill", "black");
-
-
                     setTimeout(function() {
 
                         tweetshow.transition()
@@ -294,20 +324,19 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                             .duration(500)
                             .style("opacity", 0);
 
-                        segmentClickedRect.transition()
+                        overlayRect
+                            .transition()
                             .duration(500)
-                            .style("opacity", 0);
-
-                        fadeRect.transition()
-                            .duration(500)
-                            .style("opacity", 0).remove();
-
+                            .attr("height", 0);
 
 
                     }, 2000);
 
 
+                }
 
+                function setScatterAttr() {
+                    return setCircleSize * zoom.k > 40 ? 40 : setCircleSize * zoom.k;
                 }
 
 
@@ -333,6 +362,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         chart.width = function(value) {
             if (!arguments.length) return 960;
             width = value;
+            if (typeof updateWidthScatter === 'function') updateWidthScatter();
             return chart;
         };
 
@@ -345,6 +375,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         chart.x = function(commonXAxis) {
             if (!arguments.length) return d3.scaleTime();
             x = commonXAxis;
+            if (typeof resizeScatter === 'function') resizeScatter();
             return chart;
         };
 

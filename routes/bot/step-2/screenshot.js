@@ -11,9 +11,14 @@ router.get('/', function(req, res, next) {
     var w = 110;
     var h = 50;
     var barPadding = 5;
-    var dataset = [parseFloat(req.query.neg), parseFloat(req.query.pos)];
 
+    var dataset = [parseFloat(req.query.neg), parseFloat(req.query.pos)];
     var sum = dataset.reduce((a, b) => a + b, 0);
+
+    if (sum === 0) {
+        dataset = [1, 1];
+        sum = 2;
+    }
 
     jsdom.env({
         html: '',

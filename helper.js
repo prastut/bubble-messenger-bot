@@ -37,16 +37,16 @@ module.exports = {
 
     screenshotURL: function(channel, flag, neg, pos) {
 
-
-        var screenshotUrl = "" + module.exports.ip + "screenshot?&channel=" + channel + "&flag=" + flag + "&neg=" + neg + "&pos=" + pos;
-        return screenshotUrl;
+        return "" + module.exports.ip + "screenshot?&channel=" + channel + "&flag=" + flag + "&neg=" + neg + "&pos=" + pos;
 
     },
 
-    webviewURL: function(instance_id, channel) {
+    webviewURL: function(match_id, channel_id, playerOrTeam, name) {
 
-        var url = "" + module.exports.ip + "get-webview?instance_id=" + instance_id + "&channel=" + channel;
-        return url;
+        playerOrTeam = playerOrTeam == "player" ? "&player_id=" : "&team_id=";
+
+        return "" + module.exports.ip + "get-webview?match_id=" + match_id + playerOrTeam + channel_id + "&name=" + name;
+
 
     },
 
@@ -89,7 +89,7 @@ module.exports = {
             }
         }
 
-        console.log(JSON.stringify(quick_replies));
+        // console.log(JSON.stringify(quick_replies));
         return quick_replies;
 
     }

@@ -12,9 +12,7 @@ define(["d3", "twemoji"], function(d3) {
         var y = d3.scaleLinear();
 
         // Dimensions
-        var width;
         var height;
-        var updateWidth;
 
         //Initial Zoom Level
         var zoom;
@@ -52,20 +50,16 @@ define(["d3", "twemoji"], function(d3) {
                 y.domain([0, data.max]).nice().range([height, 0]);
 
 
-
                 var line = dom.append("g")
-                    .attr("class", "line-chart")
-                    .on("mouseover", mouseover)
-                    .on("mouseout", mouseout);
-
-                //
+                    .attr("class", "line-chart");
+                // .on("mouseover", mouseover)
+                // .on("mouseout", mouseout);
 
 
                 var neg = line.append("path")
                     .datum(data.neg)
                     .attr("class", "sentiment--line sentiment--neg")
                     .attr("d", sentimentsLine)
-
 
 
                 var pos = line.append("path")
@@ -126,17 +120,7 @@ define(["d3", "twemoji"], function(d3) {
                 //     .attr("class", "line-tooltip");
                 // .attr("transform", "translate(" + margin.left + "," + 390 + ")");
 
-                // function findYatX(x, linePath) {
-                //     function getXY(len) {
-                //         var point = linePath.getPointAtLength(len);
-                //         return [point.x, point.y];
-                //     }
-                //     var curlen = 0;
-                //     while (getXY(curlen)[0] < x) { curlen += 0.01; }
-                //     return getXY(curlen);
-                // }
 
-                // console.log(findYatX(5, document.getElementsByClassName("sentiment--pos")[0]));
 
 
                 var lineChartToolTipLine = line.append("line")
@@ -154,39 +138,45 @@ define(["d3", "twemoji"], function(d3) {
 
 
                 updateDataLine = function() {
+                    resizeLine("yes");
 
-                    pos.transition()
-                        .attr("d", sentimentsLine(data.pos));
-
-                    neg.transition()
-                        .attr("d", sentimentsLine(data.neg));
                 };
 
                 zoomLine = function() {
 
                     mouseout();
-                    pos.attr("d", sentimentsLine);
-                    neg.attr("d", sentimentsLine);
+                    resizeLine();
+                };
+
+                resizeLine = function(transition) {
+                    transition = transition == "yes" ? 750 : 0;
+                    var t = d3.transition().duration(transition);
+
+                    pos.transition(t)
+                        .attr("d", sentimentsLine(data.pos));
+
+                    neg.transition(t)
+                        .attr("d", sentimentsLine(data.neg));
 
                 };
 
                 function mouseover(d) {
                     var posX = x.invert(d3.mouse(this)[0]);
 
-                    var pos = y.invert(findYatXbyBisection(x(posX), document.getElementsByClassName('sentiment--pos')[0]));
-                    var neg = y.invert(findYatXbyBisection(x(posX), document.getElementsByClassName('sentiment--neg')[0]));
+                    // var pos = y.invert(findYatXbyBisection(x(posX), document.getElementsByClassName('sentiment--pos')[0]));
+                    // var neg = y.invert(findYatXbyBisection(x(posX), document.getElementsByClassName('sentiment--neg')[0]));
 
-                    var array = [neg, pos];
-                    var sum = array.reduce((a, b) => a + b, 0);
-                    var percentage = array.map(function(i) { return Math.round(i / sum * 100); });
-                    var yCoords = array.map(function(i) { return y(i); });
+                    // var array = [neg, pos];
+                    // var sum = array.reduce((a, b) => a + b, 0);
+                    // var percentage = array.map(function(i) { return Math.round(i / sum * 100); });
+                    // var yCoords = array.map(function(i) { return y(i); });
 
 
 
-                    // var obj = {};
-                    // obj.neg = data.neg[bisectLine(data.neg, pos)].sentiment;
-                    // obj.pos = data.pos[bisectLine(data.pos, pos)].sentiment;
-                    // obj.time = data.pos[bisectLine(data.pos, pos)].time;
+                    var obj = {};
+                    obj.neg = data.neg[bisectLine(data.neg, pos)].sentiment;
+                    obj.pos = data.pos[bisectLine(data.pos, pos)].sentiment;
+                    obj.time = data.pos[bisectLine(data.pos, pos)].time;
 
                     // var sum = [obj.neg, obj.pos].reduce((a, b) => a + b, 0);
                     // var percentage = [obj.neg, obj.pos].map(function(i) { return Math.round(i / sum * 100); });
@@ -281,25 +271,15 @@ define(["d3", "twemoji"], function(d3) {
             return chart;
         };
 
-        chart.zoom = function(value) {
-            if (!arguments.length) return zoom;
-            zoom = value;
-            if (typeof zoomLine === 'function') zoomLine();
-            return chart;
-        };
 
         chart.x = function(commonXAxis) {
             if (!arguments.length) return d3.scaleTime();
             x = commonXAxis;
+            if (typeof resizeLine === 'function') resizeLine();
             return chart;
 
         };
 
-        chart.width = function(value) {
-            if (!arguments.length) return 960;
-            width = value;
-            return chart;
-        };
 
         chart.height = function(value) {
             if (!arguments.length) return 500;
