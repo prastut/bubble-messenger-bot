@@ -91,10 +91,6 @@ define(["jquery", "d3",
                     .data(lineData[channel]);
 
                 svg.call(lineChart);
-
-                console.log(index);
-
-
             });
 
             $.getJSON(helper.url('get-scatter-data'), params).done(function(scatter) {

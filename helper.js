@@ -57,7 +57,7 @@ module.exports = {
         "buzz": "Team Buzz"
     },
 
-    quickReplies: function(id, type) {
+    quickReplies: function(match_id, type) {
 
         type = type || "general";
         var options = module.exports.quick_replies_options;
