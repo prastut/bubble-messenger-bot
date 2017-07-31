@@ -9,6 +9,7 @@ define(["jquery", "d3",
 
         $(function() {
 
+            console.log(params);
 
             var channel = params.name;
 
@@ -16,6 +17,8 @@ define(["jquery", "d3",
                 params.start_timestamp = 1499019288;
                 params.end_timestamp = 1499021000;
                 params.user_type = "FAMOUS";
+
+
             } else {
                 params.start_timestamp = 1500993476;
                 params.end_timestamp = 1500993699;
@@ -23,6 +26,7 @@ define(["jquery", "d3",
             }
 
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
+            console.log(width);
             var height;
 
             if (window.location.pathname == "/get-video-overlay") {
@@ -38,6 +42,8 @@ define(["jquery", "d3",
             var commonXAxis = d3.scaleTime()
                 .domain([params.start_timestamp * 1000, params.end_timestamp * 1000])
                 .range([0, helper.widthDependingOnPage(width)]);
+
+            console.log(commonXAxis.range())
 
             var commonXZoomAxis = d3.scaleTime()
                 .domain(commonXAxis.domain())
@@ -73,6 +79,8 @@ define(["jquery", "d3",
             //     console.log(scatter);
 
             // });
+
+
 
             $.getJSON(helper.url('get-index-data'), params).done(function(index) {
 
@@ -112,7 +120,8 @@ define(["jquery", "d3",
                     .zoom(d3.zoomIdentity);
 
                 svg.call(scatterChart);
-                svg.call(overallZoom);
+                // svg.call(overallZoom);
+                d3.select(window).on('resize', resize);
                 // console.log(index);
 
 
@@ -135,9 +144,9 @@ define(["jquery", "d3",
                 scatterChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
                 // eventsChart.width(widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
 
-                // if (playersChart) {
-                //     playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
-                // }
+                if (playersChart) {
+                    playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
+                }
 
             }
 
@@ -157,27 +166,27 @@ define(["jquery", "d3",
 
             // svg.call(eventsChart);
 
-            // if (window.location.pathname == "/get-video-overlay") {
-            //     d3.select("#chart_container").style("opacity", "0");
+            if (window.location.pathname == "/get-video-overlay") {
+                d3.select("#chart_container").style("opacity", "0");
 
-            //     d3.select(window)
-            //         .on('mousemove', mousemoveIframe)
-            //         .on("click", mousemoveIframe);
+                d3.select(window)
+                    .on('mousemove', mousemoveIframe)
+                    .on("click", mousemoveIframe);
 
-            //     console.log(widthDependingOnPage(width));
-            //     var playersChart = playersGraph.init()
-            //         .xPos(commonXAxis.range()[1])
-            //         .height(height)
-            //         .width(widthDependingOnPage(width))
-            //         .x(commonXAxis)
-            //         .zoom(d3.zoomIdentity);
+                // console.log(widthDependingOnPage(width));
+                var playersChart = playersGraph.init()
+                    .xPos(commonXAxis.range()[1])
+                    .height(height)
+                    .width(helper.widthDependingOnPage(width))
+                    .x(commonXAxis)
+                    .zoom(d3.zoomIdentity);
 
-            //     svg.call(playersChart);
+                svg.call(playersChart);
 
-            // } else {
+            } else {
 
-            //     svg.call(overallZoom);
-            // }
+                svg.call(overallZoom);
+            }
 
             // // overallZoom.scaleTo(svg, 1);
             // // overallZoom.translateBy(svg, -width, -height);
@@ -300,43 +309,43 @@ define(["jquery", "d3",
 
 
 
-            // d3.select(window).on('resize', resize);
 
 
 
-            // function resize() {
 
-            //     width = Math.round(parseInt(d3.select("#chart_container").style("width")));
+            function resize() {
 
-            //     //Container Update
-            //     modelChart.width(width);
+                width = Math.round(parseInt(d3.select("#chart_container").style("width")));
+                console.log(width);
 
-            //     // Axis Update
-            //     commonXAxis.range([0, widthDependingOnPage(width)]);
-            //     commonXZoomAxis.range(commonXAxis.range());
+                //Container Update
+                modelChart.width(width);
 
-            //     // Charts Update
-            //     updateCharts();
+                // Axis Update
+                commonXAxis.range([0, helper.widthDependingOnPage(width)]);
+                commonXZoomAxis.range(commonXAxis.range());
 
-            // }
+                // Charts Update
+                updateCharts();
 
-
-            // var iframetimer;
-
-            // function mousemoveIframe() {
-
-            //     d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
-            //     d3.select("#chart_container").style("opacity", "1");
+            }
 
 
+            var iframetimer;
 
-            //     if (iframetimer) clearTimeout(iframetimer);
-            //     iframetimer = setTimeout(function() {
-            //         d3.select("#chart_container").transition().style("opacity", "0");
-            //         d3.select("body").style("background", "none");
-            //     }, 2000);
+            function mousemoveIframe() {
 
-            // }
+                d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
+                d3.select("#chart_container").style("opacity", "1");
+
+
+                if (iframetimer) clearTimeout(iframetimer);
+                iframetimer = setTimeout(function() {
+                    d3.select("#chart_container").transition().style("opacity", "0");
+                    d3.select("body").style("background", "none");
+                }, 2000);
+
+            }
 
 
         });

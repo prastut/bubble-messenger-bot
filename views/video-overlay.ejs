@@ -9,11 +9,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title><%= title %></title>
+    <title><%= name %></title>
 
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/video/bubble.css">
     <link rel="stylesheet" href="css/video/chart.css">
+    
 
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
@@ -26,9 +27,6 @@
 
 <body id="page-top" class="index">
     <div id="skipnav"><a href="#maincontent">Skip to main content</a></div>
-
-    <!-- Navigation -->
-  
 
     <!-- timeline Grid Section -->
     <section id="timeline-container">
@@ -48,7 +46,6 @@
 	<% if (params) { %>
   		<script>
 			var params = <%- params %>;
-		    var channel = <%- channel %>;
 		</script>
 	<% } %>
     <% include ga %>
