@@ -4,14 +4,14 @@ define(["jquery", "d3",
     ],
     function($, d3, helper, data, graph, lineGraph, scatterGraph, eventsGraph, playersGraph) {
 
+
         var lineData = {};
         var scatterData = {};
 
         $(function() {
 
-            console.log(params);
 
-            var channel = params.name;
+            var channel = "nemanja_matic_joins_manchester_united";
 
             if (channel == "germany") {
                 params.start_timestamp = 1499019288;
@@ -20,17 +20,32 @@ define(["jquery", "d3",
 
 
             } else {
-                params.start_timestamp = 1500993476;
-                params.end_timestamp = 1500993699;
+                params.start_timestamp = 1501534180;
+                params.end_timestamp = 1501534600;
                 params.user_type = "FAMOUS";
             }
 
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
-            console.log(width);
             var height;
 
             if (window.location.pathname == "/get-video-overlay") {
                 height = 150;
+
+                var player = window.player = videojs('videojs-overlay-player', {
+                    errorDisplay: false
+                });
+
+                player.overlay({
+                    content: 'Mike Testing',
+                    debug: true,
+                    overlays: [{
+                        start: 0,
+                        end: 'ended',
+                        align: 'bottom',
+                        content: '<div id="bubble-chart" style="position:relative;height:150px; "><iframe id="iframe-bubble-chart" src="http://localhost:8000/get-video-overlay?match_id=6bd5c316-7144-11e7-ba85-0669e02bb0da&team_id=6bd5c317-7144-11e7-ba85-0669e02bb0da&name=germany" width="960" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>'
+                    }]
+                });
+
             } else {
                 height = Math.round(parseInt(d3.select("#chart_container").style("height")));
             }
@@ -43,7 +58,6 @@ define(["jquery", "d3",
                 .domain([params.start_timestamp * 1000, params.end_timestamp * 1000])
                 .range([0, helper.widthDependingOnPage(width)]);
 
-            console.log(commonXAxis.range())
 
             var commonXZoomAxis = d3.scaleTime()
                 .domain(commonXAxis.domain())
@@ -84,12 +98,16 @@ define(["jquery", "d3",
 
             $.getJSON(helper.url('get-index-data'), params).done(function(index) {
 
+                var channelLine = Object.keys(index[0]);
+                console.log(channelLine);
+
                 if (channel == "germany") {
                     helper.pL(lineData, channel, helper.fakeDataFormatter(data.fakeLine, 1499019288));
 
                 } else {
                     helper.pL(lineData, channel, index);
                 }
+
 
 
 
