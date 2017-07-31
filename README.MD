@@ -294,6 +294,32 @@
         "team": "743c79ad-6ed6-11e7-b7a4-a402b9ccba5f"
     }
 
+### Get Events
+>Args
+
+*	match_id
+*	start_timestamp (optional)
+*	end_timestamp (optional)
+
+	URL: https://api.bubble.social/get-events
+
+> Sample Response
+
+	[
+	  {
+	    "comment": "This is the irst event for testing events pipelin", 
+	    "id": "f900867e-73ae-11e7-ba85-0669e02bb0da", 
+	    "match_id": "6bd5c316-7144-11e7-ba85-0669e02bb0da", 
+	    "name": "Test Event One", 
+	    "players": [
+	      "6bd5c319-7144-11e7-ba85-0669e02bb0da", 
+	      "6bd5c31a-7144-11e7-ba85-0669e02bb0da"
+	    ], 
+	    "time": 0.0
+	  }
+	]
+
+
 
 
 
