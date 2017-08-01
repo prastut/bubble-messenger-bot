@@ -128,9 +128,9 @@ if (window.location.pathname == "/form") {
     $("#form").hide();
 
     var postData = {
-        "instance_id": "",
-        "event_name": "",
-        "event_description": "",
+        "match_id": "",
+        "name": "",
+        "comment": "",
         "player": "",
         "time": "",
 
@@ -138,9 +138,11 @@ if (window.location.pathname == "/form") {
 
     $.getJSON(urlGenerator('get-live-matches')).then(function(data) {
 
+        console.log(data);
+
         for (var i in data) {
 
-            $("#select-match").append('<option value=' + data[i].instance_id + '>' + data[i].name + '</option>');
+            $("#select-match").append('<option value=' + data[i].id + '>' + data[i].name + '</option>');
 
         }
         $("#event-details").hide();
@@ -152,26 +154,21 @@ if (window.location.pathname == "/form") {
 
             if (this.value != "no") {
 
-                var instance_id = this.value;
+                var match_id = this.value;
 
-                postData.instance_id = instance_id;
+                postData.match_id = match_id;
 
                 $("#preview").val(prettyPrint(postData));
 
                 $("#select-player").empty();
 
-                $.getJSON(urlGenerator('get-match-details'), { instance_id: instance_id }).then(function(matchData) {
+                $.getJSON(urlGenerator('get-players'), { match_id: match_id }).then(function(players) {
 
-                    var keys = Object.keys(matchData.channels);
+                    console.log(players);
 
-                    for (var i in keys) {
-
-                        if (matchData.channels[keys[i]].type == "player") {
-
-                            $("#select-player").append('<option value=' + keys[i] + '>' + matchData.channels[keys[i]].name + '</option>');
-
-                        }
-
+                    for (var p in players) {
+                        $("#select-player")
+                            .append('<option value=' + players[p].id + '>' + players[p].name + '</option>');
                     }
 
                     $("#event-details").show();
@@ -182,24 +179,10 @@ if (window.location.pathname == "/form") {
 
                         var selectedPlayers = $("#select-player").val();
 
-                        var playerObj = [];
-
-                        for (var i in selectedPlayers) {
-
-                            var obj = {};
-                            obj[selectedPlayers[i]] = matchData.channels[selectedPlayers[i]];
-                            playerObj.push(obj);
-
-
-                        }
-
-                        console.log(playerObj);
-
-
-                        postData.event_name = $("#name").val();
-                        postData.event_description = $("#description").val();
+                        postData.name = $("#name").val();
+                        postData.comment = $("#description").val();
                         postData.time = toUnix($("#time").val());
-                        postData.player = playerObj;
+                        postData.player = selectedPlayers;
 
                         $("#preview").val(prettyPrint(postData));
 
@@ -212,7 +195,7 @@ if (window.location.pathname == "/form") {
 
                         var postObj = JSON.parse($("#preview").val());
 
-                        $.ajax(customSettings(urlGenerator('add-event-details'), postObj))
+                        $.ajax(customSettings(urlGenerator('add-event'), postObj))
                             .done(function() {
                                 console.log("POSTED");
                             })
