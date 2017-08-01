@@ -131,7 +131,7 @@ if (window.location.pathname == "/form") {
         "match_id": "",
         "name": "",
         "comment": "",
-        "player": "",
+        "players": "",
         "time": "",
 
     };
@@ -182,7 +182,7 @@ if (window.location.pathname == "/form") {
                         postData.name = $("#name").val();
                         postData.comment = $("#description").val();
                         postData.time = toUnix($("#time").val());
-                        postData.player = selectedPlayers;
+                        postData.players = selectedPlayers;
 
                         $("#preview").val(prettyPrint(postData));
 
