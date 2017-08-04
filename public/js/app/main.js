@@ -4,117 +4,81 @@ define(["jquery", "d3",
     ],
     function($, d3, helper, data, graph, lineGraph, scatterGraph, eventsGraph, playersGraph) {
 
+        //https://bubble.social/get-webview?match_id=01aa28ba-77ac-11e7-949c-0669e02bb0da&team_id=01aa28bb-77ac-11e7-949c-0669e02bb0da&name=liverpool_fc
 
-        var lineData = {};
-        var scatterData = {};
 
         $(function() {
 
+            var channel = params.name;
+            params.user_type = "INFLUENCER";
 
-            var channel;
-
-            if (params.name == "germany") {
-                channel = "germany";
-            } else {
-                channel = "nemanja_matic_joins_manchester_united";
-            }
-
-            if (channel == "germany") {
-                params.start_timestamp = 1499019288;
-                params.end_timestamp = 1499021000;
-                params.user_type = "FAMOUS";
-
-
-            } else {
-                params.start_timestamp = 1501534180;
-                params.end_timestamp = 1501534600;
-                params.user_type = "FAMOUS";
-            }
+            //Variable Definftions;
 
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
             var height;
+            var transform = d3.zoomIdentity;
+
+            //Data Model
+            var lineData = {};
+            var scatterData = {};
+
+            //All Charts
+            var modelChart;
+            var lineChart;
+            var scatterChart;
+            var eventsChart;
+            //Axis
+            var commonXAxis;
+            var commonXZoomAxis;
+
+            //Interactions
+            var overallZoom;
+
 
             if (window.location.pathname == "/get-video-overlay") {
                 height = 150;
-
             } else {
                 height = Math.round(parseInt(d3.select("#chart_container").style("height")));
             }
 
-            var modelChart = graph.chart().width(width).height(height);
-            d3.select('#chart_container').call(modelChart);
+            $.when(
+                $.getJSON(helper.url('get-index-data'), params),
+                $.getJSON(helper.url('get-scatter-data'), params)
 
-            //Axis
-            var commonXAxis = d3.scaleTime()
-                .domain([params.start_timestamp * 1000, params.end_timestamp * 1000])
-                .range([0, helper.widthDependingOnPage(width)]);
+            ).done(function(index, scatter) {
 
+                helper.pL(lineData, channel, index[0]);
+                helper.pS(scatterData, channel, scatter[0]);
 
-            var commonXZoomAxis = d3.scaleTime()
-                .domain(commonXAxis.domain())
-                .range(commonXAxis.range());
+                modelChart = graph.chart().width(width).height(height);
+                d3.select('#chart_container').call(modelChart);
 
+                var svg = d3.select(".chart");
 
-            var svg = d3.select(".chart");
+                commonXAxis = d3.scaleTime()
+                    .domain(d3.extent(lineData[channel].timestamps))
+                    .range([0, helper.widthDependingOnPage(width)]);
 
-            var transform = d3.zoomIdentity;
-            var overallZoom = d3.zoom()
-                .scaleExtent([1, 10])
-                .translateExtent([
-                    [0, 0],
-                    [helper.widthDependingOnPage(width), height]
-                ])
-                .extent([
-                    [0, 0],
-                    [helper.widthDependingOnPage(width), height]
-                ])
-                .on("zoom", zoomHandler);
+                commonXZoomAxis = d3.scaleTime()
+                    .domain(commonXAxis.domain())
+                    .range(commonXAxis.range());
 
-            var lineChart;
-            var scatterChart;
-            var eventsChart;
-
-            // $.when(
-            //     $.getJSON(helper.url('get-index-data'), params),
-            //     $.getJSON(helper.url('get-scatter-data'), params)
-
-            // ).done(function(index, scatter) {
-
-            //     console.log(index);
-            //     console.log(scatter);
-
-            // });
-
-
-
-            $.getJSON(helper.url('get-index-data'), params).done(function(index) {
-
-                if (channel == "germany") {
-                    helper.pL(lineData, channel, helper.fakeDataFormatter(data.fakeLine, 1499019288));
-
-                } else {
-                    helper.pL(lineData, channel, index);
-                }
-
-
-
+                overallZoom = d3.zoom()
+                    .scaleExtent([1, 10])
+                    .translateExtent([
+                        [0, 0],
+                        [helper.widthDependingOnPage(width), height]
+                    ])
+                    .extent([
+                        [0, 0],
+                        [helper.widthDependingOnPage(width), height]
+                    ])
+                    .on("zoom", zoomHandler);
 
                 lineChart = lineGraph.init()
                     .x(commonXAxis)
                     .height(height * 0.70)
                     .data(lineData[channel]);
-
-                svg.call(lineChart);
-            });
-
-            $.getJSON(helper.url('get-scatter-data'), params).done(function(scatter) {
-
-                if (channel == "germany") {
-                    helper.pS(scatterData, channel, helper.fakeDataFormatterScatter(data.fakeLine, 1499019288));
-                } else {
-                    helper.pS(scatterData, channel, scatter);
-
-                }
 
                 scatterChart = scatterGraph.init()
                     .height(height * 0.70)
@@ -123,24 +87,38 @@ define(["jquery", "d3",
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
 
-                svg.call(scatterChart);
-                // svg.call(overallZoom);
+                // // Events Chart. 30% of real estate
+                // var eventsChart = eventsGraph.init()
+                //     .yPos($('.axis--y')[0].getBoundingClientRect().height + 20)
+                //     .height(height)
+                //     .width(widthDependingOnPage(width))
+                //     .x(commonXAxis)
+                //     .data(lineData[channel].events)
+                //     .zoom(d3.zoomIdentity);
+
                 d3.select(window).on('resize', resize);
-                // console.log(index);
+
+                svg.call(lineChart).call(scatterChart).call(overallZoom);
+                // svg.call(eventsChart);
+
+
 
 
             });
 
 
-            function zoomHandler() {
-                // live("stop");
+            //Base Chart
 
+            //Axis
+
+
+
+            function zoomHandler() {
+
+                // live("stop");
                 transform = d3.event.transform;
-                // console.log(transform);
                 commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
                 updateCharts();
-
-
             }
 
             function updateCharts() {
@@ -148,65 +126,39 @@ define(["jquery", "d3",
                 scatterChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
                 // eventsChart.width(widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
 
-                if (playersChart) {
-                    playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
-                }
+                // if (playersChart) {
+                //     playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
+                // }
 
             }
 
 
 
+            // if (window.location.pathname == "/get-video-overlay") {
+            //     d3.select("#chart_container").style("opacity", "0");
 
-            // // Events Chart. 30% of real estate
+            //     d3.select(window)
+            //         .on('mousemove', mousemoveIframe)
+            //         .on("click", mousemoveIframe);
 
-            // var eventsChart = eventsGraph.init()
-            //     .yPos($('.axis--y')[0].getBoundingClientRect().height + 20)
-            //     .height(height)
-            //     .width(widthDependingOnPage(width))
-            //     .x(commonXAxis)
-            //     .data(lineData[channel].events)
-            //     .zoom(d3.zoomIdentity);
+            //     // console.log(widthDependingOnPage(width));
+            //     var playersChart = playersGraph.init()
+            //         .xPos(commonXAxis.range()[1])
+            //         .height(height)
+            //         .width(helper.widthDependingOnPage(width))
+            //         .x(commonXAxis)
+            //         .zoom(d3.zoomIdentity);
 
+            //     svg.call(playersChart);
 
-            // svg.call(eventsChart);
+            // } else {
 
-            if (window.location.pathname == "/get-video-overlay") {
-                d3.select("#chart_container").style("opacity", "0");
-
-                d3.select(window)
-                    .on('mousemove', mousemoveIframe)
-                    .on("click", mousemoveIframe);
-
-                // console.log(widthDependingOnPage(width));
-                var playersChart = playersGraph.init()
-                    .xPos(commonXAxis.range()[1])
-                    .height(height)
-                    .width(helper.widthDependingOnPage(width))
-                    .x(commonXAxis)
-                    .zoom(d3.zoomIdentity);
-
-                svg.call(playersChart);
-
-            } else {
-
-                svg.call(overallZoom);
-            }
+            //     svg.call(overallZoom);
+            // }
 
             // // overallZoom.scaleTo(svg, 1);
             // // overallZoom.translateBy(svg, -width, -height);
 
-
-
-            // function zoomHandler() {
-            //     // live("stop");
-
-            //     transform = d3.event.transform;
-            //     // console.log(transform);
-            //     commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
-            //     updateCharts();
-
-
-            // }
 
             // //Going Live
 

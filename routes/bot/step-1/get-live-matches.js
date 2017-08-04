@@ -2,7 +2,12 @@ const express = require('express');
 const request = require('request');
 const router = express.Router();
 const helper = require("../../../helper");
-/* GET home page. */
+
+/* GET live matches. 
+Usecases: 
+1. Bot Step 1 - get live matches. 
+*/
+
 
 router.get('/', function(req, res, next) {
 
@@ -13,14 +18,14 @@ router.get('/', function(req, res, next) {
             }
 
             var elements = [];
-            // console.log(data);
 
             for (var i in data) {
 
+                // Add for subtitle: "subtitle": data[i].pretty_name
+
                 elements.push({
-                    "title": data[i].name,
+                    "title": data[i].pretty_name,
                     "image_url": data[i].url,
-                    "subtitle": data[i].pretty_name,
                     "buttons": [{
                         "url": helper.ip + "get-buzz" + "?match_id=" + data[i].id,
                         "title": "Track this!",
@@ -29,8 +34,6 @@ router.get('/', function(req, res, next) {
                 });
             }
 
-
-            // console.log(elements);
 
             var liveData = {
                 "messages": [{

@@ -6,6 +6,14 @@ const path = require('path');
 const webshot = require('webshot');
 const router = express.Router();
 
+/* GET Match Details 
+When person clicks on Track this on a live match, following things happen:
+    * both teams participating are displayed with the last data point from the API being used for calculating bar chart. 
+        * Bar chart are rendering in screenshot.ejs view and then programtically screenshotted using webshot. 
+    * These 2 teams with the bar-chart-screenshot are displayed to the user. 
+    * The person can click on any team's view more (webview url) to explore the buzz. 
+*/
+
 
 router.get('/', function(req, res, next) {
 
@@ -17,7 +25,6 @@ router.get('/', function(req, res, next) {
                 res.send([{ "text": "Get Index Data Failed" }]);
             }
 
-            // console.log(teams);
 
             var teamsObject = teams.map(function(team) {
                 return {
@@ -94,8 +101,6 @@ router.get('/', function(req, res, next) {
 
 
 var clickPhotu = function(teamObj, callBack) {
-
-    // callBack(null, "1")
 
     var team = teamObj[Object.keys(teamObj)];
 
