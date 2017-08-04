@@ -6,14 +6,12 @@ define(["jquery", "d3",
 
         //https://bubble.social/get-webview?match_id=01aa28ba-77ac-11e7-949c-0669e02bb0da&team_id=01aa28bb-77ac-11e7-949c-0669e02bb0da&name=liverpool_fc
 
-
         $(function() {
 
             var channel = params.name;
             params.user_type = "INFLUENCER";
 
-            //Variable Definftions;
-
+            //Real Estate Setup
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
             var height;
             var transform = d3.zoomIdentity;
@@ -27,6 +25,7 @@ define(["jquery", "d3",
             var lineChart;
             var scatterChart;
             var eventsChart;
+
             //Axis
             var commonXAxis;
             var commonXZoomAxis;
@@ -261,12 +260,6 @@ define(["jquery", "d3",
 
             // // live();
             // // liveStop();
-
-
-
-
-
-
 
 
             function resize() {
