@@ -1,12 +1,28 @@
 define(function() {
 
+    /**
+     * Raw Data processing for Line Data
+     * API Call: get-index-data
+     * @param {Object} lineData Global Object which is being used to store lineData.
+     * @param {String} channel Channel which is being used for rendering
+     * @param {Data} data The raw data from the API.
+     * @param {Boolean} live Check for LIVE or not.
+     * @param {Number} max max sentiment value from the data. Need to adjust Y axis everytime max changes. 
+     * @return {Object} lineData. So the processing happens and the end result get's stored inside lineData object 
+     */
+
     function pushLineData(lineData, channel, data, live) {
         live = live == "live" ? true : false;
 
         var timestamps = [];
         var max;
 
+        /* 
+            First Time the function is being called therefore there would be no channel as key in lineObject. 
+            Since we are generating dynamic views, I would need to call this function again to process the data 
+            from the API. This if checks for that.  
 
+        */
         if (!(channel in lineData)) {
             lineData[channel] = {};
             lineData[channel].neg = [];
@@ -18,7 +34,9 @@ define(function() {
             max = lineData[channel].max;
         }
 
-
+        /*
+            Processing Data to be made accessible by D3. 
+        */
         for (var i in data) {
 
             var time = data[i].time * 1000;
@@ -49,6 +67,12 @@ define(function() {
         }
 
         lineData[channel].max = max;
+
+        /* Uncomment the following to log data (from the API) and then lineData (the processed data) 
+           to see what is happening in this function. 
+        */
+        // console.log("Data->", data)
+        // console.log("Processed Data->", lineData)
     }
 
 
