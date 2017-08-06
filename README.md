@@ -1,5 +1,5 @@
 # Bubble api
-    Base URL: https://api.bubble.social
+Base URL: https://api.bubble.social
 > Args
 * None
 > Sample Response:
@@ -8,7 +8,7 @@
 
 
 ### Get Live Matches:
-	URL: https://api.bubble.social/get-live-matches
+URL: https://api.bubble.social/get-live-matches
 	
 >	Args: 
 * None
@@ -33,7 +33,7 @@
 	]
 
 ### Get Teams:
-	URL: https://api.bubble.social/get-teams?match_id=d88fee2c-6d85-11e7-b701-a402b9ccba5f
+URL: https://api.bubble.social/get-teams?match_id=d88fee2c-6d85-11e7-b701-a402b9ccba5f
 
 >Args: 
 *	match_id
@@ -67,7 +67,7 @@
 
 ### Get Players:
 
-	URL: https://api.bubble.social/get-players?match_id=d88fee2c-6d85-11e7-b701-a402b9ccba5f
+URL: https://api.bubble.social/get-players?match_id=d88fee2c-6d85-11e7-b701-a402b9ccba5f
 
 > Args: 
 *	match_id
@@ -112,7 +112,7 @@
 
 
 
-	URL: http://localhost:5000/get-index-data?match_id=d88fee2c-6d85-11e7-b701-a402b9ccba5f&team_id=d88fee2d-6d85-11e7-b701-a402b9ccba5f&start_timestamp=0
+URL: https://api.bubble.social/get-index-data?match_id=d88fee2c-6d85-11e7-b701-a402b9ccba5f&team_id=d88fee2d-6d85-11e7-b701-a402b9ccba5f&start_timestamp=0
 	
 >Sample Response:
 
@@ -150,7 +150,7 @@
 >INFO: `user_type` ignored if start_timestamp=-1
 
 
-    URL: http://localhost:5000/get-scatter-data?match_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f&player_id=743c79af-6ed6-11e7-b7a4-a402b9ccba5f&user_type=INFLUENCER
+URL: https://api.bubble.social/get-scatter-data?match_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f&player_id=743c79af-6ed6-11e7-b7a4-a402b9ccba5f&user_type=INFLUENCER
     
 >Sample Response:
 
@@ -202,7 +202,7 @@
 *   match_id 
 		
 
-	URL: http://localhost:5000/get-trendings?match_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f
+URL: https://api.bubble.social/get-trendings?match_id=
 
 >	Info: 
 *   Heros & Zeros max Players: 2 each
@@ -255,7 +255,7 @@
 
 * team_id
 
-	URL: https://api.bubble.social/get-team-details?team_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f
+URL: https://api.bubble.social/get-team-details?team_id=
 > Sample Response
 
     {
@@ -277,7 +277,7 @@
 
 * player_id
 
-	URL: https://api.bubble.social/get-player-details?player_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f
+	URL: https://api.bubble.social/get-player-details?player_id=
 > Sample Response
 
     {
@@ -294,53 +294,26 @@
         "team": "743c79ad-6ed6-11e7-b7a4-a402b9ccba5f"
     }
 
+### Get Events
+>Args
 
+* match_id
+* team_id (optional, overrides player_id)
+* player_id (optional)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+URL: https://api.bubble.social/get-events?match_id=
+   
+   
+     [
+       {
+       "comment": "FT: It's all over, Arsenal end with a win but it's not enough to see them finish in the top four.", 
+       "entities": {
+           "players": [], 
+           "teams": ["003d0f61-77ac-11e7-949c-0669e02bb0da"]
+       	    }, 
+       "id": "d67d6489-7a9a-11e7-84ee-a402b9ccba5f", 
+       "match_id": "fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f", 
+       "name": "FT", 
+       "time": 1495382143.0
+       }
+     ]
