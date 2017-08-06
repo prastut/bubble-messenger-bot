@@ -31,16 +31,20 @@ app.use('/get-team-data', require('./routes/bot/step-2/get-team-data'));
 app.use('/screenshot', require('./routes/bot/step-2/screenshot'));
 
 app.use('/get-webview', require('./routes/bot/step-3/bot-web-view'));
-
-app.use('/get-video-overlay', require('./routes/bot/step-3/video-overlay'));
-
 app.use('/quick-replies', require('./routes/bot/step-3/quick-replies'));
+
 
 //Web Routes
 app.use('/match-view', require('./routes/web/match-view'));
 app.use('/form', require('./routes/web/form'));
 app.use('/trending', require('./routes/web/trending'));
 app.use('/form-events', require('./routes/web/form-events'));
+
+// //Video
+app.use('/get-video-overlay', require('./routes/web/video/video-overlay'));
+app.use('/get-video', require('./routes/web/video/video'));
+
+
 
 
 app.use(function(err, req, res, next) {

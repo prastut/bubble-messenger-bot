@@ -4,18 +4,35 @@ define(["jquery", "d3",
     ],
     function($, d3, helper, data, graph, lineGraph, scatterGraph, eventsGraph, playersGraph) {
 
-        var lineData = {};
-        var scatterData = {};
+        //https://bubble.social/get-webview?match_id=01aa28ba-77ac-11e7-949c-0669e02bb0da&team_id=01aa28bb-77ac-11e7-949c-0669e02bb0da&name=liverpool_fc
 
         $(function() {
 
-
             var channel = params.name;
-            params.start_timestamp = 1500993476;
-            params.end_timestamp = 1500993699;
+            params.user_type = "INFLUENCER";
 
+            //Real Estate Setup
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
             var height;
+            var transform = d3.zoomIdentity;
+
+            //Data Model
+            var lineData = {};
+            var scatterData = {};
+
+            //All Charts
+            var modelChart;
+            var lineChart;
+            var scatterChart;
+            var eventsChart;
+
+            //Axis
+            var commonXAxis;
+            var commonXZoomAxis;
+
+            //Interactions
+            var overallZoom;
+
 
             if (window.location.pathname == "/get-video-overlay") {
                 height = 150;
@@ -23,68 +40,44 @@ define(["jquery", "d3",
                 height = Math.round(parseInt(d3.select("#chart_container").style("height")));
             }
 
-            var modelChart = graph.chart().width(width).height(height);
-            d3.select('#chart_container').call(modelChart);
+            $.when(
+                $.getJSON(helper.url('get-index-data'), params),
+                $.getJSON(helper.url('get-scatter-data'), params)
 
-            //Axis
-            var commonXAxis = d3.scaleTime()
-                .domain([params.start_timestamp * 1000, params.end_timestamp * 1000])
-                .range([0, helper.widthDependingOnPage(width)]);
+            ).done(function(index, scatter) {
 
-            var commonXZoomAxis = d3.scaleTime()
-                .domain(commonXAxis.domain())
-                .range(commonXAxis.range());
+                helper.pL(lineData, channel, index[0]);
+                helper.pS(scatterData, channel, scatter[0]);
 
+                modelChart = graph.chart().width(width).height(height);
+                d3.select('#chart_container').call(modelChart);
 
-            var svg = d3.select(".chart");
+                var svg = d3.select(".chart");
 
-            var transform = d3.zoomIdentity;
-            var overallZoom = d3.zoom()
-                .scaleExtent([1, 10])
-                .translateExtent([
-                    [0, 0],
-                    [helper.widthDependingOnPage(width), height]
-                ])
-                .extent([
-                    [0, 0],
-                    [helper.widthDependingOnPage(width), height]
-                ])
-                .on("zoom", zoomHandler);
+                commonXAxis = d3.scaleTime()
+                    .domain(d3.extent(lineData[channel].timestamps))
+                    .range([0, helper.widthDependingOnPage(width)]);
 
-            var lineChart;
-            var scatterChart;
-            var eventsChart;
+                commonXZoomAxis = d3.scaleTime()
+                    .domain(commonXAxis.domain())
+                    .range(commonXAxis.range());
 
-            // $.when(
-            //     $.getJSON(helper.url('get-index-data'), params),
-            //     $.getJSON(helper.url('get-scatter-data'), params)
-
-            // ).done(function(index, scatter) {
-
-            //     console.log(index);
-            //     console.log(scatter);
-
-            // });
-
-            $.getJSON(helper.url('get-index-data'), params).done(function(index) {
-
-                helper.pL(lineData, channel, index);
+                overallZoom = d3.zoom()
+                    .scaleExtent([1, 10])
+                    .translateExtent([
+                        [0, 0],
+                        [helper.widthDependingOnPage(width), height]
+                    ])
+                    .extent([
+                        [0, 0],
+                        [helper.widthDependingOnPage(width), height]
+                    ])
+                    .on("zoom", zoomHandler);
 
                 lineChart = lineGraph.init()
                     .x(commonXAxis)
                     .height(height * 0.70)
                     .data(lineData[channel]);
-
-                svg.call(lineChart);
-
-                console.log(index);
-
-
-            });
-
-            $.getJSON(helper.url('get-scatter-data'), params).done(function(scatter) {
-
-                helper.pS(scatterData, channel, scatter);
 
                 scatterChart = scatterGraph.init()
                     .height(height * 0.70)
@@ -93,23 +86,38 @@ define(["jquery", "d3",
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
 
-                svg.call(scatterChart);
-                svg.call(overallZoom);
-                // console.log(index);
+                // // Events Chart. 30% of real estate
+                // var eventsChart = eventsGraph.init()
+                //     .yPos($('.axis--y')[0].getBoundingClientRect().height + 20)
+                //     .height(height)
+                //     .width(widthDependingOnPage(width))
+                //     .x(commonXAxis)
+                //     .data(lineData[channel].events)
+                //     .zoom(d3.zoomIdentity);
+
+                d3.select(window).on('resize', resize);
+
+                svg.call(lineChart).call(scatterChart).call(overallZoom);
+                // svg.call(eventsChart);
+
+
 
 
             });
 
 
-            function zoomHandler() {
-                // live("stop");
+            //Base Chart
 
+            //Axis
+
+
+
+            function zoomHandler() {
+
+                // live("stop");
                 transform = d3.event.transform;
-                // console.log(transform);
                 commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
                 updateCharts();
-
-
             }
 
             function updateCharts() {
@@ -117,27 +125,13 @@ define(["jquery", "d3",
                 scatterChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
                 // eventsChart.width(widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
 
-                if (playersChart) {
-                    playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
-                }
+                // if (playersChart) {
+                //     playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
+                // }
 
             }
 
 
-
-
-            // // Events Chart. 30% of real estate
-
-            // var eventsChart = eventsGraph.init()
-            //     .yPos($('.axis--y')[0].getBoundingClientRect().height + 20)
-            //     .height(height)
-            //     .width(widthDependingOnPage(width))
-            //     .x(commonXAxis)
-            //     .data(lineData[channel].events)
-            //     .zoom(d3.zoomIdentity);
-
-
-            // svg.call(eventsChart);
 
             // if (window.location.pathname == "/get-video-overlay") {
             //     d3.select("#chart_container").style("opacity", "0");
@@ -146,11 +140,11 @@ define(["jquery", "d3",
             //         .on('mousemove', mousemoveIframe)
             //         .on("click", mousemoveIframe);
 
-            //     console.log(widthDependingOnPage(width));
+            //     // console.log(widthDependingOnPage(width));
             //     var playersChart = playersGraph.init()
             //         .xPos(commonXAxis.range()[1])
             //         .height(height)
-            //         .width(widthDependingOnPage(width))
+            //         .width(helper.widthDependingOnPage(width))
             //         .x(commonXAxis)
             //         .zoom(d3.zoomIdentity);
 
@@ -164,18 +158,6 @@ define(["jquery", "d3",
             // // overallZoom.scaleTo(svg, 1);
             // // overallZoom.translateBy(svg, -width, -height);
 
-
-
-            // function zoomHandler() {
-            //     // live("stop");
-
-            //     transform = d3.event.transform;
-            //     // console.log(transform);
-            //     commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
-            //     updateCharts();
-
-
-            // }
 
             // //Going Live
 
@@ -280,45 +262,39 @@ define(["jquery", "d3",
             // // liveStop();
 
 
+            function resize() {
+
+                width = Math.round(parseInt(d3.select("#chart_container").style("width")));
+                console.log(width);
+
+                //Container Update
+                modelChart.width(width);
+
+                // Axis Update
+                commonXAxis.range([0, helper.widthDependingOnPage(width)]);
+                commonXZoomAxis.range(commonXAxis.range());
+
+                // Charts Update
+                updateCharts();
+
+            }
 
 
-            // d3.select(window).on('resize', resize);
+            var iframetimer;
+
+            function mousemoveIframe() {
+
+                d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
+                d3.select("#chart_container").style("opacity", "1");
 
 
+                if (iframetimer) clearTimeout(iframetimer);
+                iframetimer = setTimeout(function() {
+                    d3.select("#chart_container").transition().style("opacity", "0");
+                    d3.select("body").style("background", "none");
+                }, 2000);
 
-            // function resize() {
-
-            //     width = Math.round(parseInt(d3.select("#chart_container").style("width")));
-
-            //     //Container Update
-            //     modelChart.width(width);
-
-            //     // Axis Update
-            //     commonXAxis.range([0, widthDependingOnPage(width)]);
-            //     commonXZoomAxis.range(commonXAxis.range());
-
-            //     // Charts Update
-            //     updateCharts();
-
-            // }
-
-
-            // var iframetimer;
-
-            // function mousemoveIframe() {
-
-            //     d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
-            //     d3.select("#chart_container").style("opacity", "1");
-
-
-
-            //     if (iframetimer) clearTimeout(iframetimer);
-            //     iframetimer = setTimeout(function() {
-            //         d3.select("#chart_container").transition().style("opacity", "0");
-            //         d3.select("body").style("background", "none");
-            //     }, 2000);
-
-            // }
+            }
 
 
         });

@@ -1,6 +1,4 @@
-define(["moment"], function(moment) {
-
-    moment().format('LTS');
+define(function() {
 
     function pushLineData(lineData, channel, data, live) {
         live = live == "live" ? true : false;

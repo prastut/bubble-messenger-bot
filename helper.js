@@ -52,11 +52,12 @@ module.exports = {
 
     quick_replies_options: {
         "trending": "Trending Players",
-        "herozero": "Heros/Zeros",
-        "support": "Change Support"
+        "hero": "Hero",
+        "zero": "Zero",
+        "buzz": "Team Buzz"
     },
 
-    quickReplies: function(instance_id, type) {
+    quickReplies: function(match_id, type) {
 
         type = type || "general";
         var options = module.exports.quick_replies_options;
@@ -68,19 +69,23 @@ module.exports = {
 
                 if (key != type) {
 
-                    if (key != "support") {
+                    if (key != "buzz") {
                         quick_replies.push({
-                            "url": ip + "quick-replies?type=" + key + "&instance_id=" + instance_id,
+                            "url": ip + "quick-replies?type=" + key + "&match_id=" + match_id,
                             "type": "json_plugin_url",
                             "title": options[key]
                         });
                     } else {
-                        quick_replies.push({
 
-                            "url": ip + "get-support" + "?instance_id=" + instance_id,
-                            "type": "json_plugin_url",
-                            "title": options[key]
-                        });
+                        if (type != "general") {
+                            quick_replies.push({
+
+                                "url": ip + "get-buzz" + "?match_id=" + match_id,
+                                "type": "json_plugin_url",
+                                "title": options[key]
+                            });
+                        }
+
                     }
                 }
 
@@ -89,7 +94,6 @@ module.exports = {
             }
         }
 
-        // console.log(JSON.stringify(quick_replies));
         return quick_replies;
 
     }
