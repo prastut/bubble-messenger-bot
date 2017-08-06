@@ -302,8 +302,9 @@ URL: https://api.bubble.social/get-team-details?team_id=
 * player_id (optional)
 
 URL: https://api.bubble.social/get-events?match_id=
-   
-   
+
+> Sample Response
+  
      [
        {
        "comment": "FT: It's all over, Arsenal end with a win but it's not enough to see them finish in the top four.", 
