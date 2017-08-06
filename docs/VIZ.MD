@@ -2,9 +2,9 @@
 
 Our viz is the core framework which can be embedded into product(s) for consumer facing consumption. This details the intricacies of the viz. 
 
-## Axis:
+# Axis:
 
-### X Axis:
+## X Axis:
   * Base X Axis: Common to all Elements
 	* Domain: [start_timestamp, end_timestamp]
 	* Range: [0, width]
@@ -12,12 +12,12 @@ Our viz is the core framework which can be embedded into product(s) for consumer
     * Domain: Same as Base X
 	* Range: Same as Base X
 
-### Y Axis:
+## Y Axis:
 Each element has there own Y axis.
 
-## Charts
+# Charts
 
-### Model Chart: the base chart which contains all charts. Used for maintaining responsivity for the charts.
+## Model Chart: the base chart which contains all charts. Used for maintaining responsivity for the charts.
 * Interactivity: On window resize, resizes itself.
 * Real estate is divided into 2 halves and changes depending upon the view
   * View: Webview. Seperation is vertical
@@ -35,7 +35,7 @@ Each element has there own Y axis.
      * 20% of the width
      * Charts: Player
 
-### Line Chart: The overall sentiment of the chart
+## Line Chart: The overall sentiment of the chart
 * Data Population: get-index-data
 * Elements:
   * Line Pos
@@ -57,7 +57,7 @@ Each element has there own Y axis.
    * Shift graph
    * No pan/zoom allowed when data updates.
 
-### Scatter Chart: Showing tweets of the user
+## Scatter Chart: Showing tweets of the user
 * Data Population: get-scatter-data
 * Elements:
   * Since there can be multiple tweets (Y) for a particular time unit (X), we need to plot a [multi series scatter chart](https://gist.github.com/mbostock/3183403) for this.
@@ -91,7 +91,7 @@ Each element has there own Y axis.
 	* Tweet Sentiment Emoji should appear
 	* Fade away in 5 seconds
 
-### Events Chart: Events of the game
+## Events Chart: Events of the game
 * Data Population: get-events
 * Elements:
   * Background Rect
