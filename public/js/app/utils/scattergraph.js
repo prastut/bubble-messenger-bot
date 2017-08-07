@@ -12,7 +12,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         var y = d3.scaleLinear();
         var yAxis = d3.axisRight(y);
 
-
         // Dimensions
         var width;
         var height;
@@ -26,12 +25,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
             .attr("class", "tweet")
             .style("opacity", 0);
 
-        var emoji = d3.select("body")
-            .append("div")
-            .attr("class", "emoji")
-            .style("opacity", 0)
-            .style("position", "absolute");
-
         var positiveEmotions = {
             2: '1F60A',
             1: '1F601',
@@ -42,9 +35,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
             2: '1F612',
             1: '1F61E',
             0: '1F620'
-
         };
-
 
         function chart(selection) {
             selection.each(function() {
@@ -57,9 +48,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 var scatter = dom.append("g")
                     .attr("class", "scatter-chart");
-
-                // var segmentClickedRect = scatter.append('rect')
-                //     .attr("class", "segment-clicked-rect");
 
                 var scatterdots = scatter.selectAll(".series")
                     .data(data)
@@ -169,6 +157,9 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     .attr("mask", "url(#mymask)")
                     .style("fill", "rgba(54, 61, 82, 5)");
 
+
+                var emoji = scatter.append("text")
+                    .attr("class", "emoji");
 
 
                 updateScatterData = function() {
@@ -304,15 +295,13 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .duration(200)
                         .style("opacity", 0.9);
 
-
                     var segmentClicked = d3.bisectRight(coordsLocal, yClick) - 1;
 
                     var text = d.y.type == "-" ? negetiveEmotions[segmentClicked] : positiveEmotions[segmentClicked];
 
-                    emoji.html(twemoji.convert.fromCodePoint(text))
-                        .style("left", (5) + "px")
-                        .style("top", (coordsLocal[segmentClicked] + heightGrid / 2 + 50) + "px");
-
+                    emoji.text(twemoji.convert.fromCodePoint(text))
+                        .attr("x", 0)
+                        .attr("y", (yClick + 10));
 
                     setTimeout(function() {
 
