@@ -155,8 +155,8 @@ define(["jquery", "d3",
             //     svg.call(overallZoom);
             // }
 
-            // // overallZoom.scaleTo(svg, 1);
-            // // overallZoom.translateBy(svg, -width, -height);
+            overallZoom.scaleTo(svg, 1);
+            overallZoom.translateBy(svg, -width, -height);
 
 
             // //Going Live
