@@ -16,6 +16,7 @@ define(function() {
 
         var timestamps = [];
         var max;
+        var tweetcount = 0;
 
         /* 
             First Time the function is being called therefore there would be no channel as key in lineObject. 
@@ -37,6 +38,7 @@ define(function() {
         /*
             Processing Data to be made accessible by D3. 
         */
+
         for (var i in data) {
 
             var time = data[i].time * 1000;
@@ -61,12 +63,22 @@ define(function() {
                 });
             }
 
+            tweetcount = tweetcount + parseInt(data[i][channel].pos_count) + parseInt(data[i][channel].neg_count);
             max = Math.max(max, Math.max(parseFloat(data[i][channel].pos), parseFloat(data[i][channel].neg)));
             lineData[channel].timestamps.push(time);
 
         }
 
         lineData[channel].max = max;
+        lineData[channel].tweetcount = tweetcount;
+
+        lineData[channel].barchart = [
+            lineData[channel].neg[lineData[channel].neg.length - 1].sentiment,
+            lineData[channel].pos[lineData[channel].pos.length - 1].sentiment,
+
+        ];
+
+        console.log(lineData[channel]);
 
         /* Uncomment the following to log data (from the API) and then lineData (the processed data) 
            to see what is happening in this function. 

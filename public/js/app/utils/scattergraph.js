@@ -16,6 +16,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         var width;
         var height;
         var updateWidth;
+        var yPos;
 
         //Initial Zoom Level
         var zoom;
@@ -43,11 +44,12 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                 var dom = d3.select(this);
 
                 // Axis
-                y.domain([0, 9]).range([height, 0]);
+                y.domain([0, 100]).range([height, 0]);
 
 
                 var scatter = dom.append("g")
-                    .attr("class", "scatter-chart");
+                    .attr("class", "scatter-chart")
+                    .attr("transform", "translate(0," + (yPos - 2) + ")");
 
                 var scatterdots = scatter.selectAll(".series")
                     .data(data)
@@ -367,6 +369,14 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
             if (typeof resizeScatter === 'function') resizeScatter();
             return chart;
         };
+
+        chart.yPos = function(value) {
+            if (!arguments.length) return 300;
+            yPos = value;
+            return chart;
+
+        };
+
 
         return chart;
     }
