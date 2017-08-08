@@ -73,7 +73,9 @@ define(["d3", "twemoji"], function(d3) {
                   .attr('cy', function(d){
                     return y(d.sentiment);
                   })
-                  .attr('fill', 'white');
+                  .attr('fill', 'white')
+                  .on('mouseover', mouseover)
+                  .on('mouseout', mouseout);
 
                 var lineChartToolTipLine = line.append("line")
                     .attr("class", "x-hover-line line-hover-line")
@@ -82,9 +84,9 @@ define(["d3", "twemoji"], function(d3) {
                 var lineChartToolTipText = d3.select("body")
                     .append("div")
                     .attr("class", "line-tooltip-text")
-                    .style("opacity", "0");
+                    .style("opacity", 1);
 
-                var posText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-pos");
+                var posText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-pos").html('arihant');
                 var negText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-neg");
 
                 updateDataLine = function() {
@@ -117,23 +119,30 @@ define(["d3", "twemoji"], function(d3) {
 
                 };
 
-                function mouseover(d) {
+                function mouseover(d, i) {
                     var posX = x.invert(d3.mouse(this)[0]);
 
                     var obj = {};
-                    obj.neg = data.neg[bisectLine(data.neg, pos)].sentiment;
-                    obj.pos = data.pos[bisectLine(data.pos, pos)].sentiment;
-                    obj.time = data.pos[bisectLine(data.pos, pos)].time;
-
+                    obj.neg = data.neg[i%(data.neg.length)].sentiment;
+                    obj.pos = data.pos[i%(data.pos.length)].sentiment;
+                    obj.time = data.pos[i%(data.pos.length)].time;
                     var time = x(posX);
+
+                    var sum = [obj.neg, obj.pos].reduce((a, b) => a + b, 0);
+                    var percentage = [obj.neg, obj.pos].map(function(i) { return Math.round(i / sum * 100); });
+                    var yCoords = [obj.neg, obj.pos].map(function(i) { return y(i); });
+
+                    lineChartToolTipText.transition().style("opacity", "1");
 
                     negText.html('<span style="font-size:20px">' + twemoji.convert.fromCodePoint(negetiveEmotions[1]) + '</span> ' + percentage[0] + "%")
                         .style("left", (time) + "px")
-                        .style("top", (yCoords[0] + 60) + "px");
+                        .style("top", (yCoords[0] + 80) + "px")
+                        .style('opacity', 1);
 
                     posText.html(percentage[1] + "%" + '<span style="font-size:20px">' + twemoji.convert.fromCodePoint(positiveEmotions[1]) + '</span> ')
                         .style("left", (time - 50) + "px")
-                        .style("top", (yCoords[1] + 60) + "px");
+                        .style("top", (yCoords[1] + 80) + "px")
+                        .style('opacity', 1);
 
                     lineChartToolTipLine.transition()
                         .style("opacity", "1")
