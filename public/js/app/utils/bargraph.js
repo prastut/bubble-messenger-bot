@@ -35,6 +35,9 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("transform", "translate(" + (width / 2 - 50) + "," + yPos + ")");
 
                 var bardata = data.barchart;
+                if (bardata[0] === 0 && bardata[1] === 0) {
+                    bardata = [1, 1];
+                }
 
                 var sum = bardata.reduce((a, b) => a + b, 0);
 
