@@ -40,6 +40,8 @@ router.get('/', function(req, res, next) {
 
                         var player = results[i];
 
+                        console.log(player);
+
                         elements.push({
                             "title": player.pretty_name,
                             "image_url": player.image_url,
