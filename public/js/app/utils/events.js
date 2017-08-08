@@ -64,11 +64,9 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("class", "event-points")
                     .attr("x", function(d, i) {
                         return x(d.time);
-
                     })
                     .attr("dy", 20)
                     .text(function(d) {
-
                         return twemoji.convert.fromCodePoint(emojiDict[d.type]);
                     })
                     .on("mouseover", scatterMouseOver)
@@ -79,11 +77,9 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("class", "event-time")
                     .attr("x", function(d, i) {
                         return x(d.time);
-
                     })
                     .attr("dy", 40)
                     .text(function(d) {
-
                         return d.timeDisplay.time + "'";
                     });
 
@@ -96,18 +92,13 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("class", "event-tooltip-text")
                     .style("opacity", 0);
 
-
                 var tooltipLine = eventTooltip.append("line")
                     .attr("class", "x-hover-line hover-line")
                     .attr("y1", 0)
                     .attr("y2", yPos - 10)
                     .style("opacity", 0);
 
-
                 updateEvents = function() {
-
-                    // console.log(data);
-                    // console.log(x.domain())
                     var event = events.selectAll("g")
                         .data(data)
                         .enter().append("g")
@@ -117,11 +108,9 @@ define(["d3", "twemoji"], function(d3) {
                         .attr("class", "event-points")
                         .attr("x", function(d, i) {
                             return x(d.time);
-
                         })
                         .attr("dy", 20)
                         .text(function(d) {
-
                             return twemoji.convert.fromCodePoint(emojiDict[d.type]);
                         })
                         .on("mouseover", function() {
@@ -139,11 +128,9 @@ define(["d3", "twemoji"], function(d3) {
                         .attr("class", "event-time")
                         .attr("x", function(d, i) {
                             return x(d.time);
-
                         })
                         .attr("dy", 40)
                         .text(function(d) {
-
                             return d.timeDisplay.time + "'";
                         });
 
@@ -153,7 +140,6 @@ define(["d3", "twemoji"], function(d3) {
                         .transition()
                         .attr("x", function(d, i) {
                             return x(d.time);
-
                         });
 
                     var allDisplayText = d3
