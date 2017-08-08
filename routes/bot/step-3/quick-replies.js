@@ -48,7 +48,7 @@ router.get('/', function(req, res, next) {
                                 "type": "web_url",
                                 "url": player.webview,
                                 "title": "View More",
-                                "webview_height_ratio": "tall",
+                                "webview_height_ratio": "full",
                             }]
                         });
 
