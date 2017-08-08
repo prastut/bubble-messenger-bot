@@ -14,6 +14,7 @@ define(["d3", "twemoji"], function(d3) {
 
         // Dimensions
         var height;
+        var yPos;
 
         //Initial Zoom Level
         var zoom;
@@ -48,7 +49,11 @@ define(["d3", "twemoji"], function(d3) {
                 y.domain([0, data.max]).nice().range([height, 0]);
 
                 var line = dom.append("g")
-                    .attr("class", "line-chart");
+                    .attr("class", "line-chart")
+                    .attr("transform", "translate(0," + (yPos - 2) + ")");
+                // .on("mouseover", mouseover)
+                // .on("mouseout", mouseout);
+
 
                 var neg = line.append("path")
                     .datum(data.neg)
@@ -63,19 +68,19 @@ define(["d3", "twemoji"], function(d3) {
                 // Create circles on the line chart
                 circle = line.append('g');
                 circle.selectAll('circle')
-                  .data((data.neg).concat(data.pos))
-                  .enter()
-                  .append('circle')
-                  .attr('r', 5)
-                  .attr('cx', function(d){
-                    return x(d.time);
-                  })
-                  .attr('cy', function(d){
-                    return y(d.sentiment);
-                  })
-                  .attr('fill', 'white')
-                  .on('mouseover', mouseover)
-                  .on('mouseout', mouseout);
+                    .data((data.neg).concat(data.pos))
+                    .enter()
+                    .append('circle')
+                    .attr('r', 5)
+                    .attr('cx', function(d) {
+                        return x(d.time);
+                    })
+                    .attr('cy', function(d) {
+                        return y(d.sentiment);
+                    })
+                    .attr('fill', 'white')
+                    .on('mouseover', mouseover)
+                    .on('mouseout', mouseout);
 
                 var lineChartToolTipLine = line.append("line")
                     .attr("class", "x-hover-line line-hover-line")
@@ -110,11 +115,11 @@ define(["d3", "twemoji"], function(d3) {
 
                     // Transition of circles
                     circle.selectAll('circle').transition(t)
-                        .attr('cx', function(d){
-                          return x(d.time);
+                        .attr('cx', function(d) {
+                            return x(d.time);
                         })
-                        .attr('cy', function(d){
-                          return y(d.sentiment);
+                        .attr('cy', function(d) {
+                            return y(d.sentiment);
                         });
 
                 };
@@ -123,9 +128,9 @@ define(["d3", "twemoji"], function(d3) {
                     var posX = x.invert(d3.mouse(this)[0]);
 
                     var obj = {};
-                    obj.neg = data.neg[i%(data.neg.length)].sentiment;
-                    obj.pos = data.pos[i%(data.pos.length)].sentiment;
-                    obj.time = data.pos[i%(data.pos.length)].time;
+                    obj.neg = data.neg[i % (data.neg.length)].sentiment;
+                    obj.pos = data.pos[i % (data.pos.length)].sentiment;
+                    obj.time = data.pos[i % (data.pos.length)].time;
                     var time = x(posX);
 
                     var sum = [obj.neg, obj.pos].reduce((a, b) => a + b, 0);
@@ -188,6 +193,7 @@ define(["d3", "twemoji"], function(d3) {
                     var circle = d3.select(this);
                     console.log(circle);
                     repeat();
+
                     function repeat() {
                         circle.transition()
                             .duration(2000)
@@ -222,6 +228,15 @@ define(["d3", "twemoji"], function(d3) {
             height = value;
             return chart;
         };
+
+        chart.yPos = function(value) {
+            if (!arguments.length) return 300;
+            yPos = value;
+            return chart;
+
+        };
+
+
         return chart;
     }
 

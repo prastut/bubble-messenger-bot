@@ -1,8 +1,9 @@
 define(["jquery", "d3",
         "./utils/helper", "./utils/data",
-        "./utils/graph", "./utils/linegraph", "./utils/scattergraph", "./utils/events", "./utils/players"
+        "./utils/graph",
+        "./utils/bargraph", "./utils/linegraph", "./utils/scattergraph", "./utils/events", "./utils/players"
     ],
-    function($, d3, helper, data, graph, lineGraph, scatterGraph, eventsGraph, playersGraph) {
+    function($, d3, helper, data, graph, barGraph, lineGraph, scatterGraph, eventsGraph, playersGraph) {
 
         //https://bubble.social/get-webview?match_id=01aa28ba-77ac-11e7-949c-0669e02bb0da&team_id=01aa28bb-77ac-11e7-949c-0669e02bb0da&name=liverpool_fc
 
@@ -22,6 +23,7 @@ define(["jquery", "d3",
 
             //All Charts
             var modelChart;
+            var barChart;
             var lineChart;
             var scatterChart;
             var eventsChart;
@@ -45,7 +47,6 @@ define(["jquery", "d3",
                 $.getJSON(helper.url('get-scatter-data'), params)
 
             ).done(function(index, scatter) {
-
                 helper.pL(lineData, channel, index[0]);
                 helper.pS(scatterData, channel, scatter[0]);
 
@@ -53,7 +54,9 @@ define(["jquery", "d3",
                 d3.select('#chart_container').call(modelChart);
 
                 var svg = d3.select(".chart");
+                var topOffset = $('#mainNav')[0].getBoundingClientRect().height;
 
+                //Common X Axis Definitions
                 commonXAxis = d3.scaleTime()
                     .domain(d3.extent(lineData[channel].timestamps))
                     .range([0, helper.widthDependingOnPage(width)]);
@@ -74,15 +77,25 @@ define(["jquery", "d3",
                     ])
                     .on("zoom", zoomHandler);
 
+                //Charts Definition Chart
+
+                barChart = barGraph.init()
+                    .height(height * 0.10)
+                    .width(width)
+                    .yPos(0)
+                    .data(lineData[channel]);
+
                 lineChart = lineGraph.init()
                     .x(commonXAxis)
-                    .height(height * 0.70)
+                    .height(height * 0.60)
+                    .yPos(topOffset)
                     .data(lineData[channel]);
 
                 scatterChart = scatterGraph.init()
-                    .height(height * 0.70)
+                    .height(height * 0.60)
                     .width(helper.widthDependingOnPage(width))
                     .x(commonXAxis)
+                    .yPos(topOffset)
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
 
@@ -97,7 +110,11 @@ define(["jquery", "d3",
 
                 d3.select(window).on('resize', resize);
 
-                svg.call(lineChart).call(scatterChart).call(overallZoom);
+                svg
+                    .call(barChart)
+                    .call(lineChart)
+                    .call(scatterChart)
+                    .call(overallZoom);
                 // svg.call(eventsChart);
 
 
