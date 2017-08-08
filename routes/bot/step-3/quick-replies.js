@@ -40,6 +40,8 @@ router.get('/', function(req, res, next) {
 
                         var player = results[i];
 
+                        console.log(player);
+
                         elements.push({
                             "title": player.pretty_name,
                             "image_url": player.image_url,
@@ -90,7 +92,7 @@ router.get('/', function(req, res, next) {
                         'pretty_name': data.pretty_name,
                         'image_url': data.image_url,
                         'team_id': data.team,
-                        'webview': helper.webviewURL(match_id, data.id, "player", data.pretty_name),
+                        'webview': helper.webviewURL(match_id, data.id, "player", data.name),
                         'tweets_count': playerObj.tweets_count
 
                     };

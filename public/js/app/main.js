@@ -117,9 +117,8 @@ define(["jquery", "d3",
                     .call(overallZoom);
                 // svg.call(eventsChart);
 
-
-
-
+                overallZoom.scaleTo(svg, 2);
+                overallZoom.translateBy(svg, -width, -height);
             });
 
 
@@ -172,8 +171,6 @@ define(["jquery", "d3",
             //     svg.call(overallZoom);
             // }
 
-            // // overallZoom.scaleTo(svg, 1);
-            // // overallZoom.translateBy(svg, -width, -height);
 
 
             // //Going Live
