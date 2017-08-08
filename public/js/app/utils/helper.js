@@ -7,8 +7,8 @@ define(function() {
      * @param {String} channel Channel which is being used for rendering
      * @param {Data} data The raw data from the API.
      * @param {Boolean} live Check for LIVE or not.
-     * @param {Number} max max sentiment value from the data. Need to adjust Y axis everytime max changes. 
-     * @return {Object} lineData. So the processing happens and the end result get's stored inside lineData object 
+     * @param {Number} max max sentiment value from the data. Need to adjust Y axis everytime max changes.
+     * @return {Object} lineData. So the processing happens and the end result get's stored inside lineData object
      */
 
     function pushLineData(lineData, channel, data, live) {
@@ -18,10 +18,10 @@ define(function() {
         var max;
         var tweetcount = 0;
 
-        /* 
-            First Time the function is being called therefore there would be no channel as key in lineObject. 
-            Since we are generating dynamic views, I would need to call this function again to process the data 
-            from the API. This if checks for that.  
+        /*
+            First Time the function is being called therefore there would be no channel as key in lineObject.
+            Since we are generating dynamic views, I would need to call this function again to process the data
+            from the API. This if checks for that.
 
         */
         if (!(channel in lineData)) {
@@ -36,7 +36,7 @@ define(function() {
         }
 
         /*
-            Processing Data to be made accessible by D3. 
+            Processing Data to be made accessible by D3.
         */
 
         for (var i in data) {
@@ -80,8 +80,8 @@ define(function() {
 
         console.log(lineData[channel]);
 
-        /* Uncomment the following to log data (from the API) and then lineData (the processed data) 
-           to see what is happening in this function. 
+        /* Uncomment the following to log data (from the API) and then lineData (the processed data)
+           to see what is happening in this function.
         */
         // console.log("Data->", data)
         // console.log("Processed Data->", lineData)
@@ -91,7 +91,6 @@ define(function() {
     function urlGenerator(url) {
         return "https://api.bubble.social/" + url;
     }
-
 
     function pushScatterData(scatterData, channel, data, live) {
 
@@ -179,12 +178,10 @@ define(function() {
                 var compartmentsToBeAdded = newDataLength - prevDataLength;
 
                 for (i = 0; i < compartmentsToBeAdded; i++) {
-
                     scatterData[channel].push([]);
                 }
 
                 for (i = 0; i < newDataLength; i++) {
-
                     scatterData[channel][i] = scatterData[channel][i].concat(scatterSeries[i]);
                 }
 
@@ -195,6 +192,27 @@ define(function() {
         }
 
 
+    }
+
+    function pushEventsData(eventsData, channel, data, live) {
+      var d;
+        if (!(channel in eventsData)) {
+            eventsData[channel] = [];
+            //eventsData[channel].comment = [];
+            //eventsData[channel].entities = [];
+            //eventsData[channel].players = [];
+            //eventsData[channel].teams = [];
+            //eventsData[channel].time = [];
+        }
+        for(i in data){
+          d = {
+            'comment': data[i].comment,
+            'time': data[i].time
+          }
+          d.timeDisplay = {}
+          d.timeDisplay.time = parseInt(data[i].Time);
+          eventsData[channel].push(d);
+        }
     }
 
     function fakeDataFormatter(data, startTime, seconds) {
@@ -301,6 +319,7 @@ define(function() {
     return {
         pL: pushLineData,
         pS: pushScatterData,
+        pE: pushEventsData,
         url: urlGenerator,
         fakeDataFormatter: fakeDataFormatter,
         fakeDataFormatterScatter: fakeDataFormatterScatter,

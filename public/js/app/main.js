@@ -20,6 +20,7 @@ define(["jquery", "d3",
             //Data Model
             var lineData = {};
             var scatterData = {};
+            var eventsData = {};
 
             //All Charts
             var modelChart;
@@ -44,11 +45,13 @@ define(["jquery", "d3",
 
             $.when(
                 $.getJSON(helper.url('get-index-data'), params),
-                $.getJSON(helper.url('get-scatter-data'), params)
+                $.getJSON(helper.url('get-scatter-data'), params),
+                $.getJSON(helper.url('get-events'), params)
 
-            ).done(function(index, scatter) {
+            ).done(function(index, scatter, events) {
                 helper.pL(lineData, channel, index[0]);
                 helper.pS(scatterData, channel, scatter[0]);
+                helper.pE(eventsData, channel, events[0]);
 
                 modelChart = graph.chart().width(width).height(height);
                 d3.select('#chart_container').call(modelChart);
@@ -99,14 +102,14 @@ define(["jquery", "d3",
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
 
-                // // Events Chart. 30% of real estate
-                // var eventsChart = eventsGraph.init()
-                //     .yPos($('.axis--y')[0].getBoundingClientRect().height + 20)
-                //     .height(height)
-                //     .width(widthDependingOnPage(width))
-                //     .x(commonXAxis)
-                //     .data(lineData[channel].events)
-                //     .zoom(d3.zoomIdentity);
+               // Events Chart. 30% of real estate
+               eventsChart = eventsGraph.init()
+                   .yPos(topOffset + height *0.6)
+                   .height(height)
+                   .width(helper.widthDependingOnPage(width))
+                   .x(commonXAxis)
+                   .data(eventsData[channel])
+                   .zoom(d3.zoomIdentity);
 
                 d3.select(window).on('resize', resize);
 
@@ -114,11 +117,8 @@ define(["jquery", "d3",
                     .call(barChart)
                     .call(lineChart)
                     .call(scatterChart)
-                    .call(overallZoom);
-                // svg.call(eventsChart);
-
-
-
+                    .call(overallZoom)
+                    .call(eventsChart);
 
             });
 
