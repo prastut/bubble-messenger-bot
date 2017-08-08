@@ -91,7 +91,7 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("class", "line-tooltip-text")
                     .style("opacity", 1);
 
-                var posText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-pos").html('arihant');
+                var posText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-pos");
                 var negText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-neg");
 
                 updateDataLine = function() {
