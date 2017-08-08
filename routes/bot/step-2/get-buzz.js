@@ -61,7 +61,7 @@ router.get('/', function(req, res, next) {
                                     "type": "web_url",
                                     "url": results[i][team].webview,
                                     "title": "Explore Buzz",
-                                    "webview_height_ratio": "tall",
+                                    "webview_height_ratio": "full",
                                 }];
 
                                 elements.push(obj);
