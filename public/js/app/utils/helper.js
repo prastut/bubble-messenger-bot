@@ -7,8 +7,8 @@ define(function() {
      * @param {String} channel Channel which is being used for rendering
      * @param {Data} data The raw data from the API.
      * @param {Boolean} live Check for LIVE or not.
-     * @param {Number} max max sentiment value from the data. Need to adjust Y axis everytime max changes. 
-     * @return {Object} lineData. So the processing happens and the end result get's stored inside lineData object 
+     * @param {Number} max max sentiment value from the data. Need to adjust Y axis everytime max changes.
+     * @return {Object} lineData. So the processing happens and the end result get's stored inside lineData object
      */
 
     function pushLineData(lineData, channel, data, live) {
@@ -18,17 +18,16 @@ define(function() {
         var max;
         var tweetcount = 0;
 
-        /* 
-            First Time the function is being called therefore there would be no channel as key in lineObject. 
-            Since we are generating dynamic views, I would need to call this function again to process the data 
-            from the API. This if checks for that.  
+        /*
+            First Time the function is being called therefore there would be no channel as key in lineObject.
+            Since we are generating dynamic views, I would need to call this function again to process the data
+            from the API. This if checks for that.
 
         */
         if (!(channel in lineData)) {
             lineData[channel] = {};
             lineData[channel].neg = [];
             lineData[channel].pos = [];
-            lineData[channel].events = [];
             lineData[channel].timestamps = [];
             max = 0;
         } else {
@@ -36,7 +35,7 @@ define(function() {
         }
 
         /*
-            Processing Data to be made accessible by D3. 
+            Processing Data to be made accessible by D3.
         */
 
         for (var i in data) {
@@ -53,16 +52,6 @@ define(function() {
                 time: time
             });
 
-            if (data[i][channel].event) {
-                lineData[channel].events.push({
-                    event: data[i][channel].event,
-                    time: time,
-                    timeDisplay: data[i].timeDisplay,
-                    type: data[i][channel].event.split('<br>')[0].split(':')[0],
-                    country: data[i][channel].event.split('<br>')[1]
-                });
-            }
-
             tweetcount = tweetcount + parseInt(data[i][channel].pos_count) + parseInt(data[i][channel].neg_count);
             max = Math.max(max, Math.max(parseFloat(data[i][channel].pos), parseFloat(data[i][channel].neg)));
             lineData[channel].timestamps.push(time);
@@ -78,10 +67,9 @@ define(function() {
 
         ];
 
-        console.log(lineData[channel]);
 
-        /* Uncomment the following to log data (from the API) and then lineData (the processed data) 
-           to see what is happening in this function. 
+        /* Uncomment the following to log data (from the API) and then lineData (the processed data)
+           to see what is happening in this function.
         */
         // console.log("Data->", data)
         // console.log("Processed Data->", lineData)
@@ -91,7 +79,6 @@ define(function() {
     function urlGenerator(url) {
         return "https://api.bubble.social/" + url;
     }
-
 
     function pushScatterData(scatterData, channel, data, live) {
 
@@ -179,12 +166,10 @@ define(function() {
                 var compartmentsToBeAdded = newDataLength - prevDataLength;
 
                 for (i = 0; i < compartmentsToBeAdded; i++) {
-
                     scatterData[channel].push([]);
                 }
 
                 for (i = 0; i < newDataLength; i++) {
-
                     scatterData[channel][i] = scatterData[channel][i].concat(scatterSeries[i]);
                 }
 
@@ -195,6 +180,30 @@ define(function() {
         }
 
 
+    }
+
+    function pushEventsData(eventsData, channel, data, live) {
+
+
+        if (!(channel in eventsData)) {
+            eventsData[channel] = [];
+        }
+        for (var i in data) {
+
+            var commentary = data[i].comment.split(":");
+
+            if (commentary.length == 1) {
+
+                commentary = commentary[0].split("!")
+            }
+
+            eventsData[channel].push({
+                "time": data[i].time * 1000,
+                "type": data[i].name,
+                "timedisplay": commentary[0],
+                "comment": commentary[1]
+            });
+        }
     }
 
     function fakeDataFormatter(data, startTime, seconds) {
@@ -301,6 +310,7 @@ define(function() {
     return {
         pL: pushLineData,
         pS: pushScatterData,
+        pE: pushEventsData,
         url: urlGenerator,
         fakeDataFormatter: fakeDataFormatter,
         fakeDataFormatterScatter: fakeDataFormatterScatter,
