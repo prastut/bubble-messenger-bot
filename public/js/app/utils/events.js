@@ -30,7 +30,8 @@ define(["d3", "twemoji"], function(d3) {
             "FOUL": "1F915",
             "CORNER": "261D",
             "Chile": "🇨🇱",
-            "Germany": "🇩🇪"
+            "Germany": "🇩🇪",
+            "EVENT": "261D",
 
         };
 
@@ -38,7 +39,7 @@ define(["d3", "twemoji"], function(d3) {
         function chart(selection) {
 
             selection.each(function() {
-
+                console.log(data);
                 var dom = d3.select(this);
 
                 var eventsChart = dom.append("g")
@@ -67,11 +68,17 @@ define(["d3", "twemoji"], function(d3) {
                     })
                     .attr("dy", 20)
                     .text(function(d) {
-                        return twemoji.convert.fromCodePoint(emojiDict[d.type]);
+
+                        if (d.type in emojiDict) {
+                            return twemoji.convert.fromCodePoint(emojiDict[d.type]);
+                        } else {
+                            return twemoji.convert.fromCodePoint(emojiDict["EVENT"]);
+
+                        }
                     })
-                    .on("mouseover", scatterMouseOver)
-                    .on("mouseout", scatterMouseOut)
-                    .on("click", scatterMouseOver);
+                    .on("mouseover", eventMouseOver)
+                    .on("mouseout", eventMouseOut)
+                    .on("click", eventMouseOver);
 
                 var displaytime = event.append("text")
                     .attr("class", "event-time")
@@ -80,7 +87,7 @@ define(["d3", "twemoji"], function(d3) {
                     })
                     .attr("dy", 40)
                     .text(function(d) {
-                        return d.timeDisplay.time + "'";
+                        return d.timedisplay + "'";
                     });
 
                 // Tooltip
@@ -200,31 +207,33 @@ define(["d3", "twemoji"], function(d3) {
 
                 };
 
-                function scatterMouseOver() {
-
+                function eventMouseOver(d, i) {
 
                     tooltipLine.transition().style("opacity", 1);
                     tooltipText.transition().style("opacity", 1);
 
                     var x0 = x.invert(d3.mouse(this)[0]);
+                    console.log(this);
                     var position = eventBisect(data, x0) - 1;
 
 
-                    var item = data[position];
+                    var item = data[i % (data.length)];
+                    console.log(item);
+
                     if (item) {
-                        var xTooltip = x(item.time);
+                        var xTooltip = parseInt(d3.select(this).attr("x"));
 
-                        if (window.location.pathname == "/get-video-overlay") {
+                        if (window.location.pathname !== "/get-video-overlay") {
 
-                            var eventText = item.event.split("<br>");
+                            var eventText = item.comment;
 
                             tooltipText.html(
-                                    '<span style="font-size:20px">' + emojiDict[item.country] + '</span><br>' +
+                                    // '<span style="font-size:20px">' + emojiDict[item.country] + '</span><br>' +
                                     '<span style="font-size:10px">' +
-                                    eventText[0] + '<br>' + eventText[1] + '<br>' +
+                                    eventText + '<br>' +
                                     '</span>')
                                 .style("left", (xTooltip - 50 - 50) + "px")
-                                .style("top", (overallheight * 0.1) + "px")
+                                .style("top", (overallheight * 0.8) + "px")
                                 .style("line-height", 1)
                                 .style("background", "rgba(54, 61, 82, 0.9)");
 
@@ -243,7 +252,7 @@ define(["d3", "twemoji"], function(d3) {
                     }
                 }
 
-                function scatterMouseOut() {
+                function eventMouseOut() {
 
                     tooltipLine.transition().style("opacity", 0);
                     tooltipText.transition().style("opacity", 0);

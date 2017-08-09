@@ -49,6 +49,7 @@ define(["jquery", "d3",
                 $.getJSON(helper.url('get-events'), params)
 
             ).done(function(index, scatter, events) {
+
                 helper.pL(lineData, channel, index[0]);
                 helper.pS(scatterData, channel, scatter[0]);
                 helper.pE(eventsData, channel, events[0]);
@@ -102,14 +103,14 @@ define(["jquery", "d3",
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
 
-              // Events Chart. 30% of real estate
-              var eventsChart = eventsGraph.init()
-                  .yPos(topOffset + height * 0.60)
-                  .height(height)
-                  .width(helper.widthDependingOnPage(width))
-                  .x(commonXAxis)
-                  .data(eventsData[channel])
-                  .zoom(d3.zoomIdentity);
+                // Events Chart. 30% of real estate
+                eventsChart = eventsGraph.init()
+                    .yPos(topOffset + height * 0.60)
+                    .height(height * 0.30)
+                    .width(helper.widthDependingOnPage(width))
+                    .x(commonXAxis)
+                    .data(eventsData[channel])
+                    .zoom(d3.zoomIdentity);
 
                 d3.select(window).on('resize', resize);
 
@@ -142,7 +143,7 @@ define(["jquery", "d3",
             function updateCharts() {
                 lineChart.x(commonXAxis);
                 scatterChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
-                // eventsChart.width(widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
+                eventsChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
 
                 // if (playersChart) {
                 //     playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);

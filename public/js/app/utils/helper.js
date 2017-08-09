@@ -28,7 +28,6 @@ define(function() {
             lineData[channel] = {};
             lineData[channel].neg = [];
             lineData[channel].pos = [];
-            lineData[channel].events = [];
             lineData[channel].timestamps = [];
             max = 0;
         } else {
@@ -53,16 +52,6 @@ define(function() {
                 time: time
             });
 
-            if (data[i][channel].event) {
-                lineData[channel].events.push({
-                    event: data[i][channel].event,
-                    time: time,
-                    timeDisplay: data[i].timeDisplay,
-                    type: data[i][channel].event.split('<br>')[0].split(':')[0],
-                    country: data[i][channel].event.split('<br>')[1]
-                });
-            }
-
             tweetcount = tweetcount + parseInt(data[i][channel].pos_count) + parseInt(data[i][channel].neg_count);
             max = Math.max(max, Math.max(parseFloat(data[i][channel].pos), parseFloat(data[i][channel].neg)));
             lineData[channel].timestamps.push(time);
@@ -78,7 +67,6 @@ define(function() {
 
         ];
 
-        console.log(lineData[channel]);
 
         /* Uncomment the following to log data (from the API) and then lineData (the processed data)
            to see what is happening in this function.
@@ -195,24 +183,26 @@ define(function() {
     }
 
     function pushEventsData(eventsData, channel, data, live) {
-      var d;
+
+
         if (!(channel in eventsData)) {
             eventsData[channel] = [];
-            //eventsData[channel].comment = [];
-            //eventsData[channel].entities = [];
-            //eventsData[channel].players = [];
-            //eventsData[channel].teams = [];
-            //eventsData[channel].time = [];
         }
-        for(i in data){
-          d = {
-            'comment': data[i].comment,
-            'time': data[i].time,
-            'type': data[i].name
-          }
-          d.timeDisplay = {}
-          d.timeDisplay.time = parseInt(data[i].time);
-          eventsData[channel].push(d);
+        for (var i in data) {
+
+            var commentary = data[i].comment.split(":");
+
+            if (commentary.length == 1) {
+
+                commentary = commentary[0].split("!")
+            }
+
+            eventsData[channel].push({
+                "time": data[i].time * 1000,
+                "type": data[i].name,
+                "timedisplay": commentary[0],
+                "comment": commentary[1]
+            });
         }
     }
 
