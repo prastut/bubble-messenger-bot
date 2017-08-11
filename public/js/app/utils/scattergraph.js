@@ -321,7 +321,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                             .attr("height", 0);
 
 
-                    }, 2000);
+                    }, 10000);
 
 
                 }
