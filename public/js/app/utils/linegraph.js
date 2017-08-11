@@ -81,7 +81,7 @@ define(["d3", "twemoji"], function(d3) {
                     .attr('cy', function(d) {
                         return y(d.sentiment);
                     })
-                    .attr('fill', 'white')
+                    .attr('fill', '#191919')
                     .on('mouseover', mouseover)
                     .on('mouseout', mouseout);
 
@@ -158,8 +158,8 @@ define(["d3", "twemoji"], function(d3) {
                         .attr("y1", yCoords[0])
                         .attr("y2", yCoords[1]);
 
-                    circle.selectAll('circle').attr('fill', '#939393');
-                    d3.selectAll('.' + $(this).attr('class')).transition().duration(100).attr('r', 8).attr('fill', 'white');
+                    circle.selectAll('circle').attr('fill', '#666666');
+                    d3.selectAll('.' + $(this).attr('class')).transition().duration(100).attr('r', 8).attr('fill', '#191919');
 
                 }
 
@@ -167,7 +167,7 @@ define(["d3", "twemoji"], function(d3) {
                     lineChartToolTipText.transition().style("opacity", "0");
                     lineChartToolTipLine.transition().style("opacity", "0");
                     d3.selectAll('.' + $(this).attr('class')).transition().duration(100).attr('r', 5);
-                    circle.selectAll('circle').attr('fill', 'white');
+                    circle.selectAll('circle').attr('fill', '#191919');
                 }
             });
         }

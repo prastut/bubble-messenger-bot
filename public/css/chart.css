@@ -1,56 +1,55 @@
   .sentiment--line {
       fill: transparent;
       clip-path: url(#clip);
-      stroke-width: 1px;
-      stroke-dasharray: 3, 2;
+      stroke-width: 2px;
   }
-  
+
   .sentiment--pos {
-      stroke: #00B909;
+      stroke: #66b266;
   }
-  
+
   .sentiment--neg {
-      stroke: #C60606;
+      stroke: #ff6666;
   }
-  
+
   .zoom {
       cursor: move;
       fill: none;
       pointer-events: all;
   }
-  
+
   .event-points {
       font-size: 20px;
   }
-  
+
   .event-time {
       font-size: 15px;
       fill: white;
       transform: translate(1px, 0);
   }
-  
+
   .point {
       clip-path: url(#clip);
       fill: white;
       stroke-width: 2px;
   }
-  
+
   .line {
       fill: none;
       stroke: #6F257F;
       stroke-width: 5px;
   }
-  
+
   .hover-line {
       stroke: white;
   }
-  
+
   .line-hover-line {
-      stroke: white;
+      stroke: #000000;
       stroke-dasharray: 3, 3;
-      stroke-opacity: 0.6;
+      stroke-opacity: 0.9;
   }
-  
+
   .tweet {
       position: absolute;
       text-align: center;
@@ -63,7 +62,7 @@
       border: 0px;
       pointer-events: none;
   }
-  
+
   .event-tooltip-text {
       position: absolute;
       text-align: center;
@@ -76,7 +75,7 @@
       border: 0px;
       pointer-events: none;
   }
-  
+
   .line-tooltip-text div {
       position: absolute;
       text-align: center;
@@ -88,29 +87,29 @@
       border: 0px;
       pointer-events: none;
   }
-  
+
   .events-rect {
       fill: rgba(54, 61, 82, 0.60);
   }
-  
+
   .segment-clicked-rect {
       fill: rgba(54, 61, 82, 0.60);
   }
-  
+
   .emoji {
       height: 40px;
       font-size: 40px;
   }
-  
+
   .axis--y {
       /* stroke: white; */
       display: none;
   }
-  
+
   .pos-point {
       animation: pulse 2s ease infinite
   }
-  
+
   @keyframes pulse {
       0% {
           transform: scale(0.5);
