@@ -19,14 +19,17 @@ Each element has there own Y axis.
 
 ## Model Chart: the base chart which contains all charts. Used for maintaining responsivity for the charts.
 * Interactivity: On window resize, resizes itself.
-* Real estate is divided into 2 halves and changes depending upon the view
+* Real estate changes depending upon the view
   * View: Webview. Seperation is vertical
     * Half 1:
-      * 70% of the height
-      * Charts: Line, Scatter
+      * 10% of the height
+      * Charts: Bar Chart
     * Half 2:
-     * 30% of the height
-     * Charts: Event
+      * 60% of the height
+      * Charts: Line, Scatter
+    * Half 3:
+      * 30% of the height
+      * Charts: Event
   * View: Video Integration. Seperation is horizontal
     * Half 1:
       * 80% of the width
