@@ -71,6 +71,9 @@ define(["d3", "twemoji"], function(d3) {
                     .data((data.neg).concat(data.pos))
                     .enter()
                     .append('circle')
+                    .attr('class', function(d){
+                      return 'c_' + d.time
+                    })
                     .attr('r', 5)
                     .attr('cx', function(d) {
                         return x(d.time);
@@ -154,14 +157,18 @@ define(["d3", "twemoji"], function(d3) {
                         .attr("transform", "translate(" + time + ",0)")
                         .attr("y1", yCoords[0])
                         .attr("y2", yCoords[1]);
+
+                    circle.selectAll('circle').attr('fill', '#939393');
+                    d3.selectAll('.' + $(this).attr('class')).transition().duration(100).attr('r', 8).attr('fill', 'white');
+
                 }
 
                 function mouseout() {
                     lineChartToolTipText.transition().style("opacity", "0");
                     lineChartToolTipLine.transition().style("opacity", "0");
+                    d3.selectAll('.' + $(this).attr('class')).transition().duration(100).attr('r', 5);
+                    circle.selectAll('circle').attr('fill', 'white');
                 }
-
-
             });
         }
 
