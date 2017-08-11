@@ -29,6 +29,9 @@ define(["jquery", "d3",
             var scatterChart;
             var eventsChart;
 
+            //Layout dimensions
+            var footer_height = 50
+
             //Axis
             var commonXAxis;
             var commonXZoomAxis;
@@ -82,6 +85,15 @@ define(["jquery", "d3",
                     .on("zoom", zoomHandler);
 
                 //Charts Definition Chart
+                
+                // Events Chart. 30% of real estate
+                eventsChart = eventsGraph.init()
+                    .yPos(topOffset + height * 0.60)
+                    .height(height * 0.30)
+                    .width(helper.widthDependingOnPage(width))
+                    .x(commonXAxis)
+                    .data(eventsData[channel])
+                    .zoom(d3.zoomIdentity);
 
                 barChart = barGraph.init()
                     .height(height * 0.10)
@@ -91,25 +103,16 @@ define(["jquery", "d3",
 
                 lineChart = lineGraph.init()
                     .x(commonXAxis)
-                    .height(height * 0.60)
+                    .height(height * 0.60 - footer_height)
                     .yPos(topOffset)
                     .data(lineData[channel]);
 
                 scatterChart = scatterGraph.init()
-                    .height(height * 0.60)
+                    .height(height * 0.60 - footer_height)
                     .width(helper.widthDependingOnPage(width))
                     .x(commonXAxis)
                     .yPos(topOffset)
                     .data(scatterData[channel])
-                    .zoom(d3.zoomIdentity);
-
-                // Events Chart. 30% of real estate
-                eventsChart = eventsGraph.init()
-                    .yPos(topOffset + height * 0.60)
-                    .height(height * 0.30)
-                    .width(helper.widthDependingOnPage(width))
-                    .x(commonXAxis)
-                    .data(eventsData[channel])
                     .zoom(d3.zoomIdentity);
 
                 d3.select(window).on('resize', resize);

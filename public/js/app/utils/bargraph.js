@@ -68,7 +68,7 @@ define(["d3", "twemoji"], function(d3) {
 
                 var negText = barChartEmoji.append("text")
                     .attr("class", "bar-neg")
-                    .style("fill", "white")
+                    .style("fill", "black")
                     .attr("x", 0)
                     .attr("dy", 30)
                     .text(function(d) {
@@ -79,7 +79,7 @@ define(["d3", "twemoji"], function(d3) {
 
                 var posText = barChartEmoji.append("text")
                     .attr("class", "bar-pos")
-                    .style("fill", "white")
+                    .style("fill", "black")
                     .attr("x", 0)
                     .attr("dy", 30)
                     .text(function(d) {
@@ -95,7 +95,7 @@ define(["d3", "twemoji"], function(d3) {
 
                 var tweetCount = barTweetCount.append("text")
                     .attr("class", "tweet-count")
-                    .style("fill", "white")
+                    .style("fill", "black")
                     .attr("x", 0)
                     .attr("y", 0)
                     .text(data.tweetcount)

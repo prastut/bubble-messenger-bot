@@ -39,7 +39,6 @@ define(["d3", "twemoji"], function(d3) {
         function chart(selection) {
 
             selection.each(function() {
-                console.log(data);
                 var dom = d3.select(this);
 
                 var eventsChart = dom.append("g")
@@ -49,7 +48,7 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("class", "events-rect")
                     .attr("height", 50)
                     .attr("width", width)
-                    .attr("transform", "translate(0," + (yPos - 2) + ")");
+                    .attr("transform", "translate(0," + (yPos) + ")");
 
                 //Events
                 var events = eventsChart.append("g")
