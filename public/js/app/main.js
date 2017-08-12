@@ -305,7 +305,6 @@ define(["jquery", "d3",
                 d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
                 d3.select("#chart_container").style("opacity", "1");
 
-
                 if (iframetimer) clearTimeout(iframetimer);
                 iframetimer = setTimeout(function() {
                     d3.select("#chart_container").transition().style("opacity", "0");

@@ -126,6 +126,7 @@ define(["d3", "twemoji"], function(d3) {
 
                 function mouseover(d, i) {
                     var posX = x.invert(d3.mouse(this)[0]);
+                    var top_offset = $('.line-chart').offset().top;
 
                     var obj = {};
                     obj.neg = data.neg[i % (data.neg.length)].sentiment;
@@ -141,12 +142,12 @@ define(["d3", "twemoji"], function(d3) {
 
                     negText.html('<span style="font-size:20px">' + twemoji.convert.fromCodePoint(negetiveEmotions[1]) + '</span> ' + percentage[0] + "%")
                         .style("left", (time) + "px")
-                        .style("top", (yCoords[0] + 195) + "px")
+                        .style("top", (yCoords[0] + top_offset - 55) + "px") //subtracting 55px for height of div
                         .style('opacity', 1);
 
                     posText.html(percentage[1] + "%" + '<span style="font-size:20px">' + twemoji.convert.fromCodePoint(positiveEmotions[1]) + '</span> ')
                         .style("left", (time - 50) + "px")
-                        .style("top", (yCoords[1] + 195) + "px")
+                        .style("top", (yCoords[1] + top_offset - 55) + "px")
                         .style('opacity', 1);
 
                     lineChartToolTipLine.transition()
