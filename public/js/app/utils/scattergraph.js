@@ -161,10 +161,10 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 var emoji = scatter.append("text")
                     .attr("class", "emoji");
-
+                var timeText = scatter.append("text")
+                    .attr("class", "text-time");
 
                 updateScatterData = function() {
-
 
                     var t = d3.transition().duration(750);
 
@@ -303,6 +303,10 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .attr("x", 0)
                         .attr("y", (yClick + 10));
 
+                    timeText.text(d.x)
+                        .attr('x', posX)
+                        .attr('y', height);
+
                     setTimeout(function() {
 
                         tweetshow.transition()
@@ -318,6 +322,9 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                             .duration(500)
                             .attr("height", 0);
 
+                        timeText.transition()
+                            .duration(500)
+                            .style("opacity", 0);
 
                     }, 10000);
 

@@ -93,6 +93,7 @@ define(["d3", "twemoji"], function(d3) {
 
                 var posText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-pos");
                 var negText = lineChartToolTipText.append("div").attr("class", "line-tooltip-text-neg");
+                var timeText = lineChartToolTipText.append("div").attr("class", "text-time");
 
                 updateDataLine = function() {
                     resizeLine("yes");
@@ -142,18 +143,23 @@ define(["d3", "twemoji"], function(d3) {
 
                     negText.html('<span style="font-size:20px">' + twemoji.convert.fromCodePoint(negetiveEmotions[1]) + '</span> ' + percentage[0] + "%")
                         .style("left", (time) + "px")
-                        .style("top", (yCoords[0] + top_offset - 55) + "px") //subtracting 55px for height of div
+                        .style("top", (yCoords[0] + top_offset - 60) + "px") //subtracting 55px for height of div
                         .style('opacity', 1);
 
                     posText.html(percentage[1] + "%" + '<span style="font-size:20px">' + twemoji.convert.fromCodePoint(positiveEmotions[1]) + '</span> ')
                         .style("left", (time - 50) + "px")
-                        .style("top", (yCoords[1] + top_offset - 55) + "px")
+                        .style("top", (yCoords[1] + top_offset - 60) + "px")
                         .style('opacity', 1);
+
+                    timeText.html(time)
+                        .style("left", (time) + "px")
+                        .style('top', (height + top_offset) + "px")
+                        .attr('opacity', 1)
 
                     lineChartToolTipLine.transition()
                         .style("opacity", "1")
                         .attr("transform", "translate(" + time + ",0)")
-                        .attr("y1", yCoords[0])
+                        .attr("y1", height)
                         .attr("y2", yCoords[1]);
                 }
 
