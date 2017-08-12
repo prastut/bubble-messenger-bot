@@ -141,12 +141,12 @@ define(["d3", "twemoji"], function(d3) {
 
                     negText.html('<span style="font-size:20px">' + twemoji.convert.fromCodePoint(negetiveEmotions[1]) + '</span> ' + percentage[0] + "%")
                         .style("left", (time) + "px")
-                        .style("top", (yCoords[0] + 80) + "px")
+                        .style("top", (yCoords[0] + 195) + "px")
                         .style('opacity', 1);
 
                     posText.html(percentage[1] + "%" + '<span style="font-size:20px">' + twemoji.convert.fromCodePoint(positiveEmotions[1]) + '</span> ')
                         .style("left", (time - 50) + "px")
-                        .style("top", (yCoords[1] + 80) + "px")
+                        .style("top", (yCoords[1] + 195) + "px")
                         .style('opacity', 1);
 
                     lineChartToolTipLine.transition()
