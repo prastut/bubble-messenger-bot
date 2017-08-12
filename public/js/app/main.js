@@ -11,7 +11,6 @@ define(["jquery", "d3",
 
             var channel = params.name;
             params.user_type = "INFLUENCER";
-
             //Real Estate Setup
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
             var height;
@@ -35,15 +34,13 @@ define(["jquery", "d3",
 
             //Interactions
             var overallZoom;
-            var topOffset;
+            var topOffset=30;
 
 
             if (window.location.pathname == "/get-video-overlay") {
                 height = 150;
             } else {
                 height = Math.round(parseInt(d3.select("#chart_container").style("height")));
-                topOffset = $('#mainNav')[0].getBoundingClientRect().height;
-
             }
 
             $.when(
@@ -59,6 +56,14 @@ define(["jquery", "d3",
 
                 modelChart = graph.chart().width(width).height(height);
                 d3.select('#chart_container').call(modelChart);
+
+                // Title of the match
+                text = d3.select(".chart")
+                    .append("text")
+                    .text(params.name.toUpperCase())
+                    .attr("id", "game-name")
+                    .attr("x", 20)
+                    .attr("y", 30);
 
                 var svg = d3.select(".chart");
 
@@ -104,6 +109,7 @@ define(["jquery", "d3",
                     .yPos(topOffset)
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
+
 
                 // Events Chart. 30% of real estate
                 eventsChart = eventsGraph.init()
