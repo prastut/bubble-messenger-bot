@@ -38,6 +38,11 @@ define(["d3", "twemoji"], function(d3) {
 
         function chart(selection) {
 
+            //Bounding rectangle of the scatterChart
+            var scatterBox = document.getElementById('scatter-g').getBoundingClientRect();
+            yPos = scatterBox.top + scatterBox.height;
+
+
             selection.each(function() {
                 console.log(data);
                 var dom = d3.select(this);
@@ -169,7 +174,6 @@ define(["d3", "twemoji"], function(d3) {
                 };
 
                 resizeEvents = function() {
-
                     backgroundRect
                         .attr("height", function() {
 
