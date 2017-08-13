@@ -85,7 +85,7 @@ define(["jquery", "d3",
                     .on("zoom", zoomHandler);
 
                 //Charts Definition Chart
-                
+
                 // Events Chart. 30% of real estate
                 eventsChart = eventsGraph.init()
                     .yPos(topOffset + height * 0.60)
@@ -118,11 +118,12 @@ define(["jquery", "d3",
                 d3.select(window).on('resize', resize);
 
                 svg
+                    .call(eventsChart)
                     .call(barChart)
                     .call(lineChart)
                     .call(scatterChart)
                     .call(overallZoom)
-                    .call(eventsChart);
+                    ;
 
                 overallZoom.scaleTo(svg, 2);
                 overallZoom.translateBy(svg, -width, -height);

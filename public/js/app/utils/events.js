@@ -18,6 +18,9 @@ define(["d3", "twemoji"], function(d3) {
         var updateWidth;
         var yPos;
 
+        //Rectangles in the timeline
+        var time_rects = []
+
         //Event Bisector
         var eventBisect = d3.bisector(function(d) {
             return d.time;
@@ -55,6 +58,18 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("class", "events")
                     .attr("transform", "translate(0," + (yPos) + ")");
 
+                for(var i = 0; i < (data.length - 1); i++){
+                  time_rects.push(events.append('rect')
+                    .attr('x', function(){return x(data[i].time)})
+                    .attr('y', 0)
+                    .attr('width', function(){return x(data[i + 1].time) - x(data[i].time)})
+                    .attr('height', 50)
+                    .style('fill', 'red')
+                    .style('opacity', 1)
+                    .on("mouseover", event_rect_mouseover)
+                    .on("mouseout", event_rect_mouseout));
+                }
+
                 var event = events.selectAll("g")
                     .data(data)
                     .enter().append("g")
@@ -67,12 +82,10 @@ define(["d3", "twemoji"], function(d3) {
                     })
                     .attr("dy", 20)
                     .text(function(d) {
-
                         if (d.type in emojiDict) {
                             return twemoji.convert.fromCodePoint(emojiDict[d.type]);
                         } else {
                             return twemoji.convert.fromCodePoint(emojiDict["EVENT"]);
-
                         }
                     })
                     .on("mouseover", eventMouseOver)
@@ -155,10 +168,6 @@ define(["d3", "twemoji"], function(d3) {
                             return x(d.time);
 
                         });
-
-
-
-
                 };
 
                 zoomEvents = function() {
@@ -200,9 +209,18 @@ define(["d3", "twemoji"], function(d3) {
                     d3.selectAll(".event-time")
                         .attr("x", function(d, i) {
                             return x(d.time);
-
                         });
 
+
+                    for(var i = 0; i < (data.length - 1); i++){
+                      time_rects[i]
+                        .attr('x', function(){return x(data[i].time)})
+                        .attr('y', 0)
+                        .attr('width', function(){return x(data[i + 1].time) - x(data[i].time)})
+                      //  .attr('height', 50)
+                      //  .style('fill', 'red')
+                        .style('opacity', 1);
+                    }
 
                 };
 
@@ -252,11 +270,17 @@ define(["d3", "twemoji"], function(d3) {
                 }
 
                 function eventMouseOut() {
-
                     tooltipLine.transition().style("opacity", 0);
                     tooltipText.transition().style("opacity", 0);
                 }
 
+                function event_rect_mouseover(){
+                  d3.select(this).transition().duration(200).attr('y', -(yPos)).attr('height', yPos + 50).style('opacity', 0.6);
+                }
+
+                function event_rect_mouseout(){
+                  d3.select(this).transition().duration(200).attr('y', 0).attr('height', 50).style('opacity', 1);
+                }
 
             });
         }
