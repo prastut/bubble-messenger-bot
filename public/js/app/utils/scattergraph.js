@@ -149,7 +149,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 var maskCircle = mask.append("circle");
 
-
                 var overlayRect = maskGroup
                     .append("rect")
                     .attr("x", 0)
@@ -162,10 +161,10 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 var emoji = scatter.append("text")
                     .attr("class", "emoji");
-
+                var timeText = scatter.append("text")
+                    .attr("class", "text-time");
 
                 updateScatterData = function() {
-
 
                     var t = d3.transition().duration(750);
 
@@ -224,10 +223,8 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         })
                         .attr("cx", function(d) { return x(d.x); })
                         .attr("transform", function() {
-
                             var translate = setScatterAttr();
                             return "translate(" + (translate / 2) + "," + (translate / 2) + ")";
-
                         });
 
 
@@ -259,7 +256,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                 };
 
                 updateWidthScatter = function() {
-
                     maskRect.attr("width", width);
                     overlayRect.attr("width", width);
                 };
@@ -281,7 +277,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .transition()
                         .attr("height", height);
 
-
                     var yClick = d3.mouse(this)[1];
                     var coordsLocal = coords.slice();
 
@@ -289,9 +284,12 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .duration(200)
                         .style("opacity", 0.9);
 
+                    // Get mouse position
+                    var posX = parseInt(circleCords.attr("cx"));
+                    var posY = parseInt(circleCords.attr("cy"));
                     tweetshow.html(d.y.text)
-                        .style("left", (width / 2) + "px")
-                        .style("top", (height / 2) + "px");
+                        .style("left", (posX + setCircleSize*2 + 10) + 'px')
+                        .style("top", (posY + height*0.60 - setCircleSize*2) + 'px');
 
                     emoji.transition()
                         .duration(200)
@@ -304,6 +302,10 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     emoji.text(twemoji.convert.fromCodePoint(text))
                         .attr("x", 0)
                         .attr("y", (yClick + 10));
+
+                    timeText.text(d.x)
+                        .attr('x', posX)
+                        .attr('y', height);
 
                     setTimeout(function() {
 
@@ -320,8 +322,11 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                             .duration(500)
                             .attr("height", 0);
 
+                        timeText.transition()
+                            .duration(500)
+                            .style("opacity", 0);
 
-                    }, 2000);
+                    }, 10000);
 
 
                 }

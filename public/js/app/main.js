@@ -35,12 +35,15 @@ define(["jquery", "d3",
 
             //Interactions
             var overallZoom;
+            var topOffset;
 
 
             if (window.location.pathname == "/get-video-overlay") {
                 height = 150;
             } else {
                 height = Math.round(parseInt(d3.select("#chart_container").style("height")));
+                topOffset = $('#mainNav')[0].getBoundingClientRect().height;
+
             }
 
             $.when(
@@ -58,7 +61,6 @@ define(["jquery", "d3",
                 d3.select('#chart_container').call(modelChart);
 
                 var svg = d3.select(".chart");
-                var topOffset = $('#mainNav')[0].getBoundingClientRect().height;
 
                 //Common X Axis Definitions
                 commonXAxis = d3.scaleTime()
@@ -304,7 +306,6 @@ define(["jquery", "d3",
 
                 d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
                 d3.select("#chart_container").style("opacity", "1");
-
 
                 if (iframetimer) clearTimeout(iframetimer);
                 iframetimer = setTimeout(function() {
