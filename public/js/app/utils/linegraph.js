@@ -45,6 +45,10 @@ define(["d3", "twemoji"], function(d3) {
 
             selection.each(function() {
 
+                //Bounding rectangle of the Bar Chart
+                var barChartBox = document.getElementById('bar-g').getBoundingClientRect();
+                yPos = barChartBox.top + barChartBox.height;
+
                 var dom = d3.select(this);
                 y.domain([0, data.max]).nice().range([height, 0]);
 

@@ -20,15 +20,19 @@ define(["d3", "twemoji"], function(d3) {
         var zoom;
 
 
-
         function chart(selection) {
 
             selection.each(function() {
 
+                //Bounding rectangle of the game title
+                var textBox = document.getElementById('game-name').getBoundingClientRect();
+                yPos = textBox.top + textBox.height;
+
                 var dom = d3.select(this);
 
                 var barGroup = dom.append("g")
-                    .attr("class", "bar-chart");
+                    .attr("class", "bar-chart")
+                    .attr("id", "bar-g");
 
                 var bars = barGroup.append("g")
                     .attr("class", "bars")
@@ -64,7 +68,8 @@ define(["d3", "twemoji"], function(d3) {
 
                 //Bar Chart Emoji
                 var barChartEmoji = barGroup.append("g")
-                    .attr("class", "bar-emoji");
+                    .attr("class", "bar-emoji")
+                    .attr("transform", "translate(0," + yPos + ")");
 
                 var negText = barChartEmoji.append("text")
                     .attr("class", "bar-neg")
@@ -91,7 +96,7 @@ define(["d3", "twemoji"], function(d3) {
                 //Tweet Count
                 var barTweetCount = barGroup.append("g")
                     .attr("class", "bar-tweet")
-                    .attr("transform", "translate(" + (width / 2 - 40) + ",50)");
+                    .attr("transform", "translate(" + (width / 2 - 40) + ","+ (yPos+55) + ")");
 
                 var tweetCount = barTweetCount.append("text")
                     .attr("class", "tweet-count")

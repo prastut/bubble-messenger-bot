@@ -191,6 +191,11 @@ header .intro-text .skills {
     border-color: #18BC9C;
 }
 
+#game-name{
+    font-size: 2em;
+    fill: white;
+}
+
 @media (min-width: 768px) {
     .navbar-custom {
         padding: 25px 0;
@@ -214,6 +219,10 @@ header .intro-text .skills {
 
 section {
     padding: 150px 0;
+}
+
+#timeline-container {
+    padding: 10px 0px;
 }
 
 section h2 {
