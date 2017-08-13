@@ -58,11 +58,13 @@ define(["jquery", "d3",
                 d3.select('#chart_container').call(modelChart);
 
                 // Title of the match
+                // X coordinate to center the text 
+                var textX = width/2 - (8*params.name.length)
                 text = d3.select(".chart")
                     .append("text")
                     .text(params.name.toUpperCase())
                     .attr("id", "game-name")
-                    .attr("x", 20)
+                    .attr("x", textX)
                     .attr("y", 30);
 
                 var svg = d3.select(".chart");
@@ -93,27 +95,23 @@ define(["jquery", "d3",
                 barChart = barGraph.init()
                     .height(height * 0.10)
                     .width(width)
-                    .yPos(0)
                     .data(lineData[channel]);
 
                 lineChart = lineGraph.init()
                     .x(commonXAxis)
                     .height(height * 0.60)
-                    .yPos(topOffset)
                     .data(lineData[channel]);
 
                 scatterChart = scatterGraph.init()
                     .height(height * 0.60)
                     .width(helper.widthDependingOnPage(width))
                     .x(commonXAxis)
-                    .yPos(topOffset)
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
 
 
                 // Events Chart. 30% of real estate
                 eventsChart = eventsGraph.init()
-                    .yPos(topOffset + height * 0.60)
                     .height(height * 0.30)
                     .width(helper.widthDependingOnPage(width))
                     .x(commonXAxis)

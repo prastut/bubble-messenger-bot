@@ -21,6 +21,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         //Initial Zoom Level
         var zoom;
 
+
         var tweetshow = d3.select("body")
             .append("div")
             .attr("class", "tweet")
@@ -41,14 +42,18 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         function chart(selection) {
             selection.each(function() {
 
+                //Bounding rectangle of the Bar Chart
+                var barChartBox = document.getElementById('bar-g').getBoundingClientRect();
+                yPos = barChartBox.top + barChartBox.height;
+
                 var dom = d3.select(this);
 
                 // Axis
                 y.domain([0, 100]).range([height, 0]);
 
-
                 var scatter = dom.append("g")
                     .attr("class", "scatter-chart")
+                    .attr("id", "scatter-g")
                     .attr("transform", "translate(0," + (yPos - 2) + ")");
 
                 var scatterdots = scatter.selectAll(".series")
