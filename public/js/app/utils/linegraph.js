@@ -126,6 +126,7 @@ define(["d3", "twemoji"], function(d3) {
                 };
 
                 function mouseover(d, i) {
+
                     var posX = x.invert(d3.mouse(this)[0]);
                     var top_offset = $('.line-chart').offset().top;
 
@@ -151,7 +152,7 @@ define(["d3", "twemoji"], function(d3) {
                         .style("top", (yCoords[1] + top_offset - 60) + "px")
                         .style('opacity', 1);
 
-                    timeText.html(time)
+                    timeText.html(d.timedisplay)
                         .style("left", (time) + "px")
                         .style('top', (height + top_offset) + "px")
                         .attr('opacity', 1)
