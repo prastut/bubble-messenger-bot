@@ -13,7 +13,7 @@ define(["jquery", "d3",
             params.user_type = "INFLUENCER";
             //Real Estate Setup
             var width = Math.round(parseInt(d3.select("#chart_container").style("width")));
-            var height = Math.round(parseInt(d3.select("#chart_container").style("height")));
+            var height = 150;
             var transform = d3.zoomIdentity;
 
             //Data Model
@@ -23,11 +23,10 @@ define(["jquery", "d3",
 
             //All Charts
             var modelChart;
-            var title;
-            var barChart;
             var lineChart;
             var scatterChart;
             var eventsChart;
+            var playersChart;
 
             //Axis
             var commonXAxis;
@@ -53,7 +52,6 @@ define(["jquery", "d3",
                 d3.select('#chart_container').call(modelChart);
 
                 var svg = d3.select(".chart");
-
                 //Common X Axis Definitions
                 commonXAxis = d3.scaleTime()
                     .domain(d3.extent(lineData[channel].timestamps))
@@ -73,42 +71,24 @@ define(["jquery", "d3",
                         [0, 0],
                         [helper.widthDependingOnPage(width), height]
                     ])
-                    .on("zoom", zoomHandler);
+                    .on('zoom', zoomHandler);
 
-                //Real Estate
-
-                // Title
-                var textX = width / 2 - (8 * params.name.length);
-                title = svg.append("text")
-                    .text(params.name.toUpperCase())
-                    .attr("id", "game-name")
-                    .attr("x", textX)
-                    .attr("y", 30);
-
-                //BarChart
-                barChart = barGraph.init()
-                    .height(height * 0.10)
-                    .yRelativeTo(helper.getBR('game-name'))
-                    .width(width)
-                    .data(lineData[channel]);
-
-                svg.call(barChart);
-
+                //Charts Definition Chart
                 //LineChart
                 lineChart = lineGraph.init()
                     .x(commonXAxis)
-                    .yRelativeTo(helper.getBR('bar-g'))
-                    .height(height * 0.60)
+                    .yRelativeTo(helper.getBR(0))
+                    .height(height * 0.40)
                     .data(lineData[channel]);
 
                 svg.call(lineChart);
 
                 //ScatterChart
                 scatterChart = scatterGraph.init()
-                    .height(height * 0.60)
+                    .height(height * 0.40)
                     .width(helper.widthDependingOnPage(width))
                     .x(commonXAxis)
-                    .yRelativeTo(helper.getBR('bar-g'))
+                    .yRelativeTo(helper.getBR(0))
                     .data(scatterData[channel])
                     .zoom(d3.zoomIdentity);
 
@@ -125,13 +105,29 @@ define(["jquery", "d3",
 
                 svg.call(eventsChart);
 
+                //PlayersChart
+                playersChart = playersGraph.init()
+                    .xPos(commonXAxis.range()[1])
+                    .height(height)
+                    .width(helper.widthDependingOnPage(width))
+                    .x(commonXAxis)
+                    .zoom(d3.zoomIdentity);
+
+                svg.call(playersChart);
 
                 //Calling Interactions
                 d3.select(window).on('resize', resize);
                 svg.call(overallZoom);
 
-                overallZoom.scaleTo(svg, 2);
-                overallZoom.translateBy(svg, -width, -height);
+                overallZoom.scaleTo(svg, 1);
+
+                // d3.select("#chart_container").style("opacity", "0");
+
+                // d3.select(window)
+                //     .on('mousemove', mousemoveIframe)
+                //     .on("click", mousemoveIframe);
+
+                // overallZoom.translateBy(svg, -100, -height);
             });
 
 
@@ -139,17 +135,24 @@ define(["jquery", "d3",
 
             function zoomHandler() {
 
+
+
                 // live("stop");
                 transform = d3.event.transform;
+
+                console.log(transform);
                 commonXAxis.domain(transform.rescaleX(commonXZoomAxis).domain());
                 updateCharts();
             }
 
-            function updateCharts() {
-                lineChart.x(commonXAxis);
-                scatterChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
-                eventsChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
-            }
+
+
+
+
+            //     // console.log(widthDependingOnPage(width));
+            //     
+            //     svg.call(playersChart);
+
 
 
             // //Going Live
@@ -258,7 +261,7 @@ define(["jquery", "d3",
             function resize() {
 
                 width = Math.round(parseInt(d3.select("#chart_container").style("width")));
-                height = Math.round(parseInt(d3.select("#chart_container").style("height")));
+                height = 150;
                 console.log(width);
 
                 //Container Update
@@ -269,10 +272,38 @@ define(["jquery", "d3",
                 commonXAxis.range([0, helper.widthDependingOnPage(width)]);
                 commonXZoomAxis.range(commonXAxis.range());
 
+                console.log(commonXAxis.range())
+
                 // Charts Update
                 updateCharts();
 
             }
+
+            function updateCharts() {
+
+                lineChart.x(commonXAxis);
+                scatterChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
+                eventsChart.width(helper.widthDependingOnPage(width)).x(commonXAxis).zoom(transform);
+                playersChart.width(helper.widthDependingOnPage(width)).xPos(commonXAxis.range()[1]);
+
+            }
+
+
+            var iframetimer;
+
+            function mousemoveIframe() {
+
+                d3.select("body").style("background", "rgba(54, 61, 82, 0.2)");
+                d3.select("#chart_container").style("opacity", "1");
+
+                if (iframetimer) clearTimeout(iframetimer);
+                iframetimer = setTimeout(function() {
+                    d3.select("#chart_container").transition().style("opacity", "0");
+                    d3.select("body").style("background", "none");
+                }, 2000);
+
+            }
+
 
         });
     });

@@ -16,7 +16,9 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         var width;
         var height;
         var updateWidth;
+        var yRelativeTo;
         var yPos;
+
 
         //Initial Zoom Level
         var zoom;
@@ -43,8 +45,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
             selection.each(function() {
 
                 //Bounding rectangle of the Bar Chart
-                var barChartBox = document.getElementById('bar-g').getBoundingClientRect();
-                yPos = barChartBox.top + barChartBox.height;
+                yPos = yRelativeTo.top + yRelativeTo.height;
 
                 var dom = d3.select(this);
 
@@ -293,8 +294,8 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     var posX = parseInt(circleCords.attr("cx"));
                     var posY = parseInt(circleCords.attr("cy"));
                     tweetshow.html(d.y.text)
-                        .style("left", (posX + setCircleSize*2 + 10) + 'px')
-                        .style("top", (posY + height*0.60 - setCircleSize*2) + 'px');
+                        .style("left", (posX + setCircleSize * 2 + 10) + 'px')
+                        .style("top", (posY + height * 0.60 - setCircleSize * 2) + 'px');
 
                     emoji.transition()
                         .duration(200)
@@ -380,9 +381,9 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
             return chart;
         };
 
-        chart.yPos = function(value) {
-            if (!arguments.length) return 300;
-            yPos = value;
+        chart.yRelativeTo = function(value) {
+            if (!arguments.length) return 10;
+            yRelativeTo = value;
             return chart;
 
         };

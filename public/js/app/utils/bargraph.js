@@ -13,7 +13,7 @@ define(["d3", "twemoji"], function(d3) {
 
         // Dimensions
         var height;
-        var width;
+        var yRelativeTo;
         var yPos;
 
         //Initial Zoom Level
@@ -25,13 +25,11 @@ define(["d3", "twemoji"], function(d3) {
             selection.each(function() {
 
                 //Bounding rectangle of the game title
-                var textBox = document.getElementById('game-name').getBoundingClientRect();
-                yPos = textBox.top + textBox.height;
+                yPos = yRelativeTo.top + yRelativeTo.height;
 
                 var dom = d3.select(this);
 
                 var barGroup = dom.append("g")
-                    .attr("class", "bar-chart")
                     .attr("id", "bar-g");
 
                 var bars = barGroup.append("g")
@@ -96,7 +94,7 @@ define(["d3", "twemoji"], function(d3) {
                 //Tweet Count
                 var barTweetCount = barGroup.append("g")
                     .attr("class", "bar-tweet")
-                    .attr("transform", "translate(" + (width / 2 - 40) + ","+ (yPos+55) + ")");
+                    .attr("transform", "translate(" + (width / 2 - 40) + "," + (yPos + 55) + ")");
 
                 var tweetCount = barTweetCount.append("text")
                     .attr("class", "tweet-count")
@@ -119,22 +117,22 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("transform", "translate(" + (0) + ",5)");
 
                 updateBar = function() {
-                    resizeLine("yes");
+                    // resizeBar("yes");
 
                 };
 
 
-                resizeLine = function(transition) {
-                    transition = transition == "yes" ? 750 : 0;
-                    var t = d3.transition().duration(transition);
+                // resizeBar = function(transition) {
+                //     transition = transition == "yes" ? 750 : 0;
+                //     var t = d3.transition().duration(transition);
 
-                    pos.transition(t)
-                        .attr("d", sentimentsLine(data.pos));
+                //     pos.transition(t)
+                //         .attr("d", sentimentsLine(data.pos));
 
-                    neg.transition(t)
-                        .attr("d", sentimentsLine(data.neg));
+                //     neg.transition(t)
+                //         .attr("d", sentimentsLine(data.neg));
 
-                };
+                // };
 
             });
         }
@@ -158,9 +156,9 @@ define(["d3", "twemoji"], function(d3) {
             return chart;
         };
 
-        chart.yPos = function(value) {
-            if (!arguments.length) return 300;
-            yPos = value;
+        chart.yRelativeTo = function(value) {
+            if (!arguments.length) return 10;
+            yRelativeTo = value;
             return chart;
 
         };
