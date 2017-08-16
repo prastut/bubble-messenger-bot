@@ -58,14 +58,34 @@ define(["d3", "twemoji"], function(d3) {
                     .attr("class", "events")
                     .attr("transform", "translate(0," + (yPos) + ")");
 
+                // Color gradient for tile_rects
+              var gradient = eventsChart.append("defs")
+                      .append("linearGradient")
+                      .attr("id", "gradient")
+                      .attr("x1", "0%")
+                      .attr("y1", "100%")
+                      .attr("x2", "100%")
+                      .attr("y2", "100%")
+                      .attr("spreadMethod", "pad");
+
+              gradient.append("stop")
+                  .attr("offset", "0%")
+                  .attr("stop-color", "red")
+                  .attr("stop-opacity", 1);
+
+              gradient.append("stop")
+                  .attr("offset", "100%")
+                  .attr("stop-color", "white")
+                  .attr("stop-opacity", 1);
+
                 for(var i = 0; i < (data.length - 1); i++){
                   time_rects.push(events.append('rect')
                     .attr('x', function(){return x(data[i].time)})
                     .attr('y', 0)
                     .attr('width', function(){return x(data[i + 1].time) - x(data[i].time)})
                     .attr('height', 50)
-                    .style('fill', 'red')
-                    .style('opacity', 1)
+                    .style("fill", "url(#gradient)")
+                    .style("opacity", 1)
                     .on("mouseover", event_rect_mouseover)
                     .on("mouseout", event_rect_mouseout));
                 }
