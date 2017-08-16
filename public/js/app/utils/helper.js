@@ -1,4 +1,4 @@
-define(function() {
+define(function($) {
 
     /**
      * Raw Data processing for Line Data
@@ -306,12 +306,18 @@ define(function() {
         return window.location.pathname == "/get-video-overlay" ? w * 0.70 : w;
     }
 
+    //Get Bounding Rect for specific id
+    function getBR(id) {
+        var rect = id === 0 ? { top: 0, height: 0 } : document.getElementById(id.toString()).getBoundingClientRect();
+        return rect;
+    }
 
     return {
         pL: pushLineData,
         pS: pushScatterData,
         pE: pushEventsData,
         url: urlGenerator,
+        getBR: getBR,
         fakeDataFormatter: fakeDataFormatter,
         fakeDataFormatterScatter: fakeDataFormatterScatter,
         widthDependingOnPage: widthDependingOnPage

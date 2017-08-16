@@ -168,7 +168,6 @@ define(["d3", "twemoji"], function(d3) {
 
                     barChartGroup.selectAll("rect")
                         .attr("x", function(d, i) {
-                            console.log(d, i);
                             return (xPos + 110 + i * d / 8 * 100 + i * 5);
                         })
                 };

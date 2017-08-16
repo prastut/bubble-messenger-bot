@@ -16,6 +16,7 @@ define(["d3", "twemoji"], function(d3) {
         var width;
         var overallheight;
         var updateWidth;
+        var yRelativeTo;
         var yPos;
 
         //Event Bisector
@@ -39,12 +40,9 @@ define(["d3", "twemoji"], function(d3) {
         function chart(selection) {
 
             //Bounding rectangle of the scatterChart
-            var scatterBox = document.getElementById('scatter-g').getBoundingClientRect();
-            yPos = scatterBox.top + scatterBox.height;
-
+            yPos = yRelativeTo.top + yRelativeTo.height;
 
             selection.each(function() {
-                console.log(data);
                 var dom = d3.select(this);
 
                 var eventsChart = dom.append("g")
@@ -217,19 +215,18 @@ define(["d3", "twemoji"], function(d3) {
                     tooltipText.transition().style("opacity", 1);
 
                     var x0 = x.invert(d3.mouse(this)[0]);
-                    console.log(this);
                     var position = eventBisect(data, x0) - 1;
 
 
                     var item = data[i % (data.length)];
-                    console.log(item);
 
                     if (item) {
                         var xTooltip = parseInt(d3.select(this).attr("x"));
+                        var eventText = item.comment;
+
 
                         if (window.location.pathname !== "/get-video-overlay") {
 
-                            var eventText = item.comment;
 
                             tooltipText.html(
                                     // '<span style="font-size:20px">' + emojiDict[item.country] + '</span><br>' +
@@ -244,7 +241,9 @@ define(["d3", "twemoji"], function(d3) {
 
                         } else {
 
-                            tooltipText.html('<span style="font-size:20px">' + emojiDict[item.country] + '</span><br>' + item.event)
+                            tooltipText.html('<span style="font-size:10px">' +
+                                    eventText + '<br>' +
+                                    '</span>')
                                 .style("left", (xTooltip - 50 - 50) + "px")
                                 .style("top", (overallheight * 0.4) + "px");
 
@@ -300,9 +299,9 @@ define(["d3", "twemoji"], function(d3) {
             return chart;
         };
 
-        chart.yPos = function(value) {
-            if (!arguments.length) return 300;
-            yPos = value;
+        chart.yRelativeTo = function(value) {
+            if (!arguments.length) return 10;
+            yRelativeTo = value;
             return chart;
 
         };

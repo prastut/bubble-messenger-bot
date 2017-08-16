@@ -14,6 +14,7 @@ define(["d3", "twemoji"], function(d3) {
 
         // Dimensions
         var height;
+        var yRelativeTo;
         var yPos;
 
         //Initial Zoom Level
@@ -46,8 +47,8 @@ define(["d3", "twemoji"], function(d3) {
             selection.each(function() {
 
                 //Bounding rectangle of the Bar Chart
-                var barChartBox = document.getElementById('bar-g').getBoundingClientRect();
-                yPos = barChartBox.top + barChartBox.height;
+                yPos = yRelativeTo.top + yRelativeTo.height;
+                console.log(yPos);
 
                 var dom = d3.select(this);
                 y.domain([0, data.max]).nice().range([height, 0]);
@@ -196,9 +197,9 @@ define(["d3", "twemoji"], function(d3) {
             return chart;
         };
 
-        chart.yPos = function(value) {
-            if (!arguments.length) return 300;
-            yPos = value;
+        chart.yRelativeTo = function(value) {
+            if (!arguments.length) return 10;
+            yRelativeTo = value;
             return chart;
 
         };
