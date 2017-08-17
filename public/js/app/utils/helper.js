@@ -44,12 +44,14 @@ define(function($) {
 
             lineData[channel].neg.push({
                 sentiment: data[i][channel].neg,
-                time: time
+                time: time,
+                timedisplay: epochConvert(time)
             });
 
             lineData[channel].pos.push({
                 sentiment: data[i][channel].pos,
-                time: time
+                time: time,
+                timedisplay: epochConvert(time)
             });
 
             tweetcount = tweetcount + parseInt(data[i][channel].pos_count) + parseInt(data[i][channel].neg_count);
@@ -64,7 +66,6 @@ define(function($) {
         lineData[channel].barchart = [
             lineData[channel].neg[lineData[channel].neg.length - 1].sentiment,
             lineData[channel].pos[lineData[channel].pos.length - 1].sentiment,
-
         ];
 
 
@@ -81,7 +82,6 @@ define(function($) {
     }
 
     function pushScatterData(scatterData, channel, data, live) {
-
 
         var series = [];
         var i;
@@ -105,6 +105,7 @@ define(function($) {
 
             obj.x = data[i].time * 1000;
             obj.y = array;
+            obj.timedisplay = epochConvert(data[i].time);
 
             series.push(obj);
 
@@ -127,12 +128,14 @@ define(function($) {
         for (i = 0; i < series.length; i++) {
             len = series[i].y.length;
             x = series[i].x;
+            timedisplay = series[i].timedisplay;
 
             for (var j = 0; j < len; j++) {
                 y = series[i].y[j];
                 scatterSeries[j].push({
                     x: x,
-                    y: y
+                    y: y,
+                    timedisplay:timedisplay
                 });
 
             }
@@ -301,6 +304,13 @@ define(function($) {
         return prettyData;
 
     }
+
+    function epochConvert(n){
+      // Returns the time in minutes and secnonds when epoch time is passed
+      var utcSeconds = parseInt(n);
+      var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+      d.setUTCSeconds(utcSeconds);
+      return String(d.getHours()) + ' : ' + String(d.getMinutes());
 
     function widthDependingOnPage(w) {
         return window.location.pathname == "/get-video-overlay" ? w * 0.70 : w;

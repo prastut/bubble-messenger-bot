@@ -309,7 +309,8 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .attr("x", 0)
                         .attr("y", (yClick + 10));
 
-                    timeText.text(d.x)
+                    timeText.style("opacity", 1);
+                    timeText.text(d.timedisplay)
                         .attr('x', posX)
                         .attr('y', height);
 
