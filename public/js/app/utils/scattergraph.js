@@ -75,7 +75,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     setCircleSize = 20;
                 }
 
-
                 //Clip Circles
                 var clipCircles = scatterdots.append("svg:clipPath")
                     .attr("id", function(d, i) {
@@ -88,6 +87,13 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     .attr("transform", "translate(10,10)");
 
                 //Image
+                // set up filter
+                scatterdots.append('filter')
+                  .attr('id','desaturate')
+                  .append('feColorMatrix')
+                  .attr('type','matrix')
+                  .attr('values',"0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0");
+
                 var image = scatterdots.append("image")
                     .attr("class", "point-image")
                     .attr("x", function(d) { return x(d.x); })
@@ -99,7 +105,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     })
                     .attr("clip-path", function(d, i) {
                         return 'url(#clip-circle-' + d.x + d.y.sentiment_index + ")";
-
                     })
                     .on("click", click);
 
@@ -118,7 +123,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         }
                     });
 
-
                 var coords = [];
 
                 scatter.append("g")
@@ -132,38 +136,11 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     coords.push(parseInt(c));
                 });
 
-
                 coords.push(0);
                 coords = coords.sort();
                 coords.splice(coords.length - 1, 1);
 
                 var heightGrid = coords[1] - coords[0];
-
-
-                var maskGroup = scatter.append("g")
-                    .attr("class", "mask-rect");
-
-                var mask = maskGroup.append("defs").append("mask").attr("id", "mymask");
-
-                var maskRect = mask.append("rect")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("width", width)
-                    .attr("height", height)
-                    .style("fill", "white")
-                    .style("opacity", 0.9);
-
-                var maskCircle = mask.append("circle");
-
-                var overlayRect = maskGroup
-                    .append("rect")
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("width", width)
-                    .attr("height", 0)
-                    .attr("mask", "url(#mymask)")
-                    .style("fill", "rgba(54, 61, 82, 5)");
-
 
                 var emoji = scatter.append("text")
                     .attr("class", "emoji");
@@ -180,39 +157,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     console.log(update);
 
                     update.exit().remove();
-
-                    // var point = update.enter()
-                    //     .append("g")
-                    //     .attr("class", "series")
-                    //     .merge(update)
-                    //     .selectAll(".point")
-                    //     .data(function(d) { return d; })
-                    //     .enter().append("g")
-                    //     .attr("class", "point");
-
-
-                    // dots
-                    //     .attr("cy", function(d) { return y(d.y.sentiment_index); })
-                    //     .attr("cx", x.range()[1]) // Transistion from the extreme right to the screen
-                    //     .transition(t)
-                    //     .attr("cx", function(d) { return x(d.x); })
-                    //     .style("stroke", function(d) {
-                    //         if (d.y.type == "-") {
-                    //             return "red";
-                    //         } else {
-                    //             return "green";
-                    //         }
-                    //     });
-
-                    // dots.on("click", click);
-
-                    // var alldots = scatter.selectAll(".series")
-                    //     .selectAll(".point")
-                    //     .attr("cy", function(d) { return y(d.y.sentiment_index); })
-                    //     .transition(t)
-                    //     .attr("cx", function(d) { return x(d.x); });
-
-
 
                 };
 
@@ -262,26 +206,31 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                 };
 
                 updateWidthScatter = function() {
-                    maskRect.attr("width", width);
-                    overlayRect.attr("width", width);
+
                 };
 
 
-
                 function click(d) {
+                    // Fade out other bubbles and circles
+                    d3.selectAll('.point-image')
+                        .style("filter", function(d, i) {
+                            return ("filter", "url(#desaturate)");
+                        });
+                    d3.selectAll('.point-image-circle').style('stroke', '#696969')
+
+                    d3.select(this).style("filter", function(d, i) {
+                            return ("filter", "none");
+                        });
 
                     var circleCords = d3.select(this.parentNode).select(".point-image-circle");
-
-                    maskCircle
-                        .attr("cx", circleCords.attr("cx"))
-                        .attr("cy", circleCords.attr("cy"))
-                        .attr("r", parseInt(circleCords.attr("r")) + 5)
-                        .attr("transform", circleCords.attr("transform"));
-
-
-                    overlayRect
-                        .transition()
-                        .attr("height", height);
+                    circleCords
+                        .style("stroke", function(d) {
+                            if (d.y.type == "-") {
+                                return "red";
+                            } else {
+                                return "green";
+                            }
+                        })
 
                     var yClick = d3.mouse(this)[1];
                     var coordsLocal = coords.slice();
@@ -305,6 +254,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                     var text = d.y.type == "-" ? negetiveEmotions[segmentClicked] : positiveEmotions[segmentClicked];
 
+                    // Show Emoji and Time
                     emoji.text(twemoji.convert.fromCodePoint(text))
                         .attr("x", 0)
                         .attr("y", (yClick + 10));
@@ -323,14 +273,25 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                             .duration(500)
                             .style("opacity", 0);
 
-                        overlayRect
-                            .transition()
-                            .duration(500)
-                            .attr("height", 0);
-
                         timeText.transition()
                             .duration(500)
                             .style("opacity", 0);
+
+                        d3.selectAll('.point-image')
+                            .style("filter", function(d, i) {
+                                return ("filter", "none");
+                            });
+
+                        strokeCircles
+                            .transition()
+                            .duration(500)
+                            .style("stroke", function(d) {
+                                if (d.y.type == "-") {
+                                    return "red";
+                                } else {
+                                    return "green";
+                                }
+                            })
 
                     }, 10000);
 
@@ -385,9 +346,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
             if (!arguments.length) return 10;
             yRelativeTo = value;
             return chart;
-
         };
-
 
         return chart;
     }
