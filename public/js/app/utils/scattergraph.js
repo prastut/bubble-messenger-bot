@@ -121,7 +121,8 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         } else {
                             return "green";
                         }
-                    });
+                    })
+                    .style('stroke-width', '2px');
 
                 var coords = [];
 
@@ -216,7 +217,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                         .style("filter", function(d, i) {
                             return ("filter", "url(#desaturate)");
                         });
-                    d3.selectAll('.point-image-circle').style('stroke', '#696969')
+                    d3.selectAll('.point-image-circle').style('stroke', '#696969');
 
                     d3.select(this).style("filter", function(d, i) {
                             return ("filter", "none");
@@ -231,6 +232,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                                 return "green";
                             }
                         })
+                        .style('stroke-width', '4px');
 
                     var yClick = d3.mouse(this)[1];
                     var coordsLocal = coords.slice();
@@ -244,7 +246,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     var posY = parseInt(circleCords.attr("cy"));
                     tweetshow.html(d.y.text)
                         .style("left", (posX + setCircleSize * 2 + 10) + 'px')
-                        .style("top", (posY + height * 0.60 - setCircleSize * 2) + 'px');
+                        .style("top", (posY + height * 0.50 - setCircleSize*4) + 'px');
 
                     emoji.transition()
                         .duration(200)
@@ -292,6 +294,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                                     return "green";
                                 }
                             })
+                            .style('stroke-width', '2px');
 
                     }, 10000);
 
