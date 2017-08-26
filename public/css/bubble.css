@@ -981,3 +981,12 @@ label[for=step] {
     float: right;
     z-index: 1;
 }
+
+/* Tweet card for scatter chart */
+#tweet {
+  width: 400px !important;
+}
+#tweet iframe {
+  border: none !important;
+  box-shadow: none !important;
+}

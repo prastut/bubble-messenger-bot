@@ -23,12 +23,6 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
         //Initial Zoom Level
         var zoom;
 
-
-        var tweetshow = d3.select("body")
-            .append("div")
-            .attr("class", "tweet")
-            .style("opacity", 0);
-
         var positiveEmotions = {
             2: '1F60A',
             1: '1F601',
@@ -211,6 +205,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
 
                 function click(d) {
+                    CreateTweet(d.y.tweet_id);
                     // Fade out other bubbles and circles
                     d3.selectAll('.point-image')
                         .style("filter", function(d, i) {
@@ -235,17 +230,12 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
                     var yClick = d3.mouse(this)[1];
                     var coordsLocal = coords.slice();
 
-                    tweetshow.transition()
-                        .duration(200)
-                        .style("opacity", 0.9);
-
+                    var offset = $('.scatter-chart').offset();
+                    console.log(offset);
                     // Get mouse position
                     var posX = parseInt(circleCords.attr("cx"));
                     var posY = parseInt(circleCords.attr("cy"));
-                    tweetshow.html(d.y.text)
-                        .style("left", (posX + setCircleSize * 2 + 10) + 'px')
-                        .style("top", (posY + height * 0.60 - setCircleSize * 2) + 'px');
-
+                    $("#tweet").css({top: posY - setCircleSize, left: posX + setCircleSize*2 + 10, position:'absolute'});
                     emoji.transition()
                         .duration(200)
                         .style("opacity", 0.9);
@@ -265,9 +255,7 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                     setTimeout(function() {
 
-                        tweetshow.transition()
-                            .duration(500)
-                            .style("opacity", 0);
+                        //$('#tweet').empty();
 
                         emoji.transition()
                             .duration(500)
@@ -300,6 +288,21 @@ define(["d3", "twemoji", "jquery"], function(d3, emoji) {
 
                 function setScatterAttr() {
                     return setCircleSize * zoom.k > 40 ? 40 : setCircleSize * zoom.k;
+                }
+
+                function CreateTweet(id){
+                  var tweet = document.getElementById("tweet");
+                  twttr.widgets.createTweet(
+                    id, tweet,
+                    {
+                      conversation : 'none',    // or all
+                      cards        : 'hidden',  // or visible
+                      linkColor    : '#cc0000', // default is blue
+                      theme        : 'light'    // or dark
+                    })
+                  .then (function (el) {
+                    el.contentDocument.querySelector(".footer").style.display = "none";
+                  });
                 }
 
 

@@ -19,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <script data-main="js/bot-web-view" src="js/lib/require.js"></script>
-
+    <script sync src="vendor/twitter/widgets.js"></script>
 
 
 </head>
@@ -31,10 +31,9 @@
     <section id="timeline-container">
         <div id="chart_container"></div>
     </section>
-
-
+    <div id="tweet"></div>
     <!-- Footer -->
-    
+
     <!-- Theme JavaScript -->
 	<% if (params) { %>
   		<script>
@@ -42,5 +41,6 @@
 		</script>
 	<% } %>
     <% include ga %>
+
 </body>
 </html>

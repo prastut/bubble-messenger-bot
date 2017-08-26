@@ -81,8 +81,6 @@ define(function($) {
     }
 
     function pushScatterData(scatterData, channel, data, live) {
-
-
         var series = [];
         var i;
 
@@ -98,7 +96,7 @@ define(function($) {
 
                 array.push({
                     'sentiment_index': sentiment,
-                    'text': data[i][channel][tweet].text,
+                    'tweet_id': data[i][channel][tweet].tweet_id,
                     'type': sign
                 });
             }
