@@ -146,9 +146,10 @@ URL: https://api.bubble.social/get-index-data?match_id=d88fee2c-6d85-11e7-b701-a
 *	start_timestamp (optional, default 0) (pass -1 if last datapoint is required)
 *	end_timestamp (optional, default severtime)	
 *	user_type (optional, (INFLUENCER/FAMOUS/SUBFAMOUS))
+*	quantized (optional, default false)
 
->INFO: `user_type` ignored if start_timestamp=-1
-
+>INFO: `user_type` ignored if start_timestamp=-1, 
+    `quantized` when set to `true` returns quantizes sentiment values in scatter data
 
 URL: https://api.bubble.social/get-scatter-data?match_id=fb38f3f4-6ed6-11e7-b7a4-a402b9ccba5f&player_id=743c79af-6ed6-11e7-b7a4-a402b9ccba5f&user_type=INFLUENCER
     
@@ -319,3 +320,23 @@ URL: https://api.bubble.social/get-events?match_id=
        }
      ]
 
+### Get Percent Data
+> Args
+* match_id
+* team_id
+* start_timestamp (optional, default 0) (pass -1 if last datapoint is required)
+* end_timestamp (optional, default current_timestamp)
+
+URL: https://api.bubble.social/get-percent-data?match_id=&player_id=
+
+> Sample Response
+
+    [
+      {
+        "manchester_city": {
+          "neg": 0.0, 
+          "pos": 100.0
+        }, 
+        "time": 1505281975
+      }
+    ]
